@@ -1,0 +1,13 @@
+C:\Users\Pete Christinzio\source\repos\PotatoChipMine\PotatoChipMine\bin\Debug\netcoreapp2.1\xunit.runner.visualstudio.dotnetcore.testadapter.dll
+C:\Users\Pete Christinzio\source\repos\PotatoChipMine\PotatoChipMine\bin\Debug\netcoreapp2.1\xunit.runner.reporters.netcoreapp10.dll
+C:\Users\Pete Christinzio\source\repos\PotatoChipMine\PotatoChipMine\bin\Debug\netcoreapp2.1\xunit.runner.utility.netcoreapp10.dll
+C:\Users\Pete Christinzio\source\repos\PotatoChipMine\PotatoChipMine\bin\Debug\netcoreapp2.1\PotatoChipMine.deps.json
+C:\Users\Pete Christinzio\source\repos\PotatoChipMine\PotatoChipMine\bin\Debug\netcoreapp2.1\PotatoChipMine.runtimeconfig.json
+C:\Users\Pete Christinzio\source\repos\PotatoChipMine\PotatoChipMine\bin\Debug\netcoreapp2.1\PotatoChipMine.runtimeconfig.dev.json
+C:\Users\Pete Christinzio\source\repos\PotatoChipMine\PotatoChipMine\bin\Debug\netcoreapp2.1\PotatoChipMine.dll
+C:\Users\Pete Christinzio\source\repos\PotatoChipMine\PotatoChipMine\bin\Debug\netcoreapp2.1\PotatoChipMine.pdb
+C:\Users\Pete Christinzio\source\repos\PotatoChipMine\PotatoChipMine\obj\Debug\netcoreapp2.1\PotatoChipMine.csproj.CoreCompileInputs.cache
+C:\Users\Pete Christinzio\source\repos\PotatoChipMine\PotatoChipMine\obj\Debug\netcoreapp2.1\PotatoChipMine.AssemblyInfoInputs.cache
+C:\Users\Pete Christinzio\source\repos\PotatoChipMine\PotatoChipMine\obj\Debug\netcoreapp2.1\PotatoChipMine.AssemblyInfo.cs
+C:\Users\Pete Christinzio\source\repos\PotatoChipMine\PotatoChipMine\obj\Debug\netcoreapp2.1\PotatoChipMine.dll
+C:\Users\Pete Christinzio\source\repos\PotatoChipMine\PotatoChipMine\obj\Debug\netcoreapp2.1\PotatoChipMine.pdb

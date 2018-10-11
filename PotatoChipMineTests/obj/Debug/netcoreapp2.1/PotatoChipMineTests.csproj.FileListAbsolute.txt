@@ -1,0 +1,14 @@
+C:\Users\Pete Christinzio\source\repos\PotatoChipMine\PotatoChipMineTests\bin\Debug\netcoreapp2.1\xunit.runner.visualstudio.dotnetcore.testadapter.dll
+C:\Users\Pete Christinzio\source\repos\PotatoChipMine\PotatoChipMineTests\bin\Debug\netcoreapp2.1\xunit.runner.reporters.netcoreapp10.dll
+C:\Users\Pete Christinzio\source\repos\PotatoChipMine\PotatoChipMineTests\bin\Debug\netcoreapp2.1\xunit.runner.utility.netcoreapp10.dll
+C:\Users\Pete Christinzio\source\repos\PotatoChipMine\PotatoChipMineTests\bin\Debug\netcoreapp2.1\PotatoChipMineTests.deps.json
+C:\Users\Pete Christinzio\source\repos\PotatoChipMine\PotatoChipMineTests\bin\Debug\netcoreapp2.1\PotatoChipMineTests.runtimeconfig.json
+C:\Users\Pete Christinzio\source\repos\PotatoChipMine\PotatoChipMineTests\bin\Debug\netcoreapp2.1\PotatoChipMineTests.runtimeconfig.dev.json
+C:\Users\Pete Christinzio\source\repos\PotatoChipMine\PotatoChipMineTests\bin\Debug\netcoreapp2.1\PotatoChipMineTests.dll
+C:\Users\Pete Christinzio\source\repos\PotatoChipMine\PotatoChipMineTests\bin\Debug\netcoreapp2.1\PotatoChipMineTests.pdb
+C:\Users\Pete Christinzio\source\repos\PotatoChipMine\PotatoChipMineTests\obj\Debug\netcoreapp2.1\PotatoChipMineTests.csprojAssemblyReference.cache
+C:\Users\Pete Christinzio\source\repos\PotatoChipMine\PotatoChipMineTests\obj\Debug\netcoreapp2.1\PotatoChipMineTests.csproj.CoreCompileInputs.cache
+C:\Users\Pete Christinzio\source\repos\PotatoChipMine\PotatoChipMineTests\obj\Debug\netcoreapp2.1\PotatoChipMineTests.AssemblyInfoInputs.cache
+C:\Users\Pete Christinzio\source\repos\PotatoChipMine\PotatoChipMineTests\obj\Debug\netcoreapp2.1\PotatoChipMineTests.AssemblyInfo.cs
+C:\Users\Pete Christinzio\source\repos\PotatoChipMine\PotatoChipMineTests\obj\Debug\netcoreapp2.1\PotatoChipMineTests.dll
+C:\Users\Pete Christinzio\source\repos\PotatoChipMine\PotatoChipMineTests\obj\Debug\netcoreapp2.1\PotatoChipMineTests.pdb
