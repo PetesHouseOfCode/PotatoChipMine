@@ -8,6 +8,7 @@
     ".NETCoreApp,Version=v2.1": {
       "PotatoChipMineTests/1.0.0": {
         "dependencies": {
+          "PotatoChipMine": "1.0.0",
           "Shouldly": "3.0.1",
           "TeamCity.VSTest.TestAdapter": "1.0.11",
           "xunit": "2.4.0",
@@ -1103,6 +1104,11 @@
         "dependencies": {
           "Microsoft.NET.Test.Sdk": "15.0.0"
         }
+      },
+      "PotatoChipMine/1.0.0": {
+        "runtime": {
+          "PotatoChipMine.dll": {}
+        }
       }
     }
   },
@@ -1671,6 +1677,11 @@
       "sha512": "sha512-spS399J48cRVHJL4BRPT3FXBlINlJ6hh9f/8VfgkPRVjsqTU+CuDxvqsFzdj6++k+HxfFJP0ZPnbnLVNeH8zhQ==",
       "path": "xunit.runner.visualstudio/2.4.0",
       "hashPath": "xunit.runner.visualstudio.2.4.0.nupkg.sha512"
+    },
+    "PotatoChipMine/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
     }
   }
 }

@@ -3,9 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.28010.2041
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PotatoChipMine", "PotatoChipMine\PotatoChipMine.csproj", "{64271F85-03F3-4FC5-BEBD-6B5D8EED1644}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PotatoChipMine", "PotatoChipMine\PotatoChipMine.csproj", "{64271F85-03F3-4FC5-BEBD-6B5D8EED1644}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PotatoChipMineTests", "PotatoChipMineTests\PotatoChipMineTests.csproj", "{C29846C7-4901-40A1-9ED6-381545CEBD60}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PotatoChipMineTests", "PotatoChipMineTests\PotatoChipMineTests.csproj", "{C29846C7-4901-40A1-9ED6-381545CEBD60}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

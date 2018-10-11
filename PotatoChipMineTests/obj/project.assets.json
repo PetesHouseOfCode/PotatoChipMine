@@ -1748,6 +1748,19 @@
         "build": {
           "build/netcoreapp1.0/xunit.runner.visualstudio.props": {}
         }
+      },
+      "PotatoChipMine/1.0.0": {
+        "type": "project",
+        "framework": ".NETCoreApp,Version=v2.1",
+        "dependencies": {
+          "Microsoft.NETCore.App": "2.1.0"
+        },
+        "compile": {
+          "bin/placeholder/PotatoChipMine.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/PotatoChipMine.dll": {}
+        }
       }
     }
   },
@@ -5854,11 +5867,17 @@
         "xunit.runner.visualstudio.2.4.0.nupkg.sha512",
         "xunit.runner.visualstudio.nuspec"
       ]
+    },
+    "PotatoChipMine/1.0.0": {
+      "type": "project",
+      "path": "../PotatoChipMine/PotatoChipMine.csproj",
+      "msbuildProject": "../PotatoChipMine/PotatoChipMine.csproj"
     }
   },
   "projectFileDependencyGroups": {
     ".NETCoreApp,Version=v2.1": [
       "Microsoft.NETCore.App >= 2.1.0",
+      "PotatoChipMine >= 1.0.0",
       "Shouldly >= 3.0.1",
       "TeamCity.VSTest.TestAdapter >= 1.0.11",
       "xunit >= 2.4.0",
@@ -5872,11 +5891,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\Pete Christinzio\\source\\repos\\PotatoChipMine\\PotatoChipMineTests\\PotatoChipMineTests.csproj",
+      "projectUniqueName": "C:\\HouseOfCodeProjects\\PotatoChipMine\\PotatoChipMineTests\\PotatoChipMineTests.csproj",
       "projectName": "PotatoChipMineTests",
-      "projectPath": "C:\\Users\\Pete Christinzio\\source\\repos\\PotatoChipMine\\PotatoChipMineTests\\PotatoChipMineTests.csproj",
+      "projectPath": "C:\\HouseOfCodeProjects\\PotatoChipMine\\PotatoChipMineTests\\PotatoChipMineTests.csproj",
       "packagesPath": "C:\\Users\\Pete Christinzio\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\Pete Christinzio\\source\\repos\\PotatoChipMine\\PotatoChipMineTests\\obj\\",
+      "outputPath": "C:\\HouseOfCodeProjects\\PotatoChipMine\\PotatoChipMineTests\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
@@ -5894,7 +5913,11 @@
       },
       "frameworks": {
         "netcoreapp2.1": {
-          "projectReferences": {}
+          "projectReferences": {
+            "C:\\HouseOfCodeProjects\\PotatoChipMine\\PotatoChipMine\\PotatoChipMine.csproj": {
+              "projectPath": "C:\\HouseOfCodeProjects\\PotatoChipMine\\PotatoChipMine\\PotatoChipMine.csproj"
+            }
+          }
         }
       },
       "warningProperties": {

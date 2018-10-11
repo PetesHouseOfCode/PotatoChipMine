@@ -11,3 +11,14 @@ C:\Users\Pete Christinzio\source\repos\PotatoChipMine\PotatoChipMine\obj\Debug\n
 C:\Users\Pete Christinzio\source\repos\PotatoChipMine\PotatoChipMine\obj\Debug\netcoreapp2.1\PotatoChipMine.AssemblyInfo.cs
 C:\Users\Pete Christinzio\source\repos\PotatoChipMine\PotatoChipMine\obj\Debug\netcoreapp2.1\PotatoChipMine.dll
 C:\Users\Pete Christinzio\source\repos\PotatoChipMine\PotatoChipMine\obj\Debug\netcoreapp2.1\PotatoChipMine.pdb
+C:\HouseOfCodeProjects\PotatoChipMine\PotatoChipMine\bin\Debug\netcoreapp2.1\PotatoChipMine.deps.json
+C:\HouseOfCodeProjects\PotatoChipMine\PotatoChipMine\bin\Debug\netcoreapp2.1\PotatoChipMine.dll
+C:\HouseOfCodeProjects\PotatoChipMine\PotatoChipMine\bin\Debug\netcoreapp2.1\PotatoChipMine.pdb
+C:\HouseOfCodeProjects\PotatoChipMine\PotatoChipMine\obj\Debug\netcoreapp2.1\PotatoChipMine.csprojAssemblyReference.cache
+C:\HouseOfCodeProjects\PotatoChipMine\PotatoChipMine\obj\Debug\netcoreapp2.1\PotatoChipMine.csproj.CoreCompileInputs.cache
+C:\HouseOfCodeProjects\PotatoChipMine\PotatoChipMine\obj\Debug\netcoreapp2.1\PotatoChipMine.AssemblyInfoInputs.cache
+C:\HouseOfCodeProjects\PotatoChipMine\PotatoChipMine\obj\Debug\netcoreapp2.1\PotatoChipMine.AssemblyInfo.cs
+C:\HouseOfCodeProjects\PotatoChipMine\PotatoChipMine\obj\Debug\netcoreapp2.1\PotatoChipMine.dll
+C:\HouseOfCodeProjects\PotatoChipMine\PotatoChipMine\obj\Debug\netcoreapp2.1\PotatoChipMine.pdb
+C:\HouseOfCodeProjects\PotatoChipMine\PotatoChipMine\bin\Debug\netcoreapp2.1\PotatoChipMine.runtimeconfig.json
+C:\HouseOfCodeProjects\PotatoChipMine\PotatoChipMine\bin\Debug\netcoreapp2.1\PotatoChipMine.runtimeconfig.dev.json

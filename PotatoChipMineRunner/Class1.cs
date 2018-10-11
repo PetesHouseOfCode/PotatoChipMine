@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace PotatoChipMine
+namespace PotatoChipMineRunner
 {
     public class Class1
     {

@@ -687,11 +687,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\HouseOfCodeProjects\\PotatoChipMine\\PotatoChipMine\\PotatoChipMine.csproj",
-      "projectName": "PotatoChipMine",
-      "projectPath": "C:\\HouseOfCodeProjects\\PotatoChipMine\\PotatoChipMine\\PotatoChipMine.csproj",
+      "projectUniqueName": "C:\\HouseOfCodeProjects\\PotatoChipMine\\PotatoChipMineRunner\\PotatoChipMineRunner.csproj",
+      "projectName": "PotatoChipMineRunner",
+      "projectPath": "C:\\HouseOfCodeProjects\\PotatoChipMine\\PotatoChipMineRunner\\PotatoChipMineRunner.csproj",
       "packagesPath": "C:\\Users\\Pete Christinzio\\.nuget\\packages\\",
-      "outputPath": "C:\\HouseOfCodeProjects\\PotatoChipMine\\PotatoChipMine\\obj\\",
+      "outputPath": "C:\\HouseOfCodeProjects\\PotatoChipMine\\PotatoChipMineRunner\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
@@ -722,6 +722,7 @@
       "netcoreapp2.1": {
         "dependencies": {
           "Microsoft.NETCore.App": {
+            "suppressParent": "All",
             "target": "Package",
             "version": "[2.1.0, )",
             "autoReferenced": true
