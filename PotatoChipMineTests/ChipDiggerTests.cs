@@ -52,5 +52,15 @@ namespace PotatoChipMineTests
             scoop.Chips.ShouldBeGreaterThanOrEqualTo(3);
             scoop.Chips.ShouldBeLessThanOrEqualTo(7);
         }
+
+        [Fact]
+        public void ChipDigger_HavingSiteHardnessIsSoft_DurabilityDecresesBetween0and1()
+        {
+            var mineSite = new MineSite {ChipDensity = ChipDensity.Scarce, Hardness = SiteHardness.Soft};
+            var chipDigger = new ChipDigger(mineSite);
+            var scoop = chipDigger.Dig();
+            chipDigger.Durability.ShouldBeGreaterThanOrEqualTo(0);
+            chipDigger.Durability.ShouldBeLessThanOrEqualTo(1);
+        }
     }
 }

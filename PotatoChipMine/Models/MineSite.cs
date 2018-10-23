@@ -2,6 +2,15 @@
 {
     public class MineSite
     {
-        public object ChipDensity { get; set; }
+        public ChipDensity ChipDensity { get; set; }
+        public SiteHardness Hardness { get; set; }
+    }
+
+    public enum SiteHardness
+    {
+        Soft = 0,
+        Firm = 1,
+        Solid = 2,
+        Hard = 3
     }
 }
