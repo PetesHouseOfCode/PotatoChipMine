@@ -30,11 +30,11 @@ namespace PotatoChipMine
             switch (_mineSite.ChipDensity)
             {
                 case ChipDensity.Scarce:
-                    return _random.Next(0, 3);
+                    return _random.Next(0, 4);
                 case ChipDensity.Normal:
-                    return _random.Next(3, 7);
+                    return _random.Next(3, 8);
                 case ChipDensity.Rich:
-                    return _random.Next(7, 25);
+                    return _random.Next(8, 25);
                 default:
                     return 0;
             }
@@ -45,13 +45,13 @@ namespace PotatoChipMine
             switch (_mineSite.Hardness)
             {
                 case SiteHardness.Soft:
-                    return _random.Next(0, 2);
+                    return _random.Next(0, 3);
                 case SiteHardness.Firm:
                     return _random.Next(1, 4);
                 case SiteHardness.Hard:
-                    return _random.Next(4, 12);
+                    return _random.Next(4, 8);
                 case SiteHardness.Solid:
-                    return _random.Next(8, 24);
+                    return _random.Next(8, 13);
                 default:
                     return -1;
             }

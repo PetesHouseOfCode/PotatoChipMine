@@ -8,9 +8,9 @@
 
     public enum SiteHardness
     {
-        Soft = 0,
-        Firm = 1,
-        Solid = 2,
-        Hard = 3
+        Soft = 1,
+        Firm = 2,
+        Hard = 3,
+        Solid = 4
     }
 }

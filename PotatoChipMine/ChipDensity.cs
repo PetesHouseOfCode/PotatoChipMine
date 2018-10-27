@@ -2,8 +2,8 @@
 {
     public enum ChipDensity
     {
-        Scarce = 0,
-        Normal = 1,
-        Rich = 2
+        Scarce = 1,
+        Normal = 2,
+        Rich = 3
     }
 }

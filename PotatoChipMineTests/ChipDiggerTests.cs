@@ -7,13 +7,7 @@ namespace PotatoChipMineTests
 {
     public class ChipDiggerTests
     {
-        [Fact]
-        public void ChipDigger_Dig_DiggerDurabilityDecreasedBy1()
-        {
-            var chipDigger = new ChipDigger(new MineSite()) {Durability = 10};
-            chipDigger.Dig();
-            chipDigger.Durability.ShouldBe(9);
-        }
+       
 
         [Fact]
         public void ChipDigger_Dig_HavingDurabilityEqualsZero_ReturnsEmptyScoop()
