@@ -5,16 +5,19 @@ namespace PotatoChipMine
 {
     public class ChipDigger
     {
-        private readonly MineSite _mineSite;
         private readonly Random _random = new Random();
 
         public ChipDigger(MineSite mineSite)
         {
-            _mineSite = mineSite;
+            this.MineSite = mineSite;
+            this.Hopper = new ChipsHopper {Count = 0, Max = 30};
+            this.Durability = 25;
         }
 
+        public string Name { get; set; }
         public int Durability { get; set; }
-
+        public ChipsHopper Hopper { get; set; }
+        public MineSite MineSite { get; set; }
         public Scoop Dig()
         {
             var scoop = new Scoop();
@@ -27,7 +30,7 @@ namespace PotatoChipMine
 
         private int RollChips()
         {
-            switch (_mineSite.ChipDensity)
+            switch (MineSite.ChipDensity)
             {
                 case ChipDensity.Scarce:
                     return _random.Next(0, 4);
@@ -42,7 +45,7 @@ namespace PotatoChipMine
 
         private int RollDurabilityHit()
         {
-            switch (_mineSite.Hardness)
+            switch (MineSite.Hardness)
             {
                 case SiteHardness.Soft:
                     return _random.Next(0, 3);
@@ -56,5 +59,12 @@ namespace PotatoChipMine
                     return -1;
             }
         }
+    }
+
+    public class ChipsHopper
+    {
+        public int Max { get; set; } = 0;
+        public int Count { get; set; } = 0;
+        public bool IsFull => Count >= Max;
     }
 }
