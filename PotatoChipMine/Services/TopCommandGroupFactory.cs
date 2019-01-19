@@ -56,6 +56,12 @@ namespace PotatoChipMine.Services
                 },
                 new CommandsDefinition
                 {
+                    Command = "tokens",
+                    Description = "Shows then number of tokens you currently have.",
+                    Execute = TokensHandler()
+                },
+                new CommandsDefinition
+                {
                     Command = "exit",
                     Description = "Leaves the current room and returns you to the lobby.",
                     Execute = (userCommand, gameState) =>
@@ -94,6 +100,14 @@ namespace PotatoChipMine.Services
                 }
             };
             return commandsGroup;
+        }
+
+        private Action<UserCommand, GameState> TokensHandler()
+        {
+            return (userCommand, gameState) =>
+                {
+                    _gameUI.ReportInfo(new[] {$"You have {gameState.Miner.TaterTokens} Tater Tokens"});
+                };
         }
     }
 }

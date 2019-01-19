@@ -9,13 +9,15 @@ namespace PotatoChipMine
 
         public ChipDigger(MineSite mineSite)
         {
-            this.MineSite = mineSite;
-            this.Hopper = new ChipsHopper {Count = 0, Max = 30};
-            this.Durability = 25;
+            MineSite = mineSite;
+            Hopper = new ChipsHopper {Count = 0, Max = 30};
+            Durability = 25;
+            MaxDurability = 25;
         }
 
         public string Name { get; set; }
         public int Durability { get; set; }
+        public int MaxDurability { get; set; }
         public ChipsHopper Hopper { get; set; }
         public MineSite MineSite { get; set; }
         public Scoop Dig()

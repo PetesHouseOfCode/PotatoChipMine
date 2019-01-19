@@ -1,7 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using PotatoChipMine.Models;
 using PotatoChipMine.Services;
 
-namespace PotatoChipMine.ControlRoom.Services
+namespace PotatoChipMine.GameRooms.ControlRoom.Services
 {
     public class ControlRoomFactory
     {
@@ -13,13 +13,13 @@ namespace PotatoChipMine.ControlRoom.Services
             _gameState = gameState;
             _ui = ui;
         }
-        public ControlRoom BuildControlRoom()
+        public DiggerControlRoom BuildControlRoom()
         {
             var greeting = new string[]
             {
                 "Welcome to digger control.", "From here you can prepare your diggers to dig."
             };
-            var controlRoom = new ControlRoom(_ui,_gameState,greeting);
+            var controlRoom = new DiggerControlRoom(_ui,_gameState,greeting);
             return controlRoom;
         }
     }

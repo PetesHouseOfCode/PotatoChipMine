@@ -1,10 +1,11 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
+using PotatoChipMine.GameRooms.Store.Models;
 using PotatoChipMine.Models;
 using PotatoChipMine.Services;
-using PotatoChipMine.Store.Models;
 
-namespace PotatoChipMine.Store.Services
+namespace PotatoChipMine.GameRooms.Store.Services
 {
     public class StoreCommandsGroupFactory
     {
@@ -32,43 +33,27 @@ namespace PotatoChipMine.Store.Services
                         Command = "sell",
                         EntryDescription = "sell [quantity] [item name] || sell [item name] (sells all) ",
                         Description = "Sell all of the indicated items in your inventory.",
-                        Execute = (userCommand, gameState) =>
-                        {
-                            var result = Sell(userCommand.Parameters);
-                            _gameUi.WritePrompt(result.message);
-                        }
+                        Execute = SellHandler()
                     },
                     new CommandsDefinition
                     {
                         Command = "buy",
                         EntryDescription = "buy [quantity] [item name] || buy [item name] (to buy single item)",
                         Description = "Purchases the quantity indicated of the item requested.",
-                        Execute = (userCommand, gameState) =>
-                        {
-                            _gameUi.WritePrompt(
-                                Buy(
-                                        userCommand.Parameters.Count > 1
-                                            ? userCommand.Parameters[1]
-                                            : userCommand.Parameters[0]
-                                        , userCommand.Parameters.Count == 1 ? 1 : int.Parse(userCommand.Parameters[0]))
-                                    .message);
-                        }
+                        Execute = BuyHandler()
 
                     },
                     new CommandsDefinition()
                     {
                         Command="stock",
                         Description = "Displays the items and quantities and unit prices available to purchase.",
-                        Execute = (userCommand,gameState)=>
-                        {
-                            _gameUi.ReportStoreStock(_storeState.ItemsForSale);
-                        }
+                        Execute = StockHandler()
                     },
                     new CommandsDefinition()
                     {
                         Command = "buying",
                         Description = "Displays the items the store is currently buying and the price paid per item.",
-                        Execute = (userCommand, gameState) => { _gameUi.ReportBuyingItems(_storeState.ItemsBuying); }
+                        Execute = BuyingHandler()
                     }
                 }
             };
@@ -83,6 +68,43 @@ namespace PotatoChipMine.Store.Services
             });
             return commandsGroup;
         }
+
+        private Action<UserCommand, GameState> BuyingHandler()
+        {
+            return (userCommand, gameState) => { _gameUi.ReportBuyingItems(_storeState.ItemsBuying); };
+        }
+
+        private Action<UserCommand, GameState> StockHandler()
+        {
+            return (userCommand,gameState)=>
+            {
+                _gameUi.ReportStoreStock(_storeState.ItemsForSale);
+            };
+        }
+
+        private Action<UserCommand, GameState> BuyHandler()
+        {
+            return (userCommand, gameState) =>
+            {
+                _gameUi.WritePrompt(
+                    Buy(
+                            userCommand.Parameters.Count > 1
+                                ? userCommand.Parameters[1]
+                                : userCommand.Parameters[0]
+                            , userCommand.Parameters.Count == 1 ? 1 : int.Parse(userCommand.Parameters[0]))
+                        .message);
+            };
+        }
+
+        private Action<UserCommand, GameState> SellHandler()
+        {
+            return (userCommand, gameState) =>
+            {
+                var result = Sell(userCommand.Parameters);
+                _gameUi.WritePrompt(result.message);
+            };
+        }
+
         private (bool sold, string message) Sell(IReadOnlyList<string> paramsList)
         {
             int quantity;
@@ -119,6 +141,7 @@ namespace PotatoChipMine.Store.Services
             return (true, $"Sold {quantity} chips for {quantity * price}.");
 
         }
+
         public (bool sold, string message) Buy(string itemName, int quantity)
         {
             var item = _storeState.ItemsForSale.FirstOrDefault(x => x.Name.ToLower() == itemName.ToLower());

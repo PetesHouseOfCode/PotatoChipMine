@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Threading;
+using PotatoChipMine.Models;
 using PotatoChipMine.Services;
 
-namespace PotatoChipMine.ControlRoom.Services
+namespace PotatoChipMine.GameRooms.ControlRoom.Services
 {
     public class DiggerRunnerService
     {

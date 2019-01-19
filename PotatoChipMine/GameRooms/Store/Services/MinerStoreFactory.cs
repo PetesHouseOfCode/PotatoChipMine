@@ -1,7 +1,8 @@
-﻿using PotatoChipMine.Services;
-using PotatoChipMine.Store.Models;
+﻿using PotatoChipMine.GameRooms.Store.Models;
+using PotatoChipMine.Models;
+using PotatoChipMine.Services;
 
-namespace PotatoChipMine.Store.Services
+namespace PotatoChipMine.GameRooms.Store.Services
 {
     public class MinerStoreFactory
     {
@@ -24,6 +25,7 @@ namespace PotatoChipMine.Store.Services
 
             var storeState = new StoreState();
             storeState.ItemsForSale.Add(new StoreItem {Name = "Digger", Price = 20, Count = 5, InventoryId = 1});
+            storeState.ItemsForSale.Add(new StoreItem {Name = "bolts", Count = 500, Price = 5,InventoryId = 2});
             storeState.ItemsBuying.Add(new StoreItem {Name = "RawChips", Price = 10});
             var store = new MinerStore(_ui, _gameState, storeState, greeting);
             return store;

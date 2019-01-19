@@ -1,9 +1,9 @@
-﻿using PotatoChipMine.Models;
+﻿using PotatoChipMine.GameRooms.Store.Models;
+using PotatoChipMine.GameRooms.Store.Services;
+using PotatoChipMine.Models;
 using PotatoChipMine.Services;
-using PotatoChipMine.Store.Models;
-using PotatoChipMine.Store.Services;
 
-namespace PotatoChipMine.Store
+namespace PotatoChipMine.GameRooms.Store
 {
     public class MinerStore : GameRoom
     {

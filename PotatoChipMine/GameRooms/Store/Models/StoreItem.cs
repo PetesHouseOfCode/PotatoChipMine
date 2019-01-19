@@ -1,6 +1,6 @@
 ﻿using PotatoChipMine.Models;
 
-namespace PotatoChipMine.Store.Models
+namespace PotatoChipMine.GameRooms.Store.Models
 {
     public class StoreItem : InventoryItem
     {

@@ -2,10 +2,10 @@
 using System.Collections.Generic;
 using System.Text;
 using PotatoChipMine;
+using PotatoChipMine.GameRooms.Store;
+using PotatoChipMine.GameRooms.Store.Models;
 using PotatoChipMine.Models;
 using PotatoChipMine.Services;
-using PotatoChipMine.Store;
-using PotatoChipMine.Store.Models;
 using Xunit;
 
 namespace PotatoChipMineTests

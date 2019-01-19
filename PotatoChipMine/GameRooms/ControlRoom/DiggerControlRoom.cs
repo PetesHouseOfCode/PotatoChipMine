@@ -1,14 +1,14 @@
-﻿using PotatoChipMine.ControlRoom.Services;
+﻿using PotatoChipMine.GameRooms.ControlRoom.Services;
 using PotatoChipMine.Models;
 using PotatoChipMine.Services;
 
-namespace PotatoChipMine.ControlRoom
+namespace PotatoChipMine.GameRooms.ControlRoom
 {
-    public class ControlRoom : GameRoom
+    public class DiggerControlRoom : GameRoom
     {
         protected new readonly CommandsGroup CommandsGroup;
 
-        public ControlRoom(GameUI ui, GameState gameState, string[] greeting) :
+        public DiggerControlRoom(GameUI ui, GameState gameState, string[] greeting) :
             base(ui, gameState, greeting, GameMode.ControlRoom)
         {
             CommandsGroup = new ControlRoomCommandsGroupFactory(ui).Build();
@@ -22,7 +22,7 @@ namespace PotatoChipMine.ControlRoom
 
         protected override void AcceptCommand()
         {
-            var command = Ui.AcceptUserCommand("ControlRoom");
+            var command = Ui.AcceptUserCommand("control-room");
             CommandsGroup.ExecuteCommand(Ui, command, GameState);
         }
     }

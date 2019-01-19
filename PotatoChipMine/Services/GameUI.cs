@@ -3,14 +3,27 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Security.Cryptography.X509Certificates;
 using System.Threading;
+using PotatoChipMine.GameRooms.Store.Models;
 using PotatoChipMine.Models;
-using PotatoChipMine.Store.Models;
 
 namespace PotatoChipMine.Services
 {
     public class GameUI
     {
-        
+        public void Intro()
+        {
+            foreach (var s in intro)
+            {
+                Console.WriteLine(s);
+            }
+
+            for (var x = 0; x < 10; x++)
+            {
+                Console.WriteLine();
+                Thread.Sleep(30);
+            }
+        }
+
         public void ReportInfo(string[] linesToReport)
         {
             Console.ForegroundColor = ConsoleColor.Green;
@@ -18,21 +31,21 @@ namespace PotatoChipMine.Services
             Console.ResetColor();
         }
 
-        public void FastWrite(string[] linesToReport,ConsoleColor color = ConsoleColor.Cyan)
+        public void FastWrite(string[] linesToReport, ConsoleColor color = ConsoleColor.Cyan)
         {
             Console.ForegroundColor = color;
-            TypeWriterWrite(linesToReport.ToList(),3);
+            TypeWriterWrite(linesToReport.ToList(), 3);
             Console.ResetColor();
         }
 
         public void WritePrompt(string linesToReport)
         {
             Console.ForegroundColor = ConsoleColor.White;
-            TypeWriterWrite(new List<string>(){linesToReport},3);
+            TypeWriterWrite(new List<string>() {linesToReport}, 3);
             Console.ResetColor();
         }
 
-        public UserCommand AcceptUserCommand(string commandContext ="")
+        public UserCommand AcceptUserCommand(string commandContext = "")
         {
             var cmdStr = "Enter Command >>";
             if (commandContext != "")
@@ -52,11 +65,12 @@ namespace PotatoChipMine.Services
                 TypeWriterWrite(new List<string>
                 {
                     $"{chipDigger.Name}",
-                    $"---Mine site density:{ chipDigger.MineSite.ChipDensity}.",
+                    $"---Mine site density:{chipDigger.MineSite.ChipDensity}.",
                     $"---Site Hardness:{chipDigger.MineSite.Hardness}"
                 });
                 Console.WriteLine("");
             }
+
             Console.ResetColor();
         }
 
@@ -73,7 +87,7 @@ namespace PotatoChipMine.Services
                 $"-----------   {gameState.Mode.ToString().ToUpper()} Commands  ---------------",
                 "These commands are available from any game room."
             });
-            foreach (var commandsDefinition in commandsGroup.LocalCommands)
+            foreach (var commandsDefinition in commandsGroup.LocalCommands.OrderBy(x => x.Command))
             {
                 var command = commandsDefinition.EntryDescription ?? commandsDefinition.Command;
                 FastWrite(new[]
@@ -83,14 +97,16 @@ namespace PotatoChipMine.Services
             if (commandsGroup.ParentGroup == null || !(commandsGroup.ParentGroup.LocalCommands?.Count > 0)) return;
 
             FastWrite(new[]
-                {"-----------   Global Commands  ---------------", "These commands are available from any game room."},
+                {
+                    "-----------   Global Commands  ---------------", "These commands are available from any game room."
+                },
                 ConsoleColor.Green);
             Console.WriteLine();
-            foreach (var globalCommand in commandsGroup.ParentGroup.LocalCommands)
+            foreach (var globalCommand in commandsGroup.ParentGroup.LocalCommands.OrderBy(x => x.Command))
             {
                 var command = globalCommand.EntryDescription ?? globalCommand.Command;
                 FastWrite(new[]
-                    {$"Command: [{command}]", $"Description: {globalCommand.Description}", "--------"},
+                        {$"Command: [{command}]", $"Description: {globalCommand.Description}", "--------"},
                     ConsoleColor.Green);
             }
 
@@ -111,7 +127,7 @@ namespace PotatoChipMine.Services
             FastWrite(list);
         }
 
-        private void TypeWriterWrite(List<string>linesList,int charSpeed = 3)
+        private void TypeWriterWrite(List<string> linesList, int charSpeed = 3)
         {
             foreach (var line in linesList)
             {
@@ -126,6 +142,12 @@ namespace PotatoChipMine.Services
             }
         }
 
+        private void TypeWriterWrite(string line, int charSpeed = 3)
+        {
+            var linesArry = new List<string>() {line};
+            TypeWriterWrite(linesArry, charSpeed);
+        }
+
         public void ReportMinerState(Miner miner)
         {
             var minerState = new List<string>
@@ -135,31 +157,41 @@ namespace PotatoChipMine.Services
                 $"Tater Tokens:{miner.TaterTokens}",
                 $"Diggers Count:{miner.Diggers.Count}"
             };
-            if(miner.Diggers.Count > 0)
+            if (miner.Diggers.Count > 0)
                 minerState.Add("----------Digger Detail-----------");
             foreach (var minerDigger in miner.Diggers)
             {
-                minerState.Add($"Name:{minerDigger.Name} Durability:{minerDigger.Durability} Chips In Hopper:{minerDigger.Hopper}");
+                minerState.Add(
+                    $"Name:{minerDigger.Name} Durability:{minerDigger.Durability} Chips In Hopper:{minerDigger.Hopper.Count}/{minerDigger.Hopper.Max}");
             }
+
             FastWrite(minerState.ToArray());
         }
 
         public void ReportMinerInventory(Miner miner)
         {
-           var inv = miner.InventoryItems
-            .Select(x => $"--> ID:{x.ItemId} Item Name:{x.Name} Quantity:{x.Count}")
-                .ToArray();
-            if (!inv.Any())
+
+            Console.ForegroundColor = ConsoleColor.Cyan;
+            PrintLine();
+            Console.ForegroundColor = ConsoleColor.Blue;
+            Console.BackgroundColor = ConsoleColor.White;
+            PrintRow(new[] {"Name", "Quantity"});
+            Console.ResetColor();
+            Console.ForegroundColor = ConsoleColor.Cyan;
+            if (miner.InventoryItems.Count < 1) return;
+            PrintLine();
+            foreach (var minerInventoryItem in miner.InventoryItems)
             {
-                FastWrite(new[]{"Inventory is empty."});
-                return;
+                PrintRow(new[] {minerInventoryItem.Name, minerInventoryItem.Count.ToString()});
+                PrintLine();
             }
-            FastWrite(inv);
+
+            Console.ResetColor();
         }
 
         public void ReportDiggerEquipped(string newDiggerName)
         {
-            FastWrite(new [] {$"Digger {newDiggerName} is has been equipped"},ConsoleColor.Yellow);
+            FastWrite(new[] {$"Digger {newDiggerName} is has been equipped"}, ConsoleColor.Yellow);
         }
 
         public void ReportBadCommand(string badCommand)
@@ -170,7 +202,7 @@ namespace PotatoChipMine.Services
 
         public void ReportException(string[] message)
         {
-            FastWrite(message,ConsoleColor.Red);
+            FastWrite(message, ConsoleColor.Red);
         }
 
         public void ReportHopperEmptied(string diggerName, int hopperCount, int vaultCount)
@@ -182,5 +214,99 @@ namespace PotatoChipMine.Services
                     $"Vault Chips:{vaultCount}"
                 }, ConsoleColor.Yellow);
         }
+
+        public void ReportDiggerScrapped(ChipDigger digger, int bolts)
+        {
+            FastWrite(
+                new[]
+                {
+                    $"{digger} was scrapped for {bolts} bolts."
+                }, ConsoleColor.Yellow);
+
+        }
+
+        public bool ConfirmDialog(string[] message)
+        {
+            ReportInfo(message);
+            for (;;)
+            {
+                var result = Console.ReadLine();
+
+                switch (result)
+                {
+                    case "yes":
+                        return true;
+                    case "no":
+                        return false;
+                    default:
+                        FastWrite(new[] {"proceed?"});
+                        break;
+                }
+            }
+        }
+
+        static int tableWidth = 77;
+
+        private void PrintLine()
+        {
+            TypeWriterWrite(new string('-', tableWidth), 1);
+        }
+
+        private void PrintRow(params string[] columns)
+        {
+            var width = (tableWidth - columns.Length) / columns.Length;
+            var row = "|";
+            foreach (var column in columns)
+            {
+                row += AlignCentre(column, width) + "|";
+            }
+
+            TypeWriterWrite(row);
+        }
+
+        static string AlignCentre(string text, int width)
+        {
+            text = text.Length > width ? text.Substring(0, width - 3) + "..." : text;
+
+            if (string.IsNullOrEmpty(text))
+            {
+                return new string(' ', width);
+            }
+            else
+            {
+                return text.PadRight(width - (width - text.Length) / 2).PadLeft(width);
+            }
+        }
+
+        private string[] intro = new[]
+        {
+            "  _____________",
+            @"//------------\\                   ||                        ||",
+            @"||             ||                  ||                        ||",
+            @"||             ||               ////////                  ////////",
+            @"||             //    ______        ||        _______         ||         ______ ",
+            @"||____________//    /      \       ||       /       \        ||        /      \    ",
+            @"||                 |        |      ||      |         |       ||       |        |   ",
+            @"||                 |        |      ||      |         |\      ||       |        |  ",
+            @"||                  \______/       ||       \_______/\ \     ||        \______/   ",
+            @"",
+            @"  _____________",
+            @"//             \\       ||",
+            @"||              ||      ||                ",
+            @"||                      ||                \\",
+            @"||                      ||_________                  _______",
+            @"||                      ||         \\      ||      //       \\",
+            @"||                      ||         ||      ||     ||         ||",
+            @"||              ||      ||         ||      ||     ||         || ",
+            @"\\_____________//       ||         ||      ||     ||_________//",
+            @"                                                  ||",
+            @"||\\            //||                              ||",
+            @"|| \\          // ||     \\                       ||",
+            @"||  \\        //  ||           \|_________       _______",
+            @"||   \\      //   ||     ||    ||        \\    //       \\",
+            @"||    \\    //    ||     ||    ||         ||   ||_______//",
+            @"||     \\  //     ||     ||    ||         ||   ||",
+            @"||      \\//      ||     ||    ||         ||    \\______//"
+        };
     }
 }
