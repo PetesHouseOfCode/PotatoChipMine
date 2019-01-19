@@ -12,16 +12,16 @@ namespace PotatoChipMine.Services
     {
         public void Intro()
         {
+            Console.ForegroundColor = ConsoleColor.Yellow;
             foreach (var s in intro)
             {
-                Console.WriteLine(s);
+                TypeWriterWrite(s,1);
+                //Console.WriteLine(s);
             }
-
-            for (var x = 0; x < 10; x++)
-            {
-                Console.WriteLine();
-                Thread.Sleep(30);
-            }
+            Console.ResetColor();
+            Console.WriteLine(Environment.NewLine + AlignCenter("<<< PRESS ENTER >>>",Console.WindowWidth));
+            Console.ReadLine();
+            Console.Clear();
         }
 
         public void ReportInfo(string[] linesToReport)
@@ -115,11 +115,23 @@ namespace PotatoChipMine.Services
 
         public void ReportStoreStock(List<StoreItem> stock, ConsoleColor color = ConsoleColor.Gray)
         {
-            var inv = stock
-                .Select(x => $"ID:{x.InventoryId} Item Name:{x.Name} Item Price:{x.Price} Quantity:{x.Count}")
-                .ToArray();
-            FastWrite(inv);
-        }
+
+            Console.ForegroundColor = ConsoleColor.Cyan;
+            PrintLine();
+            Console.ForegroundColor = ConsoleColor.Black;
+            Console.BackgroundColor = ConsoleColor.Cyan;
+            PrintRow(new[] { "Name","Price", "Quantity" });
+            Console.ResetColor();
+            Console.ForegroundColor = ConsoleColor.Cyan;
+            if (stock.Count < 1) return;
+            PrintLine();
+            foreach (var storeItem in stock)
+            {
+                PrintRow(storeItem.Name, storeItem.Price.ToString(), storeItem.Count.ToString());
+                PrintLine();
+            }
+            Console.ResetColor();
+         }
 
         public void ReportBuyingItems(List<StoreItem> buying, ConsoleColor color = ConsoleColor.Gray)
         {
@@ -157,14 +169,6 @@ namespace PotatoChipMine.Services
                 $"Tater Tokens:{miner.TaterTokens}",
                 $"Diggers Count:{miner.Diggers.Count}"
             };
-            if (miner.Diggers.Count > 0)
-                minerState.Add("----------Digger Detail-----------");
-            foreach (var minerDigger in miner.Diggers)
-            {
-                minerState.Add(
-                    $"Name:{minerDigger.Name} Durability:{minerDigger.Durability} Chips In Hopper:{minerDigger.Hopper.Count}/{minerDigger.Hopper.Max}");
-            }
-
             FastWrite(minerState.ToArray());
         }
 
@@ -173,8 +177,8 @@ namespace PotatoChipMine.Services
 
             Console.ForegroundColor = ConsoleColor.Cyan;
             PrintLine();
-            Console.ForegroundColor = ConsoleColor.Blue;
-            Console.BackgroundColor = ConsoleColor.White;
+            Console.ForegroundColor = ConsoleColor.Black;
+            Console.BackgroundColor = ConsoleColor.Cyan;
             PrintRow(new[] {"Name", "Quantity"});
             Console.ResetColor();
             Console.ForegroundColor = ConsoleColor.Cyan;
@@ -258,13 +262,13 @@ namespace PotatoChipMine.Services
             var row = "|";
             foreach (var column in columns)
             {
-                row += AlignCentre(column, width) + "|";
+                row += AlignCenter(column, width) + "|";
             }
 
             TypeWriterWrite(row);
         }
 
-        static string AlignCentre(string text, int width)
+        private static string AlignCenter(string text, int width)
         {
             text = text.Length > width ? text.Substring(0, width - 3) + "..." : text;
 
@@ -278,10 +282,29 @@ namespace PotatoChipMine.Services
             }
         }
 
+        public void ReportDiggers(List<ChipDigger> diggers)
+        {
+            Console.ForegroundColor = ConsoleColor.DarkYellow;
+            PrintLine();
+            Console.ForegroundColor = ConsoleColor.Black;
+            Console.BackgroundColor = ConsoleColor.DarkYellow;
+            PrintRow(new[] {"Name", "Durability", "Hopper Size", "Hopper Space"});
+            Console.ResetColor();
+            Console.ForegroundColor = ConsoleColor.DarkYellow;
+            if (diggers.Count < 1) return;
+            PrintLine();
+            foreach (var digger in diggers)
+            {
+                PrintRow(digger.Name,digger.Durability.ToString(),digger.Hopper.Max.ToString(),$"{digger.Hopper.Count}/{digger.Hopper.Max}");
+                PrintLine();
+            }
+            Console.ResetColor();
+        }
+
         private string[] intro = new[]
         {
             "  _____________",
-            @"//------------\\                   ||                        ||",
+            @"//            \\                   ||                        ||",
             @"||             ||                  ||                        ||",
             @"||             ||               ////////                  ////////",
             @"||             //    ______        ||        _______         ||         ______ ",
@@ -300,13 +323,14 @@ namespace PotatoChipMine.Services
             @"||              ||      ||         ||      ||     ||         || ",
             @"\\_____________//       ||         ||      ||     ||_________//",
             @"                                                  ||",
+            @"                                                  ||",
             @"||\\            //||                              ||",
-            @"|| \\          // ||     \\                       ||",
-            @"||  \\        //  ||           \|_________       _______",
-            @"||   \\      //   ||     ||    ||        \\    //       \\",
-            @"||    \\    //    ||     ||    ||         ||   ||_______//",
-            @"||     \\  //     ||     ||    ||         ||   ||",
-            @"||      \\//      ||     ||    ||         ||    \\______//"
+            @"|| \\          // ||     \\                       ",
+            @"||  \\        //  ||           \|_________       _______       \\_______"  ,
+            @"||   \\      //   ||     ||    ||        \\    //       \\     ||      \\",
+            @"||    \\    //    ||     ||    ||         ||   ||_______//     ||        ",
+            @"||     \\  //     ||     ||    ||         ||   ||              ||",
+            @"||      \\//      ||     ||    ||         ||    \\______//     ||"
         };
     }
 }

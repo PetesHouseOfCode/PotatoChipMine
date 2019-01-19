@@ -13,7 +13,7 @@ namespace PotatoChipMine.Models
         {
             GameUi = gameUi;
             var command = ParentGroup?.LocalCommands.FirstOrDefault(x =>
-                x.Command.ToLower().StartsWith(userCommand.CommandText.ToLower()));
+                x.Command.ToLower().Equals(userCommand.CommandText.ToLower()));
             if (command != null && command.Command != "help")
             {
                 command.Execute(userCommand, gameState);

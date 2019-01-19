@@ -97,6 +97,15 @@ namespace PotatoChipMine.Services
                     Command = "control-room",
                     Description = "Enter the control room. Control room commands become available",
                     Execute = (userCommand, gameState) => { gameState.ControlRoom.EnterRoom(); }
+                },
+                new CommandsDefinition
+                {
+                    Command = "diggers",
+                    Description = "Displays a list of all of the miner's equipped diggers.",
+                    Execute = (userCommand, gameState) =>
+                    {
+                        _gameUI.ReportDiggers(gameState.Miner.Diggers);
+                    }
                 }
             };
             return commandsGroup;

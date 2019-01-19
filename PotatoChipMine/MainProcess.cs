@@ -37,14 +37,7 @@ namespace PotatoChipMine
         public void Run()
         {
             _gameUi.Intro();
-            var intro = new[]
-            {
-                "Howdy Pilgrim.  Welcome to the 'tater chip mining game.",
-                "You can buy needful things at the miner store.",
-                "You can access the store by typing the command store."
-            };
-
-            _gameUi.ReportInfo(intro);
+            GameStartupRoutine();
             while (_gameState.Running) AcceptCommand();
         }
 
@@ -52,6 +45,61 @@ namespace PotatoChipMine
         {
             var userCommand = _gameUi.AcceptUserCommand();
             _commandsGroup.ExecuteCommand(_gameUi, userCommand, _gameState);
+        }
+
+        private void GameStartupRoutine()
+        {
+            _gameUi.ReportInfo(new []
+            {
+                "Howdy pilgrim!  Welcome to glamorous world of 'tater chip mining!",
+                "I'm Earl, your mine bot. I'll be you're right hand man ... 'er bot, around this here mining operation.",
+                "Whats your name pilgrim?"
+            });
+            while (string.IsNullOrEmpty(_gameState.Miner.Name))
+            {
+                _gameUi.WritePrompt("Enter Your Name");
+                var name = Console.ReadLine();
+                if (!string.IsNullOrEmpty(name))
+                {
+                    _gameState.Miner.Name = name;
+                }
+            }
+            _gameUi.ReportInfo(new []
+            {
+                $"Very pleased to meet you {_gameState.Miner.Name}.",
+                "If you're new to 'tater mining you may want some instructions...",
+                "You look like maybe you know your way around a chip digger though.",
+                "Do you need instructions?"
+            });
+            var entry = "";
+            while (entry != null &&
+                   !entry.Equals("yes",StringComparison.CurrentCultureIgnoreCase) &&  
+                   !entry.Equals("no",StringComparison.CurrentCultureIgnoreCase))
+            {
+                _gameUi.WritePrompt("Enter [yes] or [no]");
+                entry = Console.ReadLine();
+            }
+
+            if (entry.Equals("yes",StringComparison.CurrentCultureIgnoreCase))
+            {
+                _gameUi.ReportInfo(new []{
+                    "I'm sorry to report that the tutorial is under construction, but here's what we've got so far...",
+                    Environment.NewLine,
+                    ">]** You can type [help] at any time to see a list of available commands.",
+                    Environment.NewLine,
+                    "** You can buy and sell things in the store.",
+                    "** Type [store] to enter the store.",
+                    Environment.NewLine,
+                    "** You can take actions related to your diggers in the control-room.",
+                    "** Type [control-room] to enter the control-room",
+                    Environment.NewLine});
+                _gameUi.WritePrompt("<<Press Enter To Continue>>");
+                Console.ReadLine();
+            }
+            else
+            {
+                _gameUi.ReportInfo(new []{$"Well ok then.  Good luck to you {_gameState.Miner.Name}!"});
+            }
         }
     }
 
