@@ -15,6 +15,7 @@ namespace PotatoChipMine
 
         public MainProcess()
         {
+            Console.SetWindowSize(Console.LargestWindowWidth,Console.LargestWindowHeight - 30);
             _gameUi = new GameUI();
             _gameState = new GameState
             {
@@ -32,6 +33,7 @@ namespace PotatoChipMine
             _gameState.ControlRoom = new ControlRoomFactory(_gameUi, _gameState).BuildControlRoom();
             _gameState.Miner.Diggers = new List<ChipDigger>();
             _commandsGroup = new TopCommandGroupFactory(_gameUi).Build();
+            Console.WindowWidth = 125;
         }
 
         public void Run()

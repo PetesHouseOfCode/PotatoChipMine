@@ -10,6 +10,9 @@ namespace PotatoChipMine.Services
 {
     public class GameUI
     {
+        private const int _defaultTableWidth = 77;
+        private int _tableWidth = 77;
+
         public void Intro()
         {
             Console.ForegroundColor = ConsoleColor.Yellow;
@@ -59,18 +62,21 @@ namespace PotatoChipMine.Services
 
         public void ReportDiggersStarting(List<ChipDigger> diggers)
         {
+            _tableWidth = 50;
+            Console.ForegroundColor = ConsoleColor.DarkYellow;
+            PrintLine();
+            Console.BackgroundColor = ConsoleColor.DarkYellow;
+            Console.ForegroundColor = ConsoleColor.Black;
+            PrintRow("Name","Chip Density", "Site Hardness");
+            Console.BackgroundColor = ConsoleColor.Black;
             Console.ForegroundColor = ConsoleColor.DarkYellow;
             foreach (var chipDigger in diggers)
             {
-                TypeWriterWrite(new List<string>
-                {
-                    $"{chipDigger.Name}",
-                    $"---Mine site density:{chipDigger.MineSite.ChipDensity}.",
-                    $"---Site Hardness:{chipDigger.MineSite.Hardness}"
-                });
-                Console.WriteLine("");
+                PrintRow(chipDigger.Name, chipDigger.MineSite.ChipDensity.ToString(),
+                    chipDigger.MineSite.Hardness.ToString());
+                PrintLine();
             }
-
+            _tableWidth = _defaultTableWidth;
             Console.ResetColor();
         }
 
@@ -174,7 +180,7 @@ namespace PotatoChipMine.Services
 
         public void ReportMinerInventory(Miner miner)
         {
-
+            _tableWidth = 77;
             Console.ForegroundColor = ConsoleColor.Cyan;
             PrintLine();
             Console.ForegroundColor = ConsoleColor.Black;
@@ -189,8 +195,8 @@ namespace PotatoChipMine.Services
                 PrintRow(new[] {minerInventoryItem.Name, minerInventoryItem.Count.ToString()});
                 PrintLine();
             }
-
             Console.ResetColor();
+            ResetTableWidth();
         }
 
         public void ReportDiggerEquipped(string newDiggerName)
@@ -249,16 +255,14 @@ namespace PotatoChipMine.Services
             }
         }
 
-        static int tableWidth = 77;
-
         private void PrintLine()
         {
-            TypeWriterWrite(new string('-', tableWidth), 1);
+            TypeWriterWrite(new string('-', _tableWidth), 1);
         }
 
         private void PrintRow(params string[] columns)
         {
-            var width = (tableWidth - columns.Length) / columns.Length;
+            var width = (_tableWidth - columns.Length) / columns.Length;
             var row = "|";
             foreach (var column in columns)
             {
@@ -284,53 +288,92 @@ namespace PotatoChipMine.Services
 
         public void ReportDiggers(List<ChipDigger> diggers)
         {
+            _tableWidth = 100;
             Console.ForegroundColor = ConsoleColor.DarkYellow;
             PrintLine();
             Console.ForegroundColor = ConsoleColor.Black;
             Console.BackgroundColor = ConsoleColor.DarkYellow;
-            PrintRow(new[] {"Name", "Durability", "Hopper Size", "Hopper Space"});
+            PrintRow(new[] {"Name", "Durability","Chips in Hopper", "Hopper Size", "Hopper Space"});
             Console.ResetColor();
             Console.ForegroundColor = ConsoleColor.DarkYellow;
             if (diggers.Count < 1) return;
             PrintLine();
             foreach (var digger in diggers)
             {
-                PrintRow(digger.Name,digger.Durability.ToString(),digger.Hopper.Max.ToString(),$"{digger.Hopper.Count}/{digger.Hopper.Max}");
+                PrintRow(digger.Name,digger.Durability.ToString(),digger.Hopper.Count.ToString(),digger.Hopper.Max.ToString(),$"{digger.Hopper.Max - digger.Hopper.Count}/{digger.Hopper.Max}");
                 PrintLine();
             }
             Console.ResetColor();
+            ResetTableWidth();
+        }
+
+        private void ResetTableWidth()
+        {
+            _tableWidth = _defaultTableWidth;
         }
 
         private string[] intro = new[]
         {
-            "  _____________",
-            @"//            \\                   ||                        ||",
-            @"||             ||                  ||                        ||",
-            @"||             ||               ////////                  ////////",
-            @"||             //    ______        ||        _______         ||         ______ ",
-            @"||____________//    /      \       ||       /       \        ||        /      \    ",
-            @"||                 |        |      ||      |         |       ||       |        |   ",
-            @"||                 |        |      ||      |         |\      ||       |        |  ",
-            @"||                  \______/       ||       \_______/\ \     ||        \______/   ",
+            "        _____________",
+            @"      //            \\                   ||                        ||",
+            @"      ||             ||                  ||                        ||",
+            @"      ||             ||               ////////                  ////////",
+            @"      ||             //    ______        ||        _______         ||         ______ ",
+            @"      ||____________//    /      \       ||       /       \        ||        /      \    ",
+            @"      ||                 |        |      ||      |         |       ||       |        |   ",
+            @"      ||                 |        |      ||      |         |\      ||       |        |  ",
+            @"      ||                  \______/       ||       \_______/\ \     ||        \______/   ",
             @"",
-            @"  _____________",
-            @"//             \\       ||",
-            @"||              ||      ||                ",
-            @"||                      ||                \\",
-            @"||                      ||_________                  _______",
-            @"||                      ||         \\      ||      //       \\",
-            @"||                      ||         ||      ||     ||         ||",
-            @"||              ||      ||         ||      ||     ||         || ",
-            @"\\_____________//       ||         ||      ||     ||_________//",
-            @"                                                  ||",
-            @"                                                  ||",
-            @"||\\            //||                              ||",
-            @"|| \\          // ||     \\                       ",
-            @"||  \\        //  ||           \|_________       _______       \\_______"  ,
-            @"||   \\      //   ||     ||    ||        \\    //       \\     ||      \\",
-            @"||    \\    //    ||     ||    ||         ||   ||_______//     ||        ",
-            @"||     \\  //     ||     ||    ||         ||   ||              ||",
-            @"||      \\//      ||     ||    ||         ||    \\______//     ||"
+            @"        _____________",
+            @"      //             \\       ||",
+            @"      ||              ||      ||                ",
+            @"      ||                      ||                \\",
+            @"      ||                      ||_________                  _______",
+            @"      ||                      ||         \\      ||      //       \\",
+            @"      ||                      ||         ||      ||     ||         ||",
+            @"      ||              ||      ||         ||      ||     ||         || ",
+            @"      \\_____________//       ||         ||      ||     ||_________//",
+            @"                                                        ||",
+            @"                                                        ||",
+            @"      ||\\            //||                              ||",
+            @"      || \\          // ||     \\                       ",
+            @"      ||  \\        //  ||           \|_________       _______       \\_______"  ,
+            @"      ||   \\      //   ||     ||    ||        \\    //       \\     ||      \\",
+            @"      ||    \\    //    ||     ||    ||         ||   ||_______//     ||        ",
+            @"      ||     \\  //     ||     ||    ||         ||   ||              ||",
+            @"      ||      \\//      ||     ||    ||         ||   \\_______//     ||",
+            @"",
+            @""
         };
+
+        public void WriteDigHeader(int digNumber = 0)
+        {
+            _tableWidth = 100;
+            PrintLine();
+            Console.BackgroundColor = ConsoleColor.DarkYellow;
+            Console.ForegroundColor = ConsoleColor.Black;
+            PrintRow($"DIG NUMBER {digNumber}");
+            PrintRow("Digger", "Chips Dug", "Damage","Durability","Hopper");
+            Console.ResetColor();
+            Console.ForegroundColor = ConsoleColor.DarkYellow;
+            PrintLine();
+            Console.ResetColor();
+            _tableWidth = _defaultTableWidth;
+        }
+        public void ReportScoopResult(ChipDigger chipDigger, int diggerDamage, Scoop scoop)
+        {
+            _tableWidth = 100;
+            Console.ForegroundColor = ConsoleColor.DarkYellow;
+            Console.CursorLeft=0;
+            PrintRow(
+                chipDigger.Name, 
+                scoop.Chips.ToString(), 
+                diggerDamage.ToString(),
+                $"{chipDigger.Durability}/{chipDigger.MaxDurability}",
+                $"{chipDigger.Hopper.Count}/{chipDigger.Hopper.Max}");
+            PrintLine();
+            Console.ResetColor();
+            _tableWidth = _defaultTableWidth;
+        }
     }
 }

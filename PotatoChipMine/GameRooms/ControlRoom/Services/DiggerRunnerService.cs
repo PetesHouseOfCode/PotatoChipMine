@@ -27,12 +27,13 @@ namespace PotatoChipMine.GameRooms.ControlRoom.Services
                     continue;
                 }
 
+                gameUi.WriteDigHeader(turnsCounter + 1);
                 foreach (var chipDigger in miner.Diggers)
                 {
                     if (chipDigger.Durability > 0 && chipDigger.Hopper.Count < chipDigger.Hopper.Max)
                     {
                         var oldDurabiliity = chipDigger.Durability;
-                        Console.WriteLine($"{chipDigger.Name}--Digging chips.");
+                        Console.Write($"{chipDigger.Name}--Digging chips.");
                         Console.CursorVisible = false;
                         var x = 0;
                         var consoleSpinner = new ConsoleSpinner();
@@ -53,18 +54,18 @@ namespace PotatoChipMine.GameRooms.ControlRoom.Services
                         var scoop = chipDigger.Dig();
                         var diggerDamage = oldDurabiliity - chipDigger.Durability;
                         chipDigger.Hopper.Count += scoop.Chips;
+                        gameUi.ReportScoopResult(chipDigger, diggerDamage, scoop);
+                        //Console.WriteLine($"{chipDigger.Name}--{scoop.Chips} dug!");
+                        //Console.ForegroundColor = ConsoleColor.DarkRed;
+                        //Console.WriteLine($"{chipDigger.Name}--Digger Wear:{diggerDamage}");
+                        //if (diggerDamage > 5)
+                        //{
+                        //    Console.ForegroundColor = ConsoleColor.Red;
+                        //    Console.WriteLine("OUCH!");
+                        //}
 
-                        Console.WriteLine($"{chipDigger.Name}--{scoop.Chips} dug!");
-                        Console.ForegroundColor = ConsoleColor.DarkRed;
-                        Console.WriteLine($"{chipDigger.Name}--Digger Wear:{diggerDamage}");
-                        if (diggerDamage > 5)
-                        {
-                            Console.ForegroundColor = ConsoleColor.Red;
-                            Console.WriteLine("OUCH!");
-                        }
-
-                        Console.ResetColor();
-                        Console.WriteLine($"{chipDigger.Name}--Digger durability: {chipDigger.Durability}");
+                        //Console.ResetColor();
+                        //Console.WriteLine($"{chipDigger.Name}--Digger durability: {chipDigger.Durability}");
 
                         if (chipDigger.Hopper.IsFull)
                         {
@@ -85,9 +86,8 @@ namespace PotatoChipMine.GameRooms.ControlRoom.Services
                             Console.ResetColor();
                         }
                     }
-
-                    turnsCounter++;
                 }
+                turnsCounter++;
             }
 
             Console.WriteLine("Dig Complete");

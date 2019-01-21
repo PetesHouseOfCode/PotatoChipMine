@@ -112,6 +112,7 @@ namespace PotatoChipMine.GameRooms.ControlRoom.Services
                     })) return;
                     gameState.Miner.TaterTokens -= tokensCost;
                     gameState.Miner.Inventory("bolts").Count -= (int)boltsCost;
+                    digger.Durability = digger.MaxDurability;
                 }
             };
         }
