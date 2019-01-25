@@ -55,23 +55,9 @@ namespace PotatoChipMine.GameRooms.ControlRoom.Services
                         var diggerDamage = oldDurabiliity - chipDigger.Durability;
                         chipDigger.Hopper.Count += scoop.Chips;
                         gameUi.ReportScoopResult(chipDigger, diggerDamage, scoop);
-                        //Console.WriteLine($"{chipDigger.Name}--{scoop.Chips} dug!");
-                        //Console.ForegroundColor = ConsoleColor.DarkRed;
-                        //Console.WriteLine($"{chipDigger.Name}--Digger Wear:{diggerDamage}");
-                        //if (diggerDamage > 5)
-                        //{
-                        //    Console.ForegroundColor = ConsoleColor.Red;
-                        //    Console.WriteLine("OUCH!");
-                        //}
-
-                        //Console.ResetColor();
-                        //Console.WriteLine($"{chipDigger.Name}--Digger durability: {chipDigger.Durability}");
-
                         if (chipDigger.Hopper.IsFull)
                         {
-                            Console.ForegroundColor = ConsoleColor.DarkYellow;
-                            Console.WriteLine(
-                                $"{chipDigger.Name}--The digger hopper is full. Press enter to empty the hopper.");
+                            gameUi.ReportHopperIsFull(chipDigger.Name);
                             Console.ReadLine();
                             miner.Inventory("chips").Count += chipDigger.Hopper.Count;
                             chipDigger.Hopper.Count = 0;
@@ -82,8 +68,7 @@ namespace PotatoChipMine.GameRooms.ControlRoom.Services
                         Console.ForegroundColor = ConsoleColor.Red;
                         if (chipDigger.Durability < 1)
                         {
-                            Console.WriteLine($"{chipDigger.Name}--The digger needs repair!");
-                            Console.ResetColor();
+                            gameUi.reportDiggerNeedsRepair(chipDigger);
                         }
                     }
                 }

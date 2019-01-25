@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Security.Cryptography.X509Certificates;
 using System.Threading;
@@ -16,7 +17,7 @@ namespace PotatoChipMine.Services
         public void Intro()
         {
             Console.ForegroundColor = ConsoleColor.Yellow;
-            foreach (var s in intro)
+            foreach (var s in _intro)
             {
                 TypeWriterWrite(s,1);
                 //Console.WriteLine(s);
@@ -84,6 +85,17 @@ namespace PotatoChipMine.Services
         {
             FastWrite(new[] {$"Chip Vault: {gameState.Miner.Inventory("chips").Count}"});
             Console.WriteLine();
+        }
+
+        internal void ReportHopperIsFull(string diggerName)
+        {
+            Console.BackgroundColor = ConsoleColor.DarkYellow;
+            Console.ForegroundColor = ConsoleColor.Black;
+            _tableWidth = 100;
+            PrintRow($"{diggerName}--The digger hopper is full. Press enter to empty the hopper.");
+            Console.CursorLeft = 0;
+            Console.ResetColor();
+            _tableWidth = _defaultTableWidth;
         }
 
         public void ReportAvailableCommands(CommandsGroup commandsGroup, GameState gameState)
@@ -312,7 +324,7 @@ namespace PotatoChipMine.Services
             _tableWidth = _defaultTableWidth;
         }
 
-        private string[] intro = new[]
+        private readonly string[] _intro = new[]
         {
             "        _____________",
             @"      //            \\                   ||                        ||",
@@ -374,6 +386,41 @@ namespace PotatoChipMine.Services
             PrintLine();
             Console.ResetColor();
             _tableWidth = _defaultTableWidth;
+        }
+
+        public void reportDiggerNeedsRepair(ChipDigger chipDigger)
+        {
+            _tableWidth = 100;
+            Console.BackgroundColor = ConsoleColor.Red;
+            Console.ForegroundColor = ConsoleColor.Black;
+            PrintRow($"{chipDigger.Name}--The digger needs repair!");
+            Console.ResetColor();
+            _tableWidth = _defaultTableWidth;
+        }
+
+        public void ReportSaveGames(FileInfo[] getFiles)
+        {
+            Console.ForegroundColor = ConsoleColor.Green;
+            PrintLine();
+            PrintRow("Game saves");
+            PrintLine();
+            PrintRow("Save Name","Saved Date");
+            PrintLine();
+            foreach (var file in getFiles)
+            {
+                var saveName = Path.GetFileName(file.Name).Split(".")[0];
+                var updated = file.LastWriteTime.ToString();
+                PrintRow(saveName,updated);
+                PrintLine();
+            }
+            Console.ResetColor();
+        }
+
+        public string CollectGameSaveToLoad(FileInfo[] files)
+        {
+            ReportSaveGames(files);
+            FastWrite(new[] { "Enter the name of the saved game you'd like to Resume" });
+            return  Console.ReadLine()??string.Empty;
         }
     }
 }

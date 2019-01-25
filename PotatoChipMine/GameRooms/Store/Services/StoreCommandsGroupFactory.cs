@@ -101,44 +101,57 @@ namespace PotatoChipMine.GameRooms.Store.Services
             return (userCommand, gameState) =>
             {
                 var result = Sell(userCommand.Parameters);
+                if (!result.sold)
+                {
+                    _gameUi.ReportException(new []{ result.message});
+                    return;
+                }
                 _gameUi.WritePrompt(result.message);
             };
         }
 
         private (bool sold, string message) Sell(IReadOnlyList<string> paramsList)
         {
-            int quantity;
-            InventoryItem item;
-            if (paramsList.Count >= 2)
+            try
             {
-                if (!int.TryParse(paramsList[0], out quantity))
+                int quantity;
+                InventoryItem item;
+                if (paramsList.Count >= 2)
                 {
-                    return (false,"Sell command was not in the correct format.");
+                    if (!int.TryParse(paramsList[0], out quantity))
+                    {
+                        return (false, "Sell command was not in the correct format.");
+                    }
+
+                    item = _gameState.Miner.Inventory(paramsList[1]);
+                    if (item == null)
+                    {
+                        return (false, $"You don't have any {paramsList[0]} to sell");
+                    }
+                }
+                else
+                {
+
+                    item = _gameState.Miner.Inventory(paramsList[0]);
+                    if (item == null)
+                    {
+                        return (false, $"You don't have any {paramsList[0]} to sell");
+                    }
+
+                    quantity = item.Count;
                 }
 
-                item = _gameState.Miner.Inventory(paramsList[1]);
-                if (item == null)
-                {
-                    return (false, $"You don't have any {paramsList[0]} to sell");
-                }
+                var price = _storeState.ItemsBuying.Any(x => x.Name.ToLower() == item.Name)
+                    ? _storeState.ItemsBuying.First(x => x.Name.ToLower() == item.Name).Price
+                    : 1;
+                item.Count -= quantity;
+                _gameState.Miner.TaterTokens += quantity * price;
+                return (true, $"Sold {quantity} chips for {quantity * price}.");
             }
-            else
+            catch (ArgumentOutOfRangeException e)
             {
-
-                item = _gameState.Miner.Inventory(paramsList[0]);
-                if (item == null)
-                {
-                    return (false, $"You don't have any {paramsList[0]} to sell");
-                }
-                quantity = item.Count;
+                return (false, "Invalid entry. Indicate an item to sell.");
             }
-
-            var price = _storeState.ItemsBuying.Any(x => x.Name.ToLower() == item.Name)
-                ? _storeState.ItemsBuying.First(x => x.Name.ToLower() == item.Name).Price
-                : 1;
-            item.Count -= quantity;
-            _gameState.Miner.TaterTokens += quantity * price;
-            return (true, $"Sold {quantity} chips for {quantity * price}.");
 
         }
 

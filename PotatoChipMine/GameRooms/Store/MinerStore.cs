@@ -7,7 +7,7 @@ namespace PotatoChipMine.GameRooms.Store
 {
     public class MinerStore : GameRoom
     {
-        protected readonly StoreState StoreState;
+        public StoreState StoreState { get; set; }
 
         public MinerStore(GameUI ui, GameState gameState, StoreState storeState, string[] greeting)
             : base(ui, gameState, greeting, GameMode.Store)

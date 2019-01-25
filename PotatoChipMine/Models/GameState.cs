@@ -10,5 +10,7 @@ namespace PotatoChipMine.Models
         public bool Running { get; internal set; }
         public MinerStore Store { get; internal set; }
         public DiggerControlRoom ControlRoom { get; set; }
+        public string SaveDirectory { get; set; }
+        public string SaveName { get; set; } = string.Empty;
     }
 }
