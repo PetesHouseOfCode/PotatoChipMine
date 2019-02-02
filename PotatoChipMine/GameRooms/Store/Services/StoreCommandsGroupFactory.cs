@@ -146,6 +146,7 @@ namespace PotatoChipMine.GameRooms.Store.Services
                     : 1;
                 item.Count -= quantity;
                 _gameState.Miner.TaterTokens += quantity * price;
+                _gameState.Miner.LifetimeTokens += quantity * price;
                 return (true, $"Sold {quantity} chips for {quantity * price}.");
             }
             catch (ArgumentOutOfRangeException e)

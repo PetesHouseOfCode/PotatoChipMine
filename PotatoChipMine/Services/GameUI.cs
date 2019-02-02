@@ -254,14 +254,15 @@ namespace PotatoChipMine.Services
             {
                 var result = Console.ReadLine();
 
-                switch (result)
+                switch (result.ToLower())
                 {
                     case "yes":
                         return true;
                     case "no":
+                    case "cancel":
                         return false;
                     default:
-                        FastWrite(new[] {"proceed?"});
+                        ReportInfo(message);
                         break;
                 }
             }
@@ -421,6 +422,44 @@ namespace PotatoChipMine.Services
             ReportSaveGames(files);
             FastWrite(new[] { "Enter the name of the saved game you'd like to Resume" });
             return  Console.ReadLine()??string.Empty;
+        }
+
+        public string SavePrompt(bool newSave)
+        {
+            var promptMessage = new List<string>
+            {
+                "Enter the name you would like to use to save this game.",
+                "Type [cancel] to cancel the save operation."
+            };
+            if (newSave)
+            {
+                promptMessage.Insert(0, "You have not previously saved this game.");
+            }
+            string saveName;
+            do
+            {
+                FastWrite(promptMessage.ToArray());
+                saveName = Console.ReadLine() ?? string.Empty;
+                if (saveName.Equals("cancel", StringComparison.CurrentCultureIgnoreCase))
+                {
+                    ReportException(new[] { "Save cancelled." });
+                    return string.Empty;
+                }
+            } while (saveName == string.Empty);
+            return saveName;
+        }
+
+        public void ReportEvent(string message)
+        {
+            Console.ForegroundColor = ConsoleColor.Magenta;
+            PrintLine();
+            Console.ForegroundColor = ConsoleColor.Black;
+            Console.BackgroundColor = ConsoleColor.Magenta;
+            TypeWriterWrite(new List<string>{ AlignCenter($"*** {message} ****",Console.WindowWidth)});
+            Console.ResetColor();
+            Console.ForegroundColor = ConsoleColor.Magenta;
+            PrintLine();
+            Console.ResetColor();
         }
     }
 }

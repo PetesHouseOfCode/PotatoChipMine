@@ -9,7 +9,7 @@ namespace PotatoChipMine.GameRooms.ControlRoom
         protected new readonly CommandsGroup CommandsGroup;
 
         public DiggerControlRoom(GameUI ui, GameState gameState, string[] greeting) :
-            base(ui, gameState, greeting, GameMode.ControlRoom)
+            base(ui, gameState, greeting,GameMode.ControlRoom)
         {
             CommandsGroup = new ControlRoomCommandsGroupFactory(ui).Build();
         }
@@ -22,7 +22,10 @@ namespace PotatoChipMine.GameRooms.ControlRoom
 
         protected override void AcceptCommand()
         {
+            EventRollerService.ReportEvents();
+            EventRollerService.Pause();
             var command = Ui.AcceptUserCommand("control-room");
+            EventRollerService.Resume();
             CommandsGroup.ExecuteCommand(Ui, command, GameState);
         }
     }

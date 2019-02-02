@@ -1,19 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
-using Newtonsoft.Json;
-using PotatoChipMine.GameRooms.ControlRoom;
-using PotatoChipMine.GameRooms.Store;
-using PotatoChipMine.GameRooms.Store.Models;
 using PotatoChipMine.Models;
 
 namespace PotatoChipMine.Services
 {
     public class TopCommandGroupFactory : ICommandGroupFactory
     {
-        private readonly GameUI _gameUi;
         private readonly GamePersistenceService _gamePersistenceService;
+        private readonly GameUI _gameUi;
+
         public TopCommandGroupFactory(GameUI gameUi)
         {
             _gameUi = gameUi;
@@ -121,32 +117,22 @@ namespace PotatoChipMine.Services
         {
             return (userCommand, gameState) =>
             {
-                string proceed;
-                do
+                if (!_gameUi.ConfirmDialog(new[]
                 {
-                    _gameUi.FastWrite(new[]
-                    {
-                        "Loading a new game will end this game and overwrite it with the loaded game data.",
-                        "Do you wish to proceed?"
-                    });
-                    proceed = Console.ReadLine() ?? string.Empty;
-                    if (proceed.Equals("cancel", StringComparison.CurrentCultureIgnoreCase) ||
-                        proceed.Equals("no", StringComparison.CurrentCultureIgnoreCase))
-                    {
-                        _gameUi.ReportException(new[] {"Load cancelled."});
-                        return;
-                    }
-                } while (!proceed.Equals("yes", StringComparison.CurrentCultureIgnoreCase));
-
+                    "Loading a new game will end this game and overwrite it with the loaded game data.",
+                    "Do you wish to proceed?"
+                }))
+                    return;
                 if (!userCommand.Parameters.Any())
                 {
                     var name = _gameUi.CollectGameSaveToLoad(_gamePersistenceService.SaveFiles(gameState));
                     _gamePersistenceService.LoadGame(gameState, name);
-                    _gameUi.FastWrite(new[] { $"{gameState.SaveName} loaded.  Good Luck {gameState.Miner.Name} !" });
+                    _gameUi.FastWrite(new[] {$"{gameState.SaveName} loaded.  Good Luck {gameState.Miner.Name} !"});
                     return;
                 }
+
                 _gamePersistenceService.LoadGame(gameState, userCommand.Parameters[0]);
-                _gameUi.FastWrite(new []{$"{gameState.SaveName} loaded.  Good Luck {gameState.Miner.Name} !"});
+                _gameUi.FastWrite(new[] {$"{gameState.SaveName} loaded.  Good Luck {gameState.Miner.Name} !"});
             };
         }
 
@@ -154,67 +140,9 @@ namespace PotatoChipMine.Services
         {
             return (userCommand, gameState) =>
             {
-                bool isNew = false;
-                while (true)
-                {
-                    if (gameState.SaveName == string.Empty)
-                    {
-                        isNew = true;
-                        do
-                        {
-                            _gameUi.FastWrite(new[]
-                            {
-                                "You have not previously saved this game.",
-                                "Enter the name you would like to use to save this game."
-                            });
-                            var saveName = Console.ReadLine()??string.Empty;
-                            if (saveName.Equals("cancel", StringComparison.CurrentCultureIgnoreCase))
-                            {
-                                _gameUi.ReportException(new[] { "Save cancelled." });
-                                return;
-                            }
-
-                            gameState.SaveName = saveName;
-                        } while (gameState.SaveName == string.Empty);
-                    }
-                    else
-                    {
-                        if (!isNew)
-                        {
-                            string proceed;
-                            _gameUi.FastWrite(new[]
-                                {$"Do you wish to overwrite your previous save of {gameState.SaveName}?"});
-                            do
-                            {
-                                _gameUi.FastWrite(new[] {"Please enter [yes] or [no]."});
-                                proceed = Console.ReadLine() ?? string.Empty;
-                                if (proceed.Equals("cancel", StringComparison.CurrentCultureIgnoreCase))
-                                {
-                                    _gameUi.ReportException(new[] {"Save cancelled."});
-                                    return;
-                                }
-                            } while (!proceed.Equals("yes", StringComparison.CurrentCultureIgnoreCase) &&
-                                     !proceed.Equals("no", StringComparison.CurrentCultureIgnoreCase));
-
-                            if (proceed.Equals("yes", StringComparison.CurrentCultureIgnoreCase))
-                            {
-                                _gamePersistenceService.SaveGame(_gamePersistenceService.BuildFromGameState(gameState));
-                                return;
-                            }
-
-                            _gameUi.FastWrite(new[] {"Enter the name you would like to use to save this game."});
-                            var saveName = Console.ReadLine() ?? string.Empty;
-                            if (saveName.Equals("cancel", StringComparison.CurrentCultureIgnoreCase))
-                            {
-                                _gameUi.ReportException(new[] {"Save cancelled."});
-                                return;
-                            }
-                            gameState.SaveName = saveName;
-                        }
-                        _gamePersistenceService.SaveGame(_gamePersistenceService.BuildFromGameState(gameState));
-                        return;
-                    }
-                }
+                
+                SetSaveName(gameState);
+                _gamePersistenceService.SaveGame(_gamePersistenceService.BuildFromGameState(gameState));
             };
         }
 
@@ -225,60 +153,37 @@ namespace PotatoChipMine.Services
                 _gameUi.ReportInfo(new[] {$"You have {gameState.Miner.TaterTokens} Tater Tokens"});
             };
         }
-    }
 
-    public class GamePersistenceService 
-    {
-        public GameSave BuildFromGameState(GameState gameState)
+        private void SetSaveName(GameState gameState)
         {
-            return new GameSave
-            {
-                Miner = gameState.Miner,
-                Mode = gameState.Mode,
-                SaveDirectory = gameState.SaveDirectory,
-                SaveName = gameState.SaveName
-            };
-        }
-        public void SaveGame(GameSave gameSave)
-        {
-            if (!Directory.Exists(gameSave.SaveDirectory)) Directory.CreateDirectory(gameSave.SaveDirectory);
-            var stream = new StreamWriter(Path.Combine(gameSave.SaveDirectory, gameSave.SaveName + ".json"),
-                false);
-            stream.Write(JsonConvert.SerializeObject(gameSave));
-            stream.Flush();
-            stream.Close();
-        }
-
-        public void LoadGame(GameState gameState,string gameName)
-        {
-            if (Directory.Exists(gameState.SaveDirectory))
-            {
-                if (File.Exists(Path.Combine(gameState.SaveDirectory, $"{gameName}.json")))
+            var isNew = false;
+            while (true)
+                if (gameState.SaveName == string.Empty)
                 {
-                    var str = File.ReadAllText(Path.Combine(gameState.SaveDirectory, $"{gameName}.json"));
-                    var loadedGame = JsonConvert.DeserializeObject<GameSave>(str);
-                    gameState.Miner = loadedGame.Miner;
-                    gameState.Mode = loadedGame.Mode;
-                    gameState.SaveDirectory = loadedGame.SaveDirectory;
-                    gameState.SaveName = loadedGame.SaveName;
+                    isNew = true;
+                    var saveName = _gameUi.SavePrompt(true);
+                    if (saveName.Equals("cancel", StringComparison.CurrentCultureIgnoreCase)) return;
+                    gameState.SaveName = saveName;
                 }
-            }
-        }
+                else
+                {
+                    if (isNew)
+                    {
 
-        public FileInfo[] SaveFiles(GameState gameState)
-        {
-            var dirInfo = new DirectoryInfo(gameState.SaveDirectory);
-            FileInfo[] files = dirInfo.GetFiles();
-            return files;
-        }
-    }
+                        return;
+                    }
 
-    public class GameSave
-    {
-        public Miner Miner { get; set; }
-        public GameMode Mode { get; set; }
-        public string SaveDirectory { get; set; }
-        public string SaveName { get; set; }
+                    if (_gameUi.ConfirmDialog(new[]
+                        {$"Do you wish to overwrite your previous save of {gameState.SaveName}?"}))
+                    {
+                        return;
+                    }
+
+                    var saveName = _gameUi.SavePrompt(false);
+                    if (saveName == string.Empty) return;
+                    gameState.SaveName = saveName;
+                }
+        }
 
     }
 }

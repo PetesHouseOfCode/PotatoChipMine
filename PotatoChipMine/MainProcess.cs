@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.IO;
+using System.Threading;
 using PotatoChipMine.GameRooms.ControlRoom.Services;
 using PotatoChipMine.GameRooms.Store.Services;
 using PotatoChipMine.Models;
@@ -14,6 +16,9 @@ namespace PotatoChipMine
         private readonly GameUI _gameUi;
         private readonly GameState _gameState;
         private readonly GamePersistenceService _gamePersistenceService = new GamePersistenceService();
+        private readonly EventRollerService _eventRollerService;
+        protected internal GameEvent newEvent;
+
         public MainProcess()
         {
             Console.SetWindowSize(Console.LargestWindowWidth,Console.LargestWindowHeight - 30);
@@ -35,6 +40,8 @@ namespace PotatoChipMine
             _gameState.Miner.Diggers = new List<ChipDigger>();
             _gameState.SaveDirectory = @"c:\chipMiner\saves";
             _commandsGroup = new TopCommandGroupFactory(_gameUi).Build();
+            _eventRollerService = new EventRollerService(_gameUi,_gameState);
+            _eventRollerService.Start();
             Console.WindowWidth = 125;
         }
 
@@ -42,12 +49,18 @@ namespace PotatoChipMine
         {
             _gameUi.Intro();
             GameStartupRoutine();
-            while (_gameState.Running) AcceptCommand();
+            while (_gameState.Running)
+            {
+                AcceptCommand();
+            }
         }
 
         private void AcceptCommand()
         {
+            _eventRollerService.ReportEvents();
+            _eventRollerService.Pause();
             var userCommand = _gameUi.AcceptUserCommand();
+            _eventRollerService.Resume();
             _commandsGroup.ExecuteCommand(_gameUi, userCommand, _gameState);
         }
 
@@ -124,6 +137,13 @@ namespace PotatoChipMine
             }
                 _gameUi.ReportInfo(new []{$"Well ok then.  Good luck to you {_gameState.Miner.Name}!"});
         }
+    }
+
+    public class EventLog
+    {
+        public string Name { get; set; }
+        public string Description { get; set; }
+        public string Processed { get; set; }
     }
 
     public class EmptyCommand : UserCommand

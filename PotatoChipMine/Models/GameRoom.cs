@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using PotatoChipMine.Services;
 
@@ -7,6 +7,7 @@ namespace PotatoChipMine.Models
     public class GameRoom
     {
         protected readonly string[] Greeting;
+        protected readonly EventRollerService EventRollerService;
         protected static GameUI Ui;
         protected GameState GameState;
         protected CommandsGroup CommandsGroup;
@@ -19,7 +20,7 @@ namespace PotatoChipMine.Models
             GameState = gameState;
             Ui = ui;
             Greeting = greeting;
-            
+            EventRollerService = new EventRollerService(ui,gameState);
         }
 
         public virtual void EnterRoom()

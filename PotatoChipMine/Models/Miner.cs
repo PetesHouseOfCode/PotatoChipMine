@@ -8,6 +8,8 @@ namespace PotatoChipMine.Models
         public string Name { get; set; }
         public List<ChipDigger> Diggers { get; set; } = new List<ChipDigger>();
         public int TaterTokens { get; set; }
+        public int LifetimeChips { get; set; }
+        public int LifetimeTokens { get; set; }
         public List<InventoryItem> InventoryItems { get; set; } = new List<InventoryItem>();
 
         public InventoryItem Inventory(string name)

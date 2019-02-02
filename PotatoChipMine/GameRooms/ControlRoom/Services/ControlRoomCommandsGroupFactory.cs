@@ -156,7 +156,12 @@ namespace PotatoChipMine.GameRooms.ControlRoom.Services
                 }
 
                 var hopperCount = digger.Hopper.Count;
-                if (chips != null) chips.Count += digger.Hopper.Count;
+                if (chips != null)
+                {
+                    chips.Count += digger.Hopper.Count;
+                    gameState.Miner.LifetimeChips += digger.Hopper.Count;
+                }
+                
                 digger.Hopper.Count = 0;
                 _gameUi.ReportHopperEmptied(userCommand.Parameters[0],hopperCount,gameState.Miner.Inventory("chips").Count);
             };
