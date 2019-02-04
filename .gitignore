@@ -4,6 +4,7 @@
 # Build related
 tools/**
 !tools/packages.config
+lcov.info
 
 # User-specific files
 *.suo
