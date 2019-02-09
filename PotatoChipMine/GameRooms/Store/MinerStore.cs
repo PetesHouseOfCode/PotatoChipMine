@@ -10,10 +10,11 @@ namespace PotatoChipMine.GameRooms.Store
         public StoreState StoreState { get; set; }
 
         public MinerStore(GameUI ui, GameState gameState, StoreState storeState, string[] greeting)
-            : base(ui, gameState, greeting,GameMode.Store)
+            : base(ui, gameState, greeting, GameMode.Store)
         {
             StoreState = storeState;
             CommandsGroup = new StoreCommandsGroupFactory(ui, gameState, StoreState).Build();
+            this.Name = "store";
         }
 
         public override void EnterRoom()
@@ -22,14 +23,9 @@ namespace PotatoChipMine.GameRooms.Store
             base.EnterRoom();
         }
 
-        protected override void AcceptCommand()
+        public override void ExecuteCommand(UserCommand command)
         {
-            EventRollerService.ReportEvents();
-            EventRollerService.Pause();
-            var commands = Ui.AcceptUserCommand("Store");
-            EventRollerService.Resume();
-            foreach(var command in commands)
-                CommandsGroup.ExecuteCommand(Ui, command, GameState);
+            CommandsGroup.ExecuteCommand(Ui, command, GameState);
         }
     }
 }

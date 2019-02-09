@@ -19,7 +19,6 @@ namespace PotatoChipMine.GameRooms.ControlRoom.Services
         {
             var commandsGroup = new CommandsGroup()
             {
-                ParentGroup = new TopCommandGroupFactory(_gameUi).Build(),
                 LocalCommands = new List<CommandsDefinition>()
                 {
                     new CommandsDefinition()

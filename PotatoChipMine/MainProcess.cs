@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.IO;
 using System.Threading;
+using PotatoChipMine.GameRooms;
 using PotatoChipMine.GameRooms.ControlRoom.Services;
 using PotatoChipMine.GameRooms.Store.Services;
 using PotatoChipMine.Models;
@@ -16,13 +18,11 @@ namespace PotatoChipMine
         private readonly GameUI _gameUi;
         private readonly GameState _gameState;
         private readonly GamePersistenceService _gamePersistenceService = new GamePersistenceService();
-        private readonly EventRollerService _eventRollerService;
-        protected internal GameEvent newEvent;
 
         public MainProcess()
-        {            
+        {
             Console.CursorVisible = false;
-            Console.SetWindowSize(Console.LargestWindowWidth,Console.LargestWindowHeight - 30);
+            Console.SetWindowSize(Console.LargestWindowWidth, Console.LargestWindowHeight - 30);
             _gameUi = new GameUI();
             _gameState = new GameState
             {
@@ -36,34 +36,76 @@ namespace PotatoChipMine
                 Mode = GameMode.Lobby,
                 Running = true
             };
+
+            _gameState.Events.Add(new RestockingEvent(_gameState));
+            _gameState.Events.Add(new LotteryEvent(_gameState));
+
+            _gameState.Lobby = new LobbyRoom(_gameUi, _gameState, new[] { "Welcome to the Lobby" }, GameMode.Lobby);
             _gameState.Store = new MinerStoreFactory(_gameUi, _gameState).BuildMineStore();
             _gameState.ControlRoom = new ControlRoomFactory(_gameUi, _gameState).BuildControlRoom();
             _gameState.Miner.Diggers = new List<ChipDigger>();
             _gameState.SaveDirectory = @"c:\chipMiner\saves";
             _commandsGroup = new TopCommandGroupFactory(_gameUi).Build();
-            _eventRollerService = new EventRollerService(_gameUi,_gameState);
-            _eventRollerService.Start();
             Console.WindowWidth = 125;
         }
 
         public void Run()
         {
             _gameUi.Intro();
-            GameStartupRoutine();
+            GameStartupRoutine();            
+            _gameState.Lobby.EnterRoom();
+            var frameTime = Stopwatch.StartNew();
+            var gameTime = Stopwatch.StartNew();
             while (_gameState.Running)
             {
-                AcceptCommand();
+                var frame = Frame.NewFrame(gameTime.Elapsed, frameTime.Elapsed);
+                Debug.WriteLine(frame.Elapsed);
+                frameTime.Restart();
+                var commands = GetInputs();
+                ProcessCommands(commands);
+                Update(frame);
+                DoEvents();
             }
         }
 
-        private void AcceptCommand()
+        private IList<UserCommand> GetInputs()
         {
-            _eventRollerService.ReportEvents();
-            _eventRollerService.Pause();
-            var commands = _gameUi.AcceptUserCommand();
-            _eventRollerService.Resume();
-            foreach(var command in commands)
+            return _gameUi.AcceptUserCommand(_gameState.CurrentRoom.Name);
+        }
+
+        private void ProcessCommands(IList<UserCommand> commands)
+        {
+            foreach (var command in commands)
+            {
                 _commandsGroup.ExecuteCommand(_gameUi, command, _gameState);
+            }
+
+            foreach (var command in commands)
+            {
+                _gameState.CurrentRoom.ExecuteCommand(command);
+            }
+        }
+
+        public void Update(Frame frame)
+        {
+            foreach (var component in _gameState.Events)
+                component.Update(frame);
+        }
+
+        private void DoEvents()
+        {
+            foreach (var newEvent in _gameState.NewEvents)
+            {
+                _gameUi.ReportEvent(newEvent.Message);
+                _gameState.EventsHistory.Add(new EventLog
+                {
+                    Name = newEvent.Name,
+                    Description = newEvent.Description,
+                    Processed = DateTime.Now.ToString()
+                });
+            }
+
+            _gameState.NewEvents = new List<GameEvent>();
         }
 
         private void GameStartupRoutine()
@@ -71,7 +113,7 @@ namespace PotatoChipMine
             string newGame;
             do
             {
-                _gameUi.FastWrite(new[] {"Do you want to start a new game?"});
+                _gameUi.FastWrite(new[] { "Do you want to start a new game?" });
                 newGame = Console.ReadLine();
             } while (!newGame.Equals("yes", StringComparison.CurrentCultureIgnoreCase) &&
                      !newGame.Equals("no", StringComparison.CurrentCultureIgnoreCase));
@@ -81,7 +123,7 @@ namespace PotatoChipMine
                 if (Directory.Exists(_gameState.SaveDirectory))
                 {
                     var name = _gameUi.CollectGameSaveToLoad(_gamePersistenceService.SaveFiles(_gameState));
-                    _gamePersistenceService.LoadGame(_gameState,name);
+                    _gamePersistenceService.LoadGame(_gameState, name);
                 }
             }
             else
@@ -137,7 +179,7 @@ namespace PotatoChipMine
                     Console.ReadLine();
                 }
             }
-                _gameUi.ReportInfo(new []{$"Well ok then.  Good luck to you {_gameState.Miner.Name}!"});
+            _gameUi.ReportInfo(new[] { $"Well ok then.  Good luck to you {_gameState.Miner.Name}!" });
         }
     }
 
@@ -192,6 +234,23 @@ namespace PotatoChipMine
 
             // Restore cursor to original position
             Console.SetCursorPosition(originalX, originalY);
+        }
+    }
+
+    public class Frame
+    {
+        public TimeSpan TimeSinceStart { get; }
+        public TimeSpan Elapsed { get; }
+
+        private Frame(TimeSpan timeSinceStart, TimeSpan elapsed)
+        {
+            this.TimeSinceStart = timeSinceStart;
+            this.Elapsed = elapsed;
+        }
+
+        public static Frame NewFrame(TimeSpan timeSinceStart, TimeSpan elapsed)
+        {
+            return new Frame(timeSinceStart, elapsed);
         }
     }
 }

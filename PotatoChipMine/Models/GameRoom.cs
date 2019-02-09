@@ -7,29 +7,28 @@ namespace PotatoChipMine.Models
     public class GameRoom
     {
         protected readonly string[] Greeting;
-        protected readonly EventRollerService EventRollerService;
         protected static GameUI Ui;
         protected GameState GameState;
         protected CommandsGroup CommandsGroup;
         protected readonly GameMode ActiveMode;
 
+        public string Name { get; set; }
 
-        public GameRoom(GameUI ui,GameState gameState,string[] greeting,GameMode activeMode)
+        public GameRoom(GameUI ui, GameState gameState, string[] greeting, GameMode activeMode)
         {
             ActiveMode = activeMode;
             GameState = gameState;
             Ui = ui;
             Greeting = greeting;
-            EventRollerService = new EventRollerService(ui,gameState);
         }
 
         public virtual void EnterRoom()
         {
             Ui.FastWrite(Greeting);
-            while (GameState.Mode == ActiveMode) AcceptCommand();
+            GameState.CurrentRoom = this;
         }
 
-        protected virtual void AcceptCommand()
+        public virtual void ExecuteCommand(UserCommand command)
         {
         }
     }
