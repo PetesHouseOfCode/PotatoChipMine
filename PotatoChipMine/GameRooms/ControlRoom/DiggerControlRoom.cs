@@ -24,9 +24,10 @@ namespace PotatoChipMine.GameRooms.ControlRoom
         {
             EventRollerService.ReportEvents();
             EventRollerService.Pause();
-            var command = Ui.AcceptUserCommand("control-room");
+            var commands = Ui.AcceptUserCommand("control-room");
             EventRollerService.Resume();
-            CommandsGroup.ExecuteCommand(Ui, command, GameState);
+            foreach(var command in commands)
+                CommandsGroup.ExecuteCommand(Ui, command, GameState);
         }
     }
 }

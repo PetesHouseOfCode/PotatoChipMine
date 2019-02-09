@@ -20,7 +20,8 @@ namespace PotatoChipMine
         protected internal GameEvent newEvent;
 
         public MainProcess()
-        {
+        {            
+            Console.CursorVisible = false;
             Console.SetWindowSize(Console.LargestWindowWidth,Console.LargestWindowHeight - 30);
             _gameUi = new GameUI();
             _gameState = new GameState
@@ -59,9 +60,10 @@ namespace PotatoChipMine
         {
             _eventRollerService.ReportEvents();
             _eventRollerService.Pause();
-            var userCommand = _gameUi.AcceptUserCommand();
+            var commands = _gameUi.AcceptUserCommand();
             _eventRollerService.Resume();
-            _commandsGroup.ExecuteCommand(_gameUi, userCommand, _gameState);
+            foreach(var command in commands)
+                _commandsGroup.ExecuteCommand(_gameUi, command, _gameState);
         }
 
         private void GameStartupRoutine()

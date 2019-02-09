@@ -149,7 +149,7 @@ namespace PotatoChipMine.GameRooms.Store.Services
                 _gameState.Miner.LifetimeTokens += quantity * price;
                 return (true, $"Sold {quantity} chips for {quantity * price}.");
             }
-            catch (ArgumentOutOfRangeException e)
+            catch (ArgumentOutOfRangeException)
             {
                 return (false, "Invalid entry. Indicate an item to sell.");
             }

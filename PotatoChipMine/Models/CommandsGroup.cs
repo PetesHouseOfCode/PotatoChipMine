@@ -21,7 +21,7 @@ namespace PotatoChipMine.Models
             }
 
             command = LocalCommands.FirstOrDefault(x =>
-                x.Command.Trim().ToLower().StartsWith(userCommand.CommandText.Trim().ToLower()));
+                x.Command.Trim().ToLower().Equals(userCommand.CommandText.Trim().ToLower()));
             if (command == null)
             {
                 GameUi.ReportBadCommand(userCommand.CommandText);
