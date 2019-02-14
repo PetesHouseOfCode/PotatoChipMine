@@ -13,7 +13,7 @@ namespace PotatoChipMine.GameRooms.Store.Services
         private readonly StoreState _storeState;
         private readonly GameState _gameState;
 
-        public StoreCommandsGroupFactory(GameUI gameUi,GameState gameState, StoreState storeState)
+        public StoreCommandsGroupFactory(GameUI gameUi, GameState gameState, StoreState storeState)
         {
             _gameState = gameState;
             _gameUi = gameUi;
@@ -26,7 +26,7 @@ namespace PotatoChipMine.GameRooms.Store.Services
             {
                 LocalCommands = new List<CommandsDefinition>()
                 {
-                    
+
                     new CommandsDefinition()
                     {
                         Command = "sell",
@@ -56,13 +56,14 @@ namespace PotatoChipMine.GameRooms.Store.Services
                     }
                 }
             };
-            
+
             commandsGroup.LocalCommands.Add(new CommandsDefinition()
             {
                 Command = "help",
                 Description = "Shows a description of all the currently available commands.",
-                Execute = (userCommand, gameState) => {
-                    _gameUi.ReportAvailableCommands(commandsGroup,gameState);
+                Execute = (userCommand, gameState) =>
+                {
+                    _gameUi.ReportAvailableCommands(gameState);
                 }
             });
             return commandsGroup;
@@ -75,7 +76,7 @@ namespace PotatoChipMine.GameRooms.Store.Services
 
         private Action<UserCommand, GameState> StockHandler()
         {
-            return (userCommand,gameState)=>
+            return (userCommand, gameState) =>
             {
                 _gameUi.ReportStoreStock(_storeState.ItemsForSale);
             };
@@ -85,13 +86,13 @@ namespace PotatoChipMine.GameRooms.Store.Services
         {
             return (userCommand, gameState) =>
             {
-                _gameUi.WritePrompt(
-                    Buy(
+                _gameUi.FastWrite(
+                    new[] {Buy(
                             userCommand.Parameters.Count > 1
                                 ? userCommand.Parameters[1]
                                 : userCommand.Parameters[0]
                             , userCommand.Parameters.Count == 1 ? 1 : int.Parse(userCommand.Parameters[0]))
-                        .message);
+                        .message});
             };
         }
 
@@ -102,10 +103,11 @@ namespace PotatoChipMine.GameRooms.Store.Services
                 var result = Sell(userCommand.Parameters);
                 if (!result.sold)
                 {
-                    _gameUi.ReportException(new []{ result.message});
+                    _gameUi.ReportException(new[] { result.message });
                     return;
                 }
-                _gameUi.WritePrompt(result.message);
+                
+                _gameUi.FastWrite(new[]{result.message});
             };
         }
 

@@ -15,7 +15,7 @@ namespace PotatoChipMineTests
         [Fact]
         public void MinerStore()
         {
-            var store = new MinerStore(new GameUI(),new GameState(),new StoreState(), new string[]{});
+            var store = new MinerStore(new GameUI(),new GameState(), new string[]{}, new CommandsGroup());
 
         }
     }

@@ -8,11 +8,13 @@ namespace PotatoChipMine.GameRooms.Store.Services
     {
         private readonly GameState _gameState;
         private readonly GameUI _ui;
+        private readonly CommandsGroup _baseCommandsGroup;
 
-        public MinerStoreFactory(GameUI ui, GameState gameState)
+        public MinerStoreFactory(GameUI ui, GameState gameState, CommandsGroup baseCommandsGroup)
         {
             _gameState = gameState;
             _ui = ui;
+            _baseCommandsGroup = baseCommandsGroup;
         }
 
         public MinerStore BuildMineStore()
@@ -24,10 +26,16 @@ namespace PotatoChipMine.GameRooms.Store.Services
             };
 
             var storeState = new StoreState();
-            storeState.ItemsForSale.Add(new StoreItem {Name = "Digger", Price = 20, Count = 5, InventoryId = 1});
-            storeState.ItemsForSale.Add(new StoreItem {Name = "bolts", Count = 500, Price = 5,InventoryId = 2});
-            storeState.ItemsBuying.Add(new StoreItem {Name = "RawChips", Price = 10});
-            var store = new MinerStore(_ui, _gameState, storeState, greeting);
+            storeState.ItemsForSale.Add(new StoreItem { Name = "Digger", Price = 20, Count = 5, InventoryId = 1 });
+            storeState.ItemsForSale.Add(new StoreItem { Name = "bolts", Count = 500, Price = 5, InventoryId = 2 });
+            storeState.ItemsBuying.Add(new StoreItem { Name = "RawChips", Price = 10 });
+            var store = new MinerStore(
+                _ui,
+                _gameState,
+                greeting,
+                _baseCommandsGroup.Join(new StoreCommandsGroupFactory(_ui, _gameState, storeState).Build())
+                );
+            store.StoreState = storeState;
             return store;
         }
     }

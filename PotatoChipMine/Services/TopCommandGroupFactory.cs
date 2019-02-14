@@ -25,7 +25,7 @@ namespace PotatoChipMine.Services
                 {
                     Command = "help",
                     Description = "Display all of the commands available.",
-                    Execute = (command, gameState) => { _gameUi.ReportAvailableCommands(commandsGroup, gameState); }
+                    Execute = (command, gameState) => { _gameUi.ReportAvailableCommands(gameState); }
                 },
                 new CommandsDefinition
                 {
@@ -33,7 +33,6 @@ namespace PotatoChipMine.Services
                     Description = "Opens the store mode and makes the store commands accessible.",
                     Execute = (command, gameState) =>
                     {
-                        gameState.Mode = GameMode.Store;
                         gameState.Store.EnterRoom();
                     }
                 },
@@ -63,7 +62,7 @@ namespace PotatoChipMine.Services
                     {
                         if (gameState.Mode == GameMode.Lobby) return;
                         _gameUi.FastWrite(new[] {$"Leaving {gameState.Mode}..."});
-                        gameState.Mode = GameMode.Lobby;
+                        gameState.Lobby.EnterRoom();
                     }
                 },
                 new CommandsDefinition

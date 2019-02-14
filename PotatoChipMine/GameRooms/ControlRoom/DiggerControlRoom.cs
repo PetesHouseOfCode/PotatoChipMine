@@ -6,24 +6,21 @@ namespace PotatoChipMine.GameRooms.ControlRoom
 {
     public class DiggerControlRoom : GameRoom
     {
-        protected new readonly CommandsGroup CommandsGroup;
-
-        public DiggerControlRoom(GameUI ui, GameState gameState, string[] greeting) :
-            base(ui, gameState, greeting, GameMode.ControlRoom)
+        public DiggerControlRoom(
+            GameUI ui,
+            GameState gameState,
+            string[] greeting,
+            CommandsGroup commandsGroup)
+         : base(ui, gameState, greeting, GameMode.ControlRoom)
         {
-            CommandsGroup = new ControlRoomCommandsGroupFactory(ui).Build();
             this.Name = "control-room";
+            CommandsGroup = commandsGroup;
         }
 
         public override void EnterRoom()
         {
             GameState.Mode = GameMode.ControlRoom;
             base.EnterRoom();
-        }
-
-        public override void ExecuteCommand(UserCommand command)
-        {
-            CommandsGroup.ExecuteCommand(Ui, command, GameState);
         }
     }
 }

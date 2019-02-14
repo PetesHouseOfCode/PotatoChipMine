@@ -65,7 +65,7 @@ namespace PotatoChipMine.GameRooms.ControlRoom.Services
                 Command = "help",
                 Description = "Shows a description of all the currently available commands.",
                 Execute = (userCommand, gameState) => {
-                    _gameUi.ReportAvailableCommands(commandsGroup, gameState);
+                    _gameUi.ReportAvailableCommands(gameState);
                 }
             });
             return commandsGroup;

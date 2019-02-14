@@ -7,9 +7,9 @@ namespace PotatoChipMine.Models
     public class CommandsGroup
     {
         protected internal GameUI GameUi;
-        public CommandsGroup ParentGroup { get; set; }
-        public List<CommandsDefinition> LocalCommands { get; set; }
-        public virtual void ExecuteCommand(GameUI gameUi, UserCommand userCommand,GameState gameState)
+        public List<CommandsDefinition> LocalCommands { get; set; } = new List<CommandsDefinition>();
+
+        public virtual void ExecuteCommand(GameUI gameUi, UserCommand userCommand, GameState gameState)
         {
             GameUi = gameUi;
             var command = LocalCommands.FirstOrDefault(x =>
@@ -19,6 +19,14 @@ namespace PotatoChipMine.Models
                 GameUi.ReportBadCommand(userCommand.CommandText);
             }
             command?.Execute(userCommand, gameState);
+        }
+
+        public CommandsGroup Join(CommandsGroup joinedCommandsGroup)
+        {
+            var commandsGroup = new CommandsGroup();
+            commandsGroup.LocalCommands.AddRange(this.LocalCommands);
+            commandsGroup.LocalCommands.AddRange(joinedCommandsGroup.LocalCommands);
+            return commandsGroup;
         }
     }
 }

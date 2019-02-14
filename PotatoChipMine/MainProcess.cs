@@ -22,6 +22,7 @@ namespace PotatoChipMine
         public MainProcess()
         {
             Console.CursorVisible = false;
+            Console.Title = "Potato Chip Mine";
             Console.SetWindowSize(Console.LargestWindowWidth, Console.LargestWindowHeight - 30);
             _gameUi = new GameUI();
             _gameState = new GameState
@@ -33,23 +34,22 @@ namespace PotatoChipMine
                     InventoryItems = new List<InventoryItem>
                         {new InventoryItem {Name = "chips", Count = 0, InventoryId = 0}}
                 },
-                Mode = GameMode.Lobby,
                 Running = true
             };
 
             _gameState.Events.Add(new RestockingEvent(_gameState));
             _gameState.Events.Add(new LotteryEvent(_gameState));
 
-            _gameState.Lobby = new LobbyRoom(_gameUi, _gameState, new[] { "Welcome to the Lobby" }, GameMode.Lobby);
-            _gameState.Store = new MinerStoreFactory(_gameUi, _gameState).BuildMineStore();
-            _gameState.ControlRoom = new ControlRoomFactory(_gameUi, _gameState).BuildControlRoom();
+            _commandsGroup = new TopCommandGroupFactory(_gameUi).Build();
+            _gameState.Lobby = new LobbyRoom(_gameUi, _gameState, new[] { "Welcome to the Lobby" }, GameMode.Lobby, _commandsGroup);
+            _gameState.Store = new MinerStoreFactory(_gameUi, _gameState, _commandsGroup).BuildMineStore();
+            _gameState.ControlRoom = new ControlRoomFactory(_gameUi, _gameState, _commandsGroup).BuildControlRoom();
             _gameState.Miner.Diggers = new List<ChipDigger>();
             _gameState.SaveDirectory = @"c:\chipMiner\saves";
-            _commandsGroup = new TopCommandGroupFactory(_gameUi).Build();
             Console.WindowWidth = 125;
         }
 
-        public void Run()
+        public void GameLoop()
         {
             _gameUi.Intro();
             GameStartupRoutine();            
@@ -75,11 +75,6 @@ namespace PotatoChipMine
 
         private void ProcessCommands(IList<UserCommand> commands)
         {
-            foreach (var command in commands)
-            {
-                _commandsGroup.ExecuteCommand(_gameUi, command, _gameState);
-            }
-
             foreach (var command in commands)
             {
                 _gameState.CurrentRoom.ExecuteCommand(command);

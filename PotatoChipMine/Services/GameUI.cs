@@ -144,37 +144,18 @@ namespace PotatoChipMine.Services
 
             return null;
         }
-        public void ReportAvailableCommands(CommandsGroup commandsGroup, GameState gameState)
+        public void ReportAvailableCommands(GameState gameState)
         {
             FastWrite(new string[]
             {
-                $"-----------   {gameState.Mode.ToString().ToUpper()} Commands  ---------------",
-                "These commands are available from any game room."
+                $"-----------   {gameState.Mode.ToString().ToUpper()} Commands  ---------------"
             });
-            foreach (var commandsDefinition in commandsGroup.LocalCommands.OrderBy(x => x.Command))
+            foreach (var commandsDefinition in gameState.CurrentRoom.CommandsGroup.LocalCommands.OrderBy(x => x.Command))
             {
                 var command = commandsDefinition.EntryDescription ?? commandsDefinition.Command;
                 FastWrite(new[]
                     {$"Command: [{command}]", $"Description: {commandsDefinition.Description}", "--------"});
             }
-
-            if (commandsGroup.ParentGroup == null || !(commandsGroup.ParentGroup.LocalCommands?.Count > 0)) return;
-
-            FastWrite(new[]
-                {
-                    "-----------   Global Commands  ---------------", "These commands are available from any game room."
-                },
-                ConsoleColor.Green);
-            Console.WriteLine();
-            foreach (var globalCommand in commandsGroup.ParentGroup.LocalCommands.OrderBy(x => x.Command))
-            {
-                var command = globalCommand.EntryDescription ?? globalCommand.Command;
-                FastWrite(new[]
-                        {$"Command: [{command}]", $"Description: {globalCommand.Description}", "--------"},
-                    ConsoleColor.Green);
-            }
-
-
         }
 
         public void ReportStoreStock(List<StoreItem> stock, ConsoleColor color = ConsoleColor.Gray)
