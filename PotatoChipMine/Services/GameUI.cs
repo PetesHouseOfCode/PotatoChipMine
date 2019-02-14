@@ -269,7 +269,7 @@ namespace PotatoChipMine.Services
             FastWrite(
                 new[]
                 {
-                    $"{digger} was scrapped for {bolts} bolts."
+                    $"{digger.Name} was scrapped for {bolts} bolts."
                 }, ConsoleColor.Yellow);
 
         }
