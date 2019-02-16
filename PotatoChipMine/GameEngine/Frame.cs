@@ -1,6 +1,6 @@
 using System;
 
-namespace PotatoChipMine
+namespace PotatoChipMine.GameEngine
 {
     public class Frame
     {

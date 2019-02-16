@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using PotatoChipMine.GameEngine;
 using PotatoChipMine.GameRooms;
 using PotatoChipMine.GameRooms.ControlRoom;
 using PotatoChipMine.GameRooms.Store;

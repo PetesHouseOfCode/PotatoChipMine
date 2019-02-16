@@ -10,6 +10,7 @@ using PotatoChipMine.GameRooms.Store.Services;
 using PotatoChipMine.Models;
 using PotatoChipMine.Services;
 using PotatoChipMine.Services.Events;
+using PotatoChipMine.GameEngine;
 
 namespace PotatoChipMine
 {
@@ -49,6 +50,7 @@ namespace PotatoChipMine
             _gameState.ControlRoom = new ControlRoomFactory(_gameUi, _gameState, _commandsGroup).BuildControlRoom();
             _gameState.Miner.Diggers = new List<ChipDigger>();
             _gameState.SaveDirectory = @"c:\chipMiner\saves";
+
             Console.WindowWidth = 125;
         }
 

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using PotatoChipMine.GameEngine;
 using PotatoChipMine.Models;
 
 namespace PotatoChipMine.Services.Events

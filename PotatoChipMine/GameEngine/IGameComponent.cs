@@ -1,6 +1,6 @@
 using PotatoChipMine;
 
-namespace PotatoChipMine
+namespace PotatoChipMine.GameEngine
 {
     public interface IGameComponent
     {

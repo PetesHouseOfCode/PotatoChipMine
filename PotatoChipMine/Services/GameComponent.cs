@@ -1,4 +1,5 @@
 using System;
+using PotatoChipMine.GameEngine;
 using PotatoChipMine.Models;
 
 namespace PotatoChipMine.Services
