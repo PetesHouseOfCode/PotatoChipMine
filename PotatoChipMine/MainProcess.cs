@@ -24,7 +24,9 @@ namespace PotatoChipMine
             Console.CursorVisible = false;
             Console.Title = "Potato Chip Mine";
             Console.SetWindowSize(Console.LargestWindowWidth, Console.LargestWindowHeight - 30);
+            
             _gameUi = new GameUI();
+            
             _gameState = new GameState
             {
                 Miner = new Miner
@@ -175,77 +177,6 @@ namespace PotatoChipMine
                 }
             }
             _gameUi.ReportInfo(new[] { $"Well ok then.  Good luck to you {_gameState.Miner.Name}!" });
-        }
-    }
-
-    public class EventLog
-    {
-        public string Name { get; set; }
-        public string Description { get; set; }
-        public string Processed { get; set; }
-    }
-
-    public class EmptyCommand : UserCommand
-    {
-    }
-
-    public enum GameMode
-    {
-        Lobby = 1,
-        Store = 2,
-        Mining = 3,
-        ControlRoom = 4
-    }
-
-    internal class ConsoleSpinner
-    {
-        private int _currentAnimationFrame;
-
-        public ConsoleSpinner()
-        {
-            SpinnerAnimationFrames = new[]
-            {
-                "|",
-                "/",
-                "-",
-                "\\"
-            };
-        }
-
-        public string[] SpinnerAnimationFrames { get; set; }
-
-        public void UpdateProgress()
-        {
-            // Store the current position of the cursor
-            var originalX = Console.CursorLeft;
-            var originalY = Console.CursorTop;
-
-            // Write the next frame (character) in the spinner animation
-            Console.Write(SpinnerAnimationFrames[_currentAnimationFrame]);
-
-            // Keep looping around all the animation frames
-            _currentAnimationFrame++;
-            if (_currentAnimationFrame == SpinnerAnimationFrames.Length) _currentAnimationFrame = 0;
-
-            // Restore cursor to original position
-            Console.SetCursorPosition(originalX, originalY);
-        }
-    }
-
-    public class Frame
-    {
-        public TimeSpan TimeSinceStart { get; }
-        public TimeSpan Elapsed { get; }
-
-        private Frame(TimeSpan timeSinceStart, TimeSpan elapsed)
-        {
-            this.TimeSinceStart = timeSinceStart;
-            this.Elapsed = elapsed;
-        }
-
-        public static Frame NewFrame(TimeSpan timeSinceStart, TimeSpan elapsed)
-        {
-            return new Frame(timeSinceStart, elapsed);
         }
     }
 }
