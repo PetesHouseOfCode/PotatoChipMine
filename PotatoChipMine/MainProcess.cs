@@ -9,6 +9,7 @@ using PotatoChipMine.GameRooms.ControlRoom.Services;
 using PotatoChipMine.GameRooms.Store.Services;
 using PotatoChipMine.Models;
 using PotatoChipMine.Services;
+using PotatoChipMine.Services.Events;
 
 namespace PotatoChipMine
 {

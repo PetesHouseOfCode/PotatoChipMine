@@ -6,7 +6,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using PotatoChipMine.Models;
 
-namespace PotatoChipMine.Services
+namespace PotatoChipMine.Services.Events
 {
     public class RestockingEvent : GameComponent, IGameComponent
     {

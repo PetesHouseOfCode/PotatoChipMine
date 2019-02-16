@@ -1,7 +1,7 @@
 using System;
 using PotatoChipMine.Models;
 
-namespace PotatoChipMine.Services
+namespace PotatoChipMine.Services.Events
 {
     public class LotteryEvent : GameComponent, IGameComponent
     {
