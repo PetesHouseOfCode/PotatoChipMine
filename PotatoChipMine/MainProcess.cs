@@ -57,7 +57,7 @@ namespace PotatoChipMine
         public void GameLoop()
         {
             _gameUi.Intro();
-            GameStartupRoutine();            
+            GameStartupRoutine();
             _gameState.Lobby.EnterRoom();
             var frameTime = Stopwatch.StartNew();
             var gameTime = Stopwatch.StartNew();
