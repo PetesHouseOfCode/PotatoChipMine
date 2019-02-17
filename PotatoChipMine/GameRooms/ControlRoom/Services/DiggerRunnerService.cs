@@ -68,7 +68,7 @@ namespace PotatoChipMine.GameRooms.ControlRoom.Services
                         Console.ForegroundColor = ConsoleColor.Red;
                         if (chipDigger.Durability < 1)
                         {
-                            gameUi.reportDiggerNeedsRepair(chipDigger);
+                            gameUi.ReportDiggerNeedsRepair(chipDigger);
                         }
                     }
                 }

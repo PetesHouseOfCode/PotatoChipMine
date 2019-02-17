@@ -11,8 +11,8 @@ namespace PotatoChipMine.Services
 {
     public class GameUI
     {
-        private const int _defaultTableWidth = 77;
-        private int _tableWidth = 77;
+        private const int defaultTableWidth = 77;
+        private int tableWidth = 77;
         private string incomingCommand = string.Empty;
         private int linePrintSpeed = 1;
         private string oldCommandPrompt = string.Empty;
@@ -20,13 +20,13 @@ namespace PotatoChipMine.Services
         public void Intro()
         {
             Console.ForegroundColor = ConsoleColor.Yellow;
-            foreach (var s in _intro)
+            foreach (var s in intro)
             {
                 TypeWriterWrite(s, 1);
-                //Console.WriteLine(s);
             }
+            
             Console.ResetColor();
-            Console.WriteLine(Environment.NewLine + AlignCenter("<<< PRESS ENTER >>>", Console.WindowWidth));
+            Console.WriteLine(AlignCenter("<<< PRESS ENTER >>>", Console.WindowWidth));
             Console.ReadLine();
             Console.Clear();
         }
@@ -82,7 +82,7 @@ namespace PotatoChipMine.Services
 
         public void ReportDiggersStarting(List<ChipDigger> diggers)
         {
-            _tableWidth = 50;
+            tableWidth = 50;
             Console.ForegroundColor = ConsoleColor.DarkYellow;
             PrintLine();
             Console.BackgroundColor = ConsoleColor.DarkYellow;
@@ -96,7 +96,7 @@ namespace PotatoChipMine.Services
                     chipDigger.MineSite.Hardness.ToString());
                 PrintLine();
             }
-            _tableWidth = _defaultTableWidth;
+            tableWidth = defaultTableWidth;
             Console.ResetColor();
         }
 
@@ -110,11 +110,11 @@ namespace PotatoChipMine.Services
         {
             Console.BackgroundColor = ConsoleColor.DarkYellow;
             Console.ForegroundColor = ConsoleColor.Black;
-            _tableWidth = 100;
+            tableWidth = 100;
             PrintRow($"{diggerName}--The digger hopper is full. Press enter to empty the hopper.");
             Console.CursorLeft = 0;
             Console.ResetColor();
-            _tableWidth = _defaultTableWidth;
+            tableWidth = defaultTableWidth;
         }
         private string GetInput()
         {
@@ -191,7 +191,8 @@ namespace PotatoChipMine.Services
                 foreach (var x in line)
                 {
                     Console.Write(x);
-                    Thread.Sleep(charSpeed);
+                    if(x != ' ')
+                        Thread.Sleep(charSpeed);
                 }
 
                 Console.Write(Environment.NewLine);
@@ -219,7 +220,7 @@ namespace PotatoChipMine.Services
 
         public void ReportMinerInventory(Miner miner)
         {
-            _tableWidth = 77;
+            tableWidth = 77;
             Console.ForegroundColor = ConsoleColor.Cyan;
             PrintLine();
             Console.ForegroundColor = ConsoleColor.Black;
@@ -297,12 +298,12 @@ namespace PotatoChipMine.Services
 
         private void PrintLine()
         {
-            TypeWriterWrite(new string('-', _tableWidth), 1);
+            TypeWriterWrite(new string('-', tableWidth), 1);
         }
 
         private void PrintRow(params string[] columns)
         {
-            var width = (_tableWidth - columns.Length) / columns.Length;
+            var width = (tableWidth - columns.Length) / columns.Length;
             var row = "|";
             foreach (var column in columns)
             {
@@ -328,7 +329,7 @@ namespace PotatoChipMine.Services
 
         public void ReportDiggers(List<ChipDigger> diggers)
         {
-            _tableWidth = 100;
+            tableWidth = 100;
             Console.ForegroundColor = ConsoleColor.DarkYellow;
             PrintLine();
             Console.ForegroundColor = ConsoleColor.Black;
@@ -349,46 +350,47 @@ namespace PotatoChipMine.Services
 
         private void ResetTableWidth()
         {
-            _tableWidth = _defaultTableWidth;
+            tableWidth = defaultTableWidth;
         }
 
-        private readonly string[] _intro = new[]
+        private readonly string[] intro = new[]
         {
-            "        _____________",
-            @"      //            \\                   ||                        ||",
-            @"      ||             ||                  ||                        ||",
-            @"      ||             ||               ////////                  ////////",
-            @"      ||             //    ______        ||        _______         ||         ______ ",
-            @"      ||____________//    /      \       ||       /       \        ||        /      \    ",
-            @"      ||                 |        |      ||      |         |       ||       |        |   ",
-            @"      ||                 |        |      ||      |         |\      ||       |        |  ",
-            @"      ||                  \______/       ||       \_______/\ \     ||        \______/   ",
-            @"",
-            @"        _____________",
-            @"      //             \\       ||",
-            @"      ||              ||      ||                ",
-            @"      ||                      ||                \\",
-            @"      ||                      ||_________                  _______",
-            @"      ||                      ||         \\      ||      //       \\",
-            @"      ||                      ||         ||      ||     ||         ||",
-            @"      ||              ||      ||         ||      ||     ||         || ",
-            @"      \\_____________//       ||         ||      ||     ||_________//",
-            @"                                                        ||",
-            @"                                                        ||",
-            @"      ||\\            //||                              ||",
-            @"      || \\          // ||     \\                       ",
-            @"      ||  \\        //  ||           \|_________       _______       \\_______"  ,
-            @"      ||   \\      //   ||     ||    ||        \\    //       \\     ||      \\",
-            @"      ||    \\    //    ||     ||    ||         ||   ||_______//     ||        ",
-            @"      ||     \\  //     ||     ||    ||         ||   ||              ||",
-            @"      ||      \\//      ||     ||    ||         ||   \\_______//     ||",
-            @"",
-            @""
+            "╔════════════════════════════════════════════════════════════════════════════════════════╗",
+            "║       _____________                                                                    ║",
+            @"║      //            \\                   ||                        ||                   ║",
+            @"║      ||             ||                  ||                        ||                   ║",
+            @"║      ||             ||               ////////                  ////////                ║",
+            @"║      ||             //    ______        ||        _______         ||         ______    ║",
+            @"║      ||____________//    /      \       ||       /       \        ||        /      \   ║",
+            @"║      ||                 |        |      ||      |         |       ||       |        |  ║",
+            @"║      ||                 |        |      ||      |         |\      ||       |        |  ║",
+            @"║      ||                  \______/       ||       \_______/\ \     ||        \______/   ║",
+            @"║                                                                                        ║",
+            @"║        _____________                                                                   ║",
+            @"║      //             \\       ||                                                        ║",
+            @"║      ||              ||      ||                                                        ║",
+            @"║      ||                      ||                \\                                      ║",
+            @"║      ||                      ||_________                  _______                      ║",
+            @"║      ||                      ||         \\      ||      //       \\                    ║",
+            @"║      ||                      ||         ||      ||     ||         ||                   ║",
+            @"║      ||              ||      ||         ||      ||     ||         ||                   ║",
+            @"║      \\_____________//       ||         ||      ||     ||_________//                   ║",
+            @"║                                                        ||                              ║",
+            @"║                                                        ||                              ║",
+            @"║      ||\\            //||                              ||                              ║",
+            @"║      || \\          // ||     \\                                                       ║",
+            @"║      ||  \\        //  ||           \|_________       _______       \\_______          ║"  ,
+            @"║      ||   \\      //   ||     ||    ||        \\    //       \\     ||      \\         ║",
+            @"║      ||    \\    //    ||     ||    ||         ||   ||_______//     ||                 ║",
+            @"║      ||     \\  //     ||     ||    ||         ||   ||              ||                 ║",
+            @"║      ||      \\//      ||     ||    ||         ||   \\_______//     ||                 ║",
+            @"║                                                                                        ║",
+            @"╚════════════════════════════════════════════════════════════════════════════════════════╝"
         };
 
         public void WriteDigHeader(int digNumber = 0)
         {
-            _tableWidth = 100;
+            tableWidth = 100;
             PrintLine();
             Console.BackgroundColor = ConsoleColor.DarkYellow;
             Console.ForegroundColor = ConsoleColor.Black;
@@ -398,11 +400,11 @@ namespace PotatoChipMine.Services
             Console.ForegroundColor = ConsoleColor.DarkYellow;
             PrintLine();
             Console.ResetColor();
-            _tableWidth = _defaultTableWidth;
+            tableWidth = defaultTableWidth;
         }
         public void ReportScoopResult(ChipDigger chipDigger, int diggerDamage, Scoop scoop)
         {
-            _tableWidth = 100;
+            tableWidth = 100;
             Console.ForegroundColor = ConsoleColor.DarkYellow;
             Console.CursorLeft = 0;
             PrintRow(
@@ -413,17 +415,17 @@ namespace PotatoChipMine.Services
                 $"{chipDigger.Hopper.Count}/{chipDigger.Hopper.Max}");
             PrintLine();
             Console.ResetColor();
-            _tableWidth = _defaultTableWidth;
+            tableWidth = defaultTableWidth;
         }
 
-        public void reportDiggerNeedsRepair(ChipDigger chipDigger)
+        public void ReportDiggerNeedsRepair(ChipDigger chipDigger)
         {
-            _tableWidth = 100;
+            tableWidth = 100;
             Console.BackgroundColor = ConsoleColor.Red;
             Console.ForegroundColor = ConsoleColor.Black;
             PrintRow($"{chipDigger.Name}--The digger needs repair!");
             Console.ResetColor();
-            _tableWidth = _defaultTableWidth;
+            tableWidth = defaultTableWidth;
         }
 
         public void ReportSaveGames(FileInfo[] getFiles)

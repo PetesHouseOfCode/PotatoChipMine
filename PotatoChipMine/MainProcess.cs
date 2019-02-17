@@ -26,9 +26,9 @@ namespace PotatoChipMine
             Console.CursorVisible = false;
             Console.Title = "Potato Chip Mine";
             Console.SetWindowSize(Console.LargestWindowWidth, Console.LargestWindowHeight - 30);
-            
+
             _gameUi = new GameUI();
-            
+
             _gameState = new GameState
             {
                 Miner = new Miner
@@ -57,20 +57,49 @@ namespace PotatoChipMine
         public void GameLoop()
         {
             _gameUi.Intro();
-            GameStartupRoutine();            
+            GameStartupRoutine();
             _gameState.Lobby.EnterRoom();
             var frameTime = Stopwatch.StartNew();
             var gameTime = Stopwatch.StartNew();
             while (_gameState.Running)
             {
                 var frame = Frame.NewFrame(gameTime.Elapsed, frameTime.Elapsed);
-                Debug.WriteLine(frame.Elapsed);
                 frameTime.Restart();
                 var commands = GetInputs();
                 ProcessCommands(commands);
                 Update(frame);
+                CalculateFrameRate(frame);
                 DoEvents();
             }
+        }
+
+        private int fpsFrames = 0;
+        private TimeSpan fpsElapsed = TimeSpan.Zero;
+        private double fpsAvg = 0;
+
+        private void CalculateFrameRate(Frame frame)
+        {
+            if (fpsFrames == 0)
+            {
+                fpsElapsed = frame.TimeSinceStart;
+            }
+
+            fpsFrames++;
+
+            if (frame.TimeSinceStart.Subtract(fpsElapsed).TotalSeconds >= 1)
+            {
+                var fps = fpsFrames / (frame.TimeSinceStart.Subtract(fpsElapsed).TotalSeconds);
+                fpsAvg = approxRollingAverage(fpsAvg, fps);
+                Console.Title = $"Miner - fps: {fpsAvg:0.##}";
+                fpsFrames = 0;
+            }
+        }
+
+        private double approxRollingAverage(double avg, double new_sample)
+        {
+            avg -= avg / 10;
+            avg += new_sample / 10;
+            return avg;
         }
 
         private IList<UserCommand> GetInputs()
