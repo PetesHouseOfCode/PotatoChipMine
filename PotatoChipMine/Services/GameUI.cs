@@ -17,6 +17,11 @@ namespace PotatoChipMine.Services
         private int linePrintSpeed = 1;
         private string oldCommandPrompt = string.Empty;
 
+        public GameUI(GameState state)
+        {
+            this.state = state;
+        }
+
         public void Intro()
         {
             Console.ForegroundColor = ConsoleColor.Yellow;
@@ -24,7 +29,7 @@ namespace PotatoChipMine.Services
             {
                 TypeWriterWrite(s, 1);
             }
-            
+
             Console.ResetColor();
             Console.WriteLine(AlignCenter("<<< PRESS ENTER >>>", Console.WindowWidth));
             Console.ReadLine();
@@ -45,9 +50,9 @@ namespace PotatoChipMine.Services
             Console.ResetColor();
         }
 
-        public void WritePrompt(string commandPrompt)
+        public void WritePrompt(string commandPrompt, bool force = false)
         {
-            if(commandPrompt == oldCommandPrompt)
+            if (commandPrompt == oldCommandPrompt && !force)
                 return;
 
             oldCommandPrompt = commandPrompt;
@@ -57,13 +62,19 @@ namespace PotatoChipMine.Services
             Console.ResetColor();
         }
 
-        public List<UserCommand> AcceptUserCommand(string commandContext = "")
+        private void DrawCommandPrompt(bool force = false)
         {
+            var commandContext = state.CurrentRoom.Name ?? string.Empty;
+
             if (commandContext != "")
                 commandContext += " ";
 
             var cmdStr = $"{commandContext}Command >> {incomingCommand}";
-            WritePrompt(cmdStr);
+            WritePrompt(cmdStr, force);
+        }
+        public List<UserCommand> AcceptUserCommand()
+        {
+            DrawCommandPrompt();
 
             var commandEntry = GetInput()?.Split(' ');
             if (commandEntry == null)
@@ -191,7 +202,7 @@ namespace PotatoChipMine.Services
                 foreach (var x in line)
                 {
                     Console.Write(x);
-                    if(x != ' ')
+                    if (x != ' ')
                         Thread.Sleep(charSpeed);
                 }
 
@@ -387,6 +398,7 @@ namespace PotatoChipMine.Services
             @"║                                                                                        ║",
             @"╚════════════════════════════════════════════════════════════════════════════════════════╝"
         };
+        private readonly GameState state;
 
         public void WriteDigHeader(int digNumber = 0)
         {
@@ -480,6 +492,7 @@ namespace PotatoChipMine.Services
 
         public void ReportEvent(string message)
         {
+            HideCommandPrompt();
             Console.ForegroundColor = ConsoleColor.Magenta;
             PrintLine();
             Console.ForegroundColor = ConsoleColor.Black;
@@ -489,6 +502,17 @@ namespace PotatoChipMine.Services
             Console.ForegroundColor = ConsoleColor.Magenta;
             PrintLine();
             Console.ResetColor();
+            ShowCommandPrompt();
+        }
+
+        private void ShowCommandPrompt()
+        {
+            DrawCommandPrompt(true);
+        }
+
+        private void HideCommandPrompt()
+        {
+            Console.Write("\r                                                                                     \r");
         }
     }
 }

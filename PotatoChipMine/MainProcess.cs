@@ -27,8 +27,6 @@ namespace PotatoChipMine
             Console.Title = "Potato Chip Mine";
             Console.SetWindowSize(Console.LargestWindowWidth, Console.LargestWindowHeight - 30);
 
-            _gameUi = new GameUI();
-
             _gameState = new GameState
             {
                 Miner = new Miner
@@ -40,6 +38,7 @@ namespace PotatoChipMine
                 },
                 Running = true
             };
+            _gameUi = new GameUI(_gameState);
 
             _gameState.Events.Add(new RestockingEvent(_gameState));
             _gameState.Events.Add(new LotteryEvent(_gameState));
@@ -104,7 +103,7 @@ namespace PotatoChipMine
 
         private IList<UserCommand> GetInputs()
         {
-            return _gameUi.AcceptUserCommand(_gameState.CurrentRoom.Name);
+            return _gameUi.AcceptUserCommand();
         }
 
         private void ProcessCommands(IList<UserCommand> commands)
