@@ -27,7 +27,7 @@ namespace PotatoChipMine.Services
             Console.ForegroundColor = ConsoleColor.Yellow;
             foreach (var s in intro)
             {
-                TypeWriterWrite(s, 1);
+                TypeWriterWrite(AlignCenter(s,Console.WindowWidth), 1);
             }
 
             Console.ResetColor();
@@ -50,19 +50,19 @@ namespace PotatoChipMine.Services
             Console.ResetColor();
         }
 
-        public void WritePrompt(string commandPrompt, bool force = false)
+        public void WritePrompt(string commandPrompt, bool force = false,bool showCursor= true)
         {
             if (commandPrompt == oldCommandPrompt && !force)
                 return;
 
+            var cursorChar = showCursor?"\x00A6":"";
             oldCommandPrompt = commandPrompt;
             Console.ForegroundColor = ConsoleColor.White;
-            Console.Write("\r");
-            Console.Write($"{commandPrompt}\x00A6    ");
+            Console.Write($"\r{commandPrompt}{cursorChar} ");
             Console.ResetColor();
         }
 
-        private void DrawCommandPrompt(bool force = false)
+        private void DrawCommandPrompt(bool force = false,bool showCursor=true)
         {
             var commandContext = state.CurrentRoom.Name ?? string.Empty;
 
@@ -70,7 +70,7 @@ namespace PotatoChipMine.Services
                 commandContext += " ";
 
             var cmdStr = $"{commandContext}Command >> {incomingCommand}";
-            WritePrompt(cmdStr, force);
+            WritePrompt(cmdStr, force,showCursor);
         }
         public List<UserCommand> AcceptUserCommand()
         {
@@ -91,6 +91,11 @@ namespace PotatoChipMine.Services
             return new List<UserCommand>() { new UserCommand { CommandText = commandEntry?[0], Parameters = commandEntry.Skip(1).ToList() } };
         }
 
+        public string AcceptUserDialogInput(string message){
+            WritePrompt(message,true);
+            var userInput = GetInput()?.Replace(' ','-');
+            return userInput;
+        }
         public void ReportDiggersStarting(List<ChipDigger> diggers)
         {
             tableWidth = 50;
@@ -135,6 +140,7 @@ namespace PotatoChipMine.Services
                 if (consoleKeyInfo.Key == ConsoleKey.Enter)
                 {
                     var returnCommand = incomingCommand;
+                    DrawCommandPrompt(true,false);
                     incomingCommand = string.Empty;
                     return returnCommand;
                 }
@@ -512,7 +518,7 @@ namespace PotatoChipMine.Services
 
         private void HideCommandPrompt()
         {
-            Console.Write("\r                                                                                     \r");
+            Console.Write($"                                                                                    \r");
         }
     }
 }

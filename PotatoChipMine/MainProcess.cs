@@ -138,15 +138,7 @@ namespace PotatoChipMine
 
         private void GameStartupRoutine()
         {
-            string newGame;
-            do
-            {
-                _gameUi.FastWrite(new[] { "Do you want to start a new game?" });
-                newGame = Console.ReadLine();
-            } while (!newGame.Equals("yes", StringComparison.CurrentCultureIgnoreCase) &&
-                     !newGame.Equals("no", StringComparison.CurrentCultureIgnoreCase));
-
-            if (!newGame.Equals("yes", StringComparison.CurrentCultureIgnoreCase))
+            if (!_gameUi.ConfirmDialog(new[]{"Do you want to start a new game?"}))
             {
                 if (Directory.Exists(_gameState.SaveDirectory))
                 {
