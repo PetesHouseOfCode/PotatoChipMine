@@ -5,16 +5,21 @@ namespace PotatoChipMine
 {
     public class ChipDigger
     {
-        private readonly MineSite _mineSite;
         private readonly Random _random = new Random();
 
         public ChipDigger(MineSite mineSite)
         {
-            _mineSite = mineSite;
+            MineSite = mineSite;
+            Hopper = new ChipsHopper {Count = 0, Max = 30};
+            Durability = 25;
+            MaxDurability = 25;
         }
 
+        public string Name { get; set; }
         public int Durability { get; set; }
-
+        public int MaxDurability { get; set; }
+        public ChipsHopper Hopper { get; set; }
+        public MineSite MineSite { get; set; }
         public Scoop Dig()
         {
             var scoop = new Scoop();
@@ -27,14 +32,14 @@ namespace PotatoChipMine
 
         private int RollChips()
         {
-            switch (_mineSite.ChipDensity)
+            switch (MineSite.ChipDensity)
             {
                 case ChipDensity.Scarce:
-                    return _random.Next(0, 3);
+                    return _random.Next(0, 4);
                 case ChipDensity.Normal:
-                    return _random.Next(3, 7);
+                    return _random.Next(3, 8);
                 case ChipDensity.Rich:
-                    return _random.Next(7, 25);
+                    return _random.Next(8, 25);
                 default:
                     return 0;
             }
@@ -42,19 +47,26 @@ namespace PotatoChipMine
 
         private int RollDurabilityHit()
         {
-            switch (_mineSite.Hardness)
+            switch (MineSite.Hardness)
             {
                 case SiteHardness.Soft:
-                    return _random.Next(0, 2);
+                    return _random.Next(0, 3);
                 case SiteHardness.Firm:
                     return _random.Next(1, 4);
                 case SiteHardness.Hard:
-                    return _random.Next(4, 12);
+                    return _random.Next(4, 8);
                 case SiteHardness.Solid:
-                    return _random.Next(8, 24);
+                    return _random.Next(8, 13);
                 default:
                     return -1;
             }
         }
+    }
+
+    public class ChipsHopper
+    {
+        public int Max { get; set; } = 0;
+        public int Count { get; set; } = 0;
+        public bool IsFull => Count >= Max;
     }
 }
