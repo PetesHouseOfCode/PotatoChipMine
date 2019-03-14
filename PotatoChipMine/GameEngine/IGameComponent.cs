@@ -1,9 +1,11 @@
 using PotatoChipMine;
+using PotatoChipMine.Models;
 
 namespace PotatoChipMine.GameEngine
 {
-    public interface IGameComponent
+    public interface IGameEntity
     {
+        void HandleInput(UserCommand command);
         void Update(Frame frame);
     }
 }

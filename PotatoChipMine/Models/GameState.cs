@@ -20,7 +20,6 @@ namespace PotatoChipMine.Models
         public string SaveDirectory { get; set; }
         public string SaveName { get; set; } = string.Empty;
         public List<EventLog> EventsHistory { get; set; } = new List<EventLog>();
-        public IList<IGameComponent> Events { get; } = new List<IGameComponent>();
         public LobbyRoom Lobby { get; set; }
     }
 

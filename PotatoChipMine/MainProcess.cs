@@ -20,6 +20,8 @@ namespace PotatoChipMine
         private readonly GameUI _gameUi;
         private readonly GameState _gameState;
         private readonly GamePersistenceService _gamePersistenceService = new GamePersistenceService();
+        public Stack<Scene> SceneStack { get; } = new Stack<Scene>();
+        public Scene CurrentScene { get; set; }
 
         public MainProcess()
         {
@@ -40,8 +42,6 @@ namespace PotatoChipMine
             };
             _gameUi = new GameUI(_gameState);
 
-            _gameState.Events.Add(new RestockingEvent(_gameState));
-            _gameState.Events.Add(new LotteryEvent(_gameState));
 
             _commandsGroup = new TopCommandGroupFactory(_gameUi).Build();
             _gameState.Lobby = new LobbyRoom(_gameUi, _gameState, new[] { "Welcome to the Lobby" }, GameMode.Lobby, _commandsGroup);
@@ -53,11 +53,26 @@ namespace PotatoChipMine
             Console.WindowWidth = 125;
         }
 
-        public void GameLoop()
+        public void StartGame()
         {
             _gameUi.Intro();
             GameStartupRoutine();
             _gameState.Lobby.EnterRoom();
+
+            var initialScene = Scene.Create(new List<IGameEntity>
+                {
+                    new RestockingEvent(_gameState),
+                    new LotteryEvent(_gameState),
+                    new GameRoomManager(_gameState)
+                });
+
+            Game.SetMainProcess(this);
+            Game.PushScene(initialScene);
+            GameLoop();
+        }
+
+        private void GameLoop()
+        {
             var frameTime = Stopwatch.StartNew();
             var gameTime = Stopwatch.StartNew();
             while (_gameState.Running)
@@ -110,14 +125,17 @@ namespace PotatoChipMine
         {
             foreach (var command in commands)
             {
-                _gameState.CurrentRoom.ExecuteCommand(command);
+                foreach (var entity in CurrentScene.Entities)
+                {
+                    entity.HandleInput(command);
+                }
             }
         }
 
         public void Update(Frame frame)
         {
-            foreach (var component in _gameState.Events)
-                component.Update(frame);
+            foreach (var entity in CurrentScene.Entities)
+                entity.Update(frame);
         }
 
         private void DoEvents()

@@ -4,18 +4,21 @@ using PotatoChipMine.Models;
 
 namespace PotatoChipMine.Services
 {
-    public abstract class GameComponent : IGameComponent
+    public abstract class GameEntity : IGameEntity
     {
         protected GameState GameState { get; set; }
 
-        public GameComponent(GameState gameState)
+        public GameEntity(GameState gameState)
         {
             this.GameState = gameState;
         }
 
         public virtual void Update(Frame frame)
         {
-            throw new NotImplementedException();
+        }
+
+        public virtual void HandleInput(UserCommand command)
+        {
         }
     }
 }
