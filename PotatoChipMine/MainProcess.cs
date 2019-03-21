@@ -2,14 +2,12 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
-using System.IO;
 using System.Threading;
 using PotatoChipMine.GameRooms;
 using PotatoChipMine.GameRooms.ControlRoom.Services;
 using PotatoChipMine.GameRooms.Store.Services;
 using PotatoChipMine.Models;
 using PotatoChipMine.Services;
-using PotatoChipMine.Services.Events;
 using PotatoChipMine.GameEngine;
 
 namespace PotatoChipMine
@@ -56,18 +54,12 @@ namespace PotatoChipMine
         public void StartGame()
         {
             _gameUi.Intro();
-            GameStartupRoutine();
+
             _gameState.Lobby.EnterRoom();
-
-            var initialScene = Scene.Create(new List<IGameEntity>
-                {
-                    new RestockingEvent(_gameState),
-                    new LotteryEvent(_gameState),
-                    new GameRoomManager(_gameState)
-                });
-
             Game.SetMainProcess(this);
-            Game.PushScene(initialScene);
+            Game.SwitchScene(Scene.Create(new List<IGameEntity>{
+                new GameLoaderEntity(_gameState)
+            }));
             GameLoop();
         }
 
@@ -152,72 +144,6 @@ namespace PotatoChipMine
             }
 
             _gameState.NewEvents = new List<GameEvent>();
-        }
-
-        private void GameStartupRoutine()
-        {
-            if (!_gameUi.ConfirmDialog(new[]{"Do you want to start a new game?"}))
-            {
-                if (Directory.Exists(_gameState.SaveDirectory))
-                {
-                    var name = _gameUi.CollectGameSaveToLoad(_gamePersistenceService.SaveFiles(_gameState));
-                    _gamePersistenceService.LoadGame(_gameState, name);
-                }
-            }
-            else
-            {
-                _gameUi.ReportInfo(new[]
-                {
-                    "Howdy pilgrim!  Welcome to glamorous world of 'tater chip mining!",
-                    "I'm Earl, your mine bot. I'll be you're right hand man ... 'er bot, around this here mining operation.",
-                    "Whats your name pilgrim?"
-                });
-                while (string.IsNullOrEmpty(_gameState.Miner.Name))
-                {
-                    _gameUi.WritePrompt("Enter Your Name");
-                    var name = Console.ReadLine();
-                    if (!string.IsNullOrEmpty(name))
-                    {
-                        _gameState.Miner.Name = name;
-                    }
-                }
-
-                _gameUi.ReportInfo(new[]
-                {
-                    $"Very pleased to meet you {_gameState.Miner.Name}.",
-                    "If you're new to 'tater mining you may want some instructions...",
-                    "You look like maybe you know your way around a chip digger though.",
-                    "Do you need instructions?"
-                });
-                var entry = "";
-                while (entry != null &&
-                       !entry.Equals("yes", StringComparison.CurrentCultureIgnoreCase) &&
-                       !entry.Equals("no", StringComparison.CurrentCultureIgnoreCase))
-                {
-                    _gameUi.WritePrompt("Enter [yes] or [no]");
-                    entry = Console.ReadLine();
-                }
-
-                if (entry.Equals("yes", StringComparison.CurrentCultureIgnoreCase))
-                {
-                    _gameUi.ReportInfo(new[]
-                    {
-                        "I'm sorry to report that the tutorial is under construction, but here's what we've got so far...",
-                        Environment.NewLine,
-                        ">]** You can type [help] at any time to see a list of available commands.",
-                        Environment.NewLine,
-                        "** You can buy and sell things in the store.",
-                        "** Type [store] to enter the store.",
-                        Environment.NewLine,
-                        "** You can take actions related to your diggers in the control-room.",
-                        "** Type [control-room] to enter the control-room",
-                        Environment.NewLine
-                    });
-                    _gameUi.WritePrompt("<<Press Enter To Continue>>");
-                    Console.ReadLine();
-                }
-            }
-            _gameUi.ReportInfo(new[] { $"Well ok then.  Good luck to you {_gameState.Miner.Name}!" });
         }
     }
 }

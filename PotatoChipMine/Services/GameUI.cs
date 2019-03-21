@@ -50,12 +50,12 @@ namespace PotatoChipMine.Services
             Console.ResetColor();
         }
 
-        public void WritePrompt(string commandPrompt, bool force = false,bool showCursor= true)
+        public void WritePrompt(string commandPrompt, bool force = false, bool showCursor= true)
         {
             if (commandPrompt == oldCommandPrompt && !force)
                 return;
 
-            var cursorChar = showCursor?"\x00A6":"";
+            var cursorChar = showCursor ? "\x00A6" : "";
             oldCommandPrompt = commandPrompt;
             Console.ForegroundColor = ConsoleColor.White;
             Console.Write($"\r{commandPrompt}{cursorChar} ");
@@ -64,14 +64,15 @@ namespace PotatoChipMine.Services
 
         private void DrawCommandPrompt(bool force = false,bool showCursor=true)
         {
-            var commandContext = state.CurrentRoom.Name ?? string.Empty;
+            var commandContext = state.PromptText ?? $"{state.CurrentRoom.Name} Command >>" ?? string.Empty;
 
             if (commandContext != "")
                 commandContext += " ";
 
-            var cmdStr = $"{commandContext}Command >> {incomingCommand}";
-            WritePrompt(cmdStr, force,showCursor);
+            var cmdStr = $"{commandContext} {incomingCommand}";
+            WritePrompt(cmdStr, force, showCursor);
         }
+
         public List<UserCommand> AcceptUserCommand()
         {
             DrawCommandPrompt();

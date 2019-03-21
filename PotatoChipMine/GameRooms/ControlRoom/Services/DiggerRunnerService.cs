@@ -34,7 +34,6 @@ namespace PotatoChipMine.GameRooms.ControlRoom.Services
                     {
                         var oldDurabiliity = chipDigger.Durability;
                         Console.Write($"{chipDigger.Name}--Digging chips.");
-                        Console.CursorVisible = false;
                         var x = 0;
                         var consoleSpinner = new ConsoleSpinner();
                         consoleSpinner.SpinnerAnimationFrames =
@@ -50,7 +49,6 @@ namespace PotatoChipMine.GameRooms.ControlRoom.Services
                             x++;
                         }
 
-                        Console.CursorVisible = true;
                         var scoop = chipDigger.Dig();
                         var diggerDamage = oldDurabiliity - chipDigger.Durability;
                         chipDigger.Hopper.Count += scoop.Chips;

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using PotatoChipMine.GameEngine;
 using PotatoChipMine.Models;
 using PotatoChipMine.Services;
 
@@ -170,16 +171,15 @@ namespace PotatoChipMine.GameRooms.ControlRoom.Services
         {
             return (userCommand, gameState) =>
             {
+                var scene = Scene.Create(new List<IGameEntity>{
+                    new EquipHandlerEntity(gameState)
+                });
+
                 var digger = gameState.Miner.InventoryItems.FirstOrDefault(x => x.Name.ToLower() == "digger");
                 if (digger != null && digger.Count > 0)
                 {
-                    var factory = new MineSiteFactory();
-                    var newDigger = new ChipDigger(factory.BuildSite()) { Durability = 20 };
-                    _gameUi.WritePrompt("enter digger name");
-                    newDigger.Name = Console.ReadLine()?.Trim().Replace(" ", "-");
-                    digger.Count--;
-                    gameState.Miner.Diggers.Add(newDigger);
-                    _gameUi.ReportDiggerEquipped(newDigger.Name);
+                    gameState.PromptText = "Enter Digger Name: ";
+                    Game.PushScene(scene);
                     return;
                 }
 
