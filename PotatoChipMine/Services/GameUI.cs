@@ -16,6 +16,7 @@ namespace PotatoChipMine.Services
         private string incomingCommand = string.Empty;
         private int linePrintSpeed = 1;
         private string oldCommandPrompt = string.Empty;
+        private bool showingPrompt = true;
 
         public GameUI(GameState state)
         {
@@ -162,6 +163,7 @@ namespace PotatoChipMine.Services
 
             return null;
         }
+
         public void ReportAvailableCommands(GameState gameState)
         {
             FastWrite(new string[]
@@ -512,14 +514,22 @@ namespace PotatoChipMine.Services
             ShowCommandPrompt();
         }
 
-        private void ShowCommandPrompt()
+        public void ShowCommandPrompt()
         {
-            DrawCommandPrompt(true);
+            if (!showingPrompt)
+            {
+                showingPrompt = true;
+                DrawCommandPrompt(true);
+            }
         }
 
-        private void HideCommandPrompt()
+        public void HideCommandPrompt()
         {
-            Console.Write($"                                                                                    \r");
+            if (showingPrompt)
+            {
+                showingPrompt = false;
+                Console.Write($"                                                                                    \r");
+            }
         }
     }
 }

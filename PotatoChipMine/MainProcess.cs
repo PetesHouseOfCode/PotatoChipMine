@@ -21,6 +21,8 @@ namespace PotatoChipMine
         public Stack<Scene> SceneStack { get; } = new Stack<Scene>();
         public Scene CurrentScene { get; set; }
 
+        public ConsoleBuffer Output { get; set; } = new ConsoleBuffer();
+
         public MainProcess()
         {
             Console.CursorVisible = false;
@@ -74,8 +76,11 @@ namespace PotatoChipMine
                 var commands = GetInputs();
                 ProcessCommands(commands);
                 Update(frame);
+
+                // TODO: Move to Entity
                 CalculateFrameRate(frame);
                 DoEvents();
+                Draw();
             }
         }
 
@@ -144,6 +149,22 @@ namespace PotatoChipMine
             }
 
             _gameState.NewEvents = new List<GameEvent>();
+        }
+
+        private void Draw()
+        {
+            var character = Output.Read();
+            if(character != null)
+            {
+                _gameUi.HideCommandPrompt();
+                Console.ForegroundColor = character.ForegroundColor;
+                Console.BackgroundColor = character.BackgroundColor;
+                Console.Write(character.Char);
+            }
+            else
+            { 
+                _gameUi.ShowCommandPrompt();
+            }
         }
     }
 }
