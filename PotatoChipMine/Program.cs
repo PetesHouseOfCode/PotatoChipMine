@@ -7,7 +7,7 @@ namespace PotatoChipMine
         public static void Main(string[] args)
         {
           var main = new MainProcess();
-            main.GameLoop();
+            main.StartGame();
         }
     }
 }

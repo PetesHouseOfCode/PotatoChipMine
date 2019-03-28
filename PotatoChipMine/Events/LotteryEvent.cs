@@ -4,7 +4,7 @@ using PotatoChipMine.Models;
 
 namespace PotatoChipMine.Services.Events
 {
-    public class LotteryEvent : GameComponent, IGameComponent
+    public class LotteryEvent : GameEntity, IGameEntity
     {
         private readonly Random _rnd = new Random();
 

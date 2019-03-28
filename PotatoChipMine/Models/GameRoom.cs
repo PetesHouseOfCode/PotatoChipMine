@@ -1,18 +1,19 @@
 using System;
 using System.Collections.Generic;
+using PotatoChipMine.GameEngine;
 using PotatoChipMine.Services;
 
 namespace PotatoChipMine.Models
 {
-    public class GameRoom
+    public class GameRoom : IGameEntity
     {
         protected string[] Greeting { get; set; }
         protected static GameUI Ui { get; set; }
         protected GameState GameState { get; set; }
         public CommandsGroup CommandsGroup { get; protected set; }
         protected GameMode ActiveMode { get; set; }
-
         public string Name { get; set; }
+        private Scene roomScene;
 
         public GameRoom(
             GameUI ui,
@@ -28,13 +29,17 @@ namespace PotatoChipMine.Models
 
         public virtual void EnterRoom()
         {
-            Ui.FastWrite(Greeting);
+            Game.Write(string.Join(Environment.NewLine, Greeting), ConsoleColor.Cyan);
             GameState.CurrentRoom = this;
         }
 
-        public void ExecuteCommand(UserCommand command)
+        public void HandleInput(UserCommand command)
         {
             CommandsGroup.ExecuteCommand(Ui, command, GameState);
+        }
+
+        public void Update(Frame frame)
+        {
         }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Security.Cryptography.X509Certificates;
@@ -16,6 +17,7 @@ namespace PotatoChipMine.Services
         private string incomingCommand = string.Empty;
         private int linePrintSpeed = 1;
         private string oldCommandPrompt = string.Empty;
+        private bool showingPrompt = true;
 
         public GameUI(GameState state)
         {
@@ -50,12 +52,12 @@ namespace PotatoChipMine.Services
             Console.ResetColor();
         }
 
-        public void WritePrompt(string commandPrompt, bool force = false,bool showCursor= true)
+        public void WritePrompt(string commandPrompt, bool force = false, bool showCursor= true)
         {
             if (commandPrompt == oldCommandPrompt && !force)
                 return;
 
-            var cursorChar = showCursor?"\x00A6":"";
+            var cursorChar = showCursor ? "\x00A6" : "";
             oldCommandPrompt = commandPrompt;
             Console.ForegroundColor = ConsoleColor.White;
             Console.Write($"\r{commandPrompt}{cursorChar} ");
@@ -64,16 +66,20 @@ namespace PotatoChipMine.Services
 
         private void DrawCommandPrompt(bool force = false,bool showCursor=true)
         {
-            var commandContext = state.CurrentRoom.Name ?? string.Empty;
+            var commandContext = state.PromptText ?? $"{state.CurrentRoom.Name} Command >>" ?? string.Empty;
 
             if (commandContext != "")
                 commandContext += " ";
 
-            var cmdStr = $"{commandContext}Command >> {incomingCommand}";
-            WritePrompt(cmdStr, force,showCursor);
+            var cmdStr = $"{commandContext} {incomingCommand}";
+            WritePrompt(cmdStr, force, showCursor);
         }
+
         public List<UserCommand> AcceptUserCommand()
         {
+            if (!showingPrompt)
+                return new List<UserCommand>();
+
             DrawCommandPrompt();
 
             var commandEntry = GetInput()?.Split(' ');
@@ -91,11 +97,6 @@ namespace PotatoChipMine.Services
             return new List<UserCommand>() { new UserCommand { CommandText = commandEntry?[0], Parameters = commandEntry.Skip(1).ToList() } };
         }
 
-        public string AcceptUserDialogInput(string message){
-            WritePrompt(message,true);
-            var userInput = GetInput()?.Replace(' ','-');
-            return userInput;
-        }
         public void ReportDiggersStarting(List<ChipDigger> diggers)
         {
             tableWidth = 50;
@@ -161,6 +162,7 @@ namespace PotatoChipMine.Services
 
             return null;
         }
+
         public void ReportAvailableCommands(GameState gameState)
         {
             FastWrite(new string[]
@@ -511,14 +513,24 @@ namespace PotatoChipMine.Services
             ShowCommandPrompt();
         }
 
-        private void ShowCommandPrompt()
+        public void ShowCommandPrompt()
         {
-            DrawCommandPrompt(true);
+            if (!showingPrompt)
+            {
+                Debug.WriteLine("Showing Prompt");
+                showingPrompt = true;
+                DrawCommandPrompt(true);
+            }
         }
 
-        private void HideCommandPrompt()
+        public void HideCommandPrompt()
         {
-            Console.Write($"                                                                                    \r");
+            if (showingPrompt)
+            {
+                Debug.WriteLine("Hiding Prompt");
+                showingPrompt = false;
+                Console.Write($"                                                                                    \r");
+            }
         }
     }
 }

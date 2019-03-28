@@ -9,7 +9,7 @@ using PotatoChipMine.Models;
 
 namespace PotatoChipMine.Services.Events
 {
-    public class RestockingEvent : GameComponent, IGameComponent
+    public class RestockingEvent : GameEntity, IGameEntity
     {
         private readonly Random _rnd = new Random();
 
