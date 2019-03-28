@@ -59,11 +59,7 @@ namespace PotatoChipMine
 
         private void StartGame()
         {
-            GameState.NewEvents.Add(new GameEvent
-            {
-                Name = "GetStarted",
-                Message = $"Well ok then.  Good luck to you {GameState.Miner.Name}!"
-            });
+            Game.Write($"Well ok then.  Good luck to you {GameState.Miner.Name}!", ConsoleColor.DarkGreen);
 
             var initialScene = Scene.Create(new List<IGameEntity>
                 {

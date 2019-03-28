@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Security.Cryptography.X509Certificates;
@@ -76,6 +77,9 @@ namespace PotatoChipMine.Services
 
         public List<UserCommand> AcceptUserCommand()
         {
+            if (!showingPrompt)
+                return new List<UserCommand>();
+
             DrawCommandPrompt();
 
             var commandEntry = GetInput()?.Split(' ');
@@ -93,11 +97,6 @@ namespace PotatoChipMine.Services
             return new List<UserCommand>() { new UserCommand { CommandText = commandEntry?[0], Parameters = commandEntry.Skip(1).ToList() } };
         }
 
-        public string AcceptUserDialogInput(string message){
-            WritePrompt(message,true);
-            var userInput = GetInput()?.Replace(' ','-');
-            return userInput;
-        }
         public void ReportDiggersStarting(List<ChipDigger> diggers)
         {
             tableWidth = 50;
@@ -518,6 +517,7 @@ namespace PotatoChipMine.Services
         {
             if (!showingPrompt)
             {
+                Debug.WriteLine("Showing Prompt");
                 showingPrompt = true;
                 DrawCommandPrompt(true);
             }
@@ -527,6 +527,7 @@ namespace PotatoChipMine.Services
         {
             if (showingPrompt)
             {
+                Debug.WriteLine("Hiding Prompt");
                 showingPrompt = false;
                 Console.Write($"                                                                                    \r");
             }

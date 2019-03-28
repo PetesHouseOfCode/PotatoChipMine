@@ -25,28 +25,14 @@ namespace PotatoChipMine
 
             if (command.CommandText.ToLower() == "yes")
             {
-                var gameEvent = new GameEvent
-                {
-                    Name = "TutorialMessage",
-                    Description = "",
-                    Message ="I'm sorry to report that the tutorial is under construction, but here's what we've got so far..." + Environment.NewLine + Environment.NewLine +
+                var message ="I'm sorry to report that the tutorial is under construction, but here's what we've got so far..." + Environment.NewLine + Environment.NewLine +
                         "** You can type [help] at any time to see a list of available commands." + Environment.NewLine + Environment.NewLine +
                         "** You can buy and sell things in the store." + Environment.NewLine +
                         "** Type [store] to enter the store." + Environment.NewLine  + Environment.NewLine +
                         "** You can take actions related to your diggers in the control-room." + Environment.NewLine +
-                        "** Type [control-room] to enter the control-room"  + Environment.NewLine  + Environment.NewLine
-                };
+                        "** Type [control-room] to enter the control-room"  + Environment.NewLine  + Environment.NewLine;
 
-                GameState.NewEvents.Add(gameEvent);
-                Game.Write(gameEvent.Message, ConsoleColor.Blue);
-                // foreach (var c in gameEvent.Message)
-                // {
-                //     if (c == '*')
-                //         Game.Write(new ConsoleChar(c, ConsoleColor.Blue));
-                //     else
-                //         Game.Write(new ConsoleChar(c));
-                // }
-
+                Game.Write(message, ConsoleColor.Blue);
 
                 StartGame();          
             }
@@ -54,12 +40,8 @@ namespace PotatoChipMine
 
         private void StartGame()
         {
-            GameState.NewEvents.Add(new GameEvent
-            {
-                Name = "GetStarted",
-                Message = $"Well ok then.  Good luck to you {GameState.Miner.Name}!"
-            });
-
+            Game.Write($"Well ok then.  Good luck to you {GameState.Miner.Name}!", ConsoleColor.Blue);
+            
             var initialScene = Scene.Create(new List<IGameEntity>
                 {
                     new RestockingEvent(GameState),

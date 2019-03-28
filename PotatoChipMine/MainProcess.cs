@@ -55,10 +55,10 @@ namespace PotatoChipMine
 
         public void StartGame()
         {
+            Game.SetMainProcess(this);
             _gameUi.Intro();
 
             _gameState.Lobby.EnterRoom();
-            Game.SetMainProcess(this);
             Game.SwitchScene(Scene.Create(new List<IGameEntity>{
                 new GameLoaderEntity(_gameState)
             }));
@@ -80,7 +80,7 @@ namespace PotatoChipMine
                 // TODO: Move to Entity
                 CalculateFrameRate(frame);
                 DoEvents();
-                Draw();
+                Draw(frame);
             }
         }
 
@@ -139,7 +139,7 @@ namespace PotatoChipMine
         {
             foreach (var newEvent in _gameState.NewEvents)
             {
-                _gameUi.ReportEvent(newEvent.Message);
+                Game.Write(newEvent.Message + Environment.NewLine, ConsoleColor.Green);
                 _gameState.EventsHistory.Add(new EventLog
                 {
                     Name = newEvent.Name,
@@ -148,21 +148,30 @@ namespace PotatoChipMine
                 });
             }
 
-            _gameState.NewEvents = new List<GameEvent>();
+            _gameState.NewEvents.Clear();
         }
 
-        private void Draw()
+        private TimeSpan lastCharOut = TimeSpan.Zero;
+
+        private void Draw(Frame frame)
         {
-            var character = Output.Read();
-            if(character != null)
+            if (lastCharOut != TimeSpan.Zero && frame.TimeSinceStart.Subtract(lastCharOut).Milliseconds < 3)
             {
+                return;
+            }
+
+            var character = Output.Read();
+            if (character != null)
+            {
+                lastCharOut = frame.TimeSinceStart;
                 _gameUi.HideCommandPrompt();
                 Console.ForegroundColor = character.ForegroundColor;
                 Console.BackgroundColor = character.BackgroundColor;
                 Console.Write(character.Char);
             }
             else
-            { 
+            {
+                lastCharOut = TimeSpan.Zero;
                 _gameUi.ShowCommandPrompt();
             }
         }

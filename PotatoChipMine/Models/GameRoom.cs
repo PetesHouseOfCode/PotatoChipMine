@@ -29,7 +29,7 @@ namespace PotatoChipMine.Models
 
         public virtual void EnterRoom()
         {
-            Ui.FastWrite(Greeting);
+            Game.Write(string.Join(Environment.NewLine, Greeting), ConsoleColor.Cyan);
             GameState.CurrentRoom = this;
         }
 

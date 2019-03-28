@@ -31,8 +31,11 @@ namespace PotatoChipMine.GameEngine
             mainProcess.Output.Write(character);
         }
 
-        public static void Write(string text, ConsoleColor color)
+        public static void Write(string text, ConsoleColor color = ConsoleColor.White)
         {
+            if (!text.EndsWith(Environment.NewLine))
+                text = text + Environment.NewLine;
+
             foreach (var c in text)
             {
                 mainProcess.Output.Write(new ConsoleChar(c, color));

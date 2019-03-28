@@ -18,13 +18,8 @@ namespace PotatoChipMine
         public override void HandleInput(UserCommand command)
         {
             if (string.IsNullOrEmpty(command.CommandText))
-            {                   
-                GameState.NewEvents.Add(new GameEvent
-                {
-                    Name = "ErrorMessage",
-                    Description = "",
-                    Message = "Please enter a name."
-                });
+            {
+                Game.Write("Please enter a name.", ConsoleColor.Red);
 
                 return;
             }
@@ -40,14 +35,8 @@ namespace PotatoChipMine
         {
             if (!sentMessage)
             {
-                GameState.NewEvents.Add(new GameEvent
-                {
-                    Name = "WelcomeMessage",
-                    Description = "",
-                    Message = "Howdy pilgrim!  Welcome to glamorous world of 'tater chip mining!" + Environment.NewLine +
-                    "I'm Earl, your mine bot. I'll be you're right hand man ... 'er bot, around this here mining operation."
-                });
-
+                Game.Write("Howdy pilgrim!  Welcome to glamorous world of 'tater chip mining!" + Environment.NewLine +
+                    "I'm Earl, your mine bot. I'll be you're right hand man ... 'er bot, around this here mining operation.");
                 GameState.PromptText = "Whats your name pilgrim?";
                 sentMessage = true;
             }
