@@ -46,20 +46,19 @@ namespace PotatoChipMine
 
         private void ReportFiles()
         {
-            GameState.NewEvents.Add(new GameEvent
+            var table = new TableOutput(77);
+            table.AddHeaders("File Name", "Save Date");
+            foreach( var file in persistenceService.SaveFiles(GameState))
             {
-                Name = "ListOfFiles",
-                Description = "",
-                Message = string.Join(
-                                Environment.NewLine,
-                                persistenceService.SaveFiles(GameState).Select(x => x.Name).ToList()
-                                )
-            });
+                table.AddRow(file.Name, file.LastWriteTime.ToShortDateString());
+            }
+
+            Game.Write(table);
         }
 
         private void StartGame()
         {
-            Game.Write($"Well ok then.  Good luck to you {GameState.Miner.Name}!", ConsoleColor.DarkGreen);
+            Game.WriteLine($"Well ok then.  Good luck to you {GameState.Miner.Name}!", ConsoleColor.DarkGreen);
 
             var initialScene = Scene.Create(new List<IGameEntity>
                 {

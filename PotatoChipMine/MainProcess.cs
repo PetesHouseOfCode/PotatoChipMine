@@ -139,7 +139,7 @@ namespace PotatoChipMine
         {
             foreach (var newEvent in _gameState.NewEvents)
             {
-                Game.Write(newEvent.Message + Environment.NewLine, ConsoleColor.Green);
+                Game.WriteLine(newEvent.Message + Environment.NewLine, ConsoleColor.Green);
                 _gameState.EventsHistory.Add(new EventLog
                 {
                     Name = newEvent.Name,

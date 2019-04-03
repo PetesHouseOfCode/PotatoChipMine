@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Security.Cryptography.X509Certificates;
 using System.Threading;
+using PotatoChipMine.GameEngine;
 using PotatoChipMine.GameRooms.Store.Models;
 using PotatoChipMine.Models;
 
@@ -47,9 +48,8 @@ namespace PotatoChipMine.Services
 
         public void FastWrite(string[] linesToReport, ConsoleColor color = ConsoleColor.Cyan)
         {
-            Console.ForegroundColor = color;
-            TypeWriterWrite(linesToReport.ToList(), 3);
-            Console.ResetColor();
+            foreach(var line in linesToReport)
+                Game.WriteLine(line, color);
         }
 
         public void WritePrompt(string commandPrompt, bool force = false, bool showCursor= true)
@@ -239,23 +239,14 @@ namespace PotatoChipMine.Services
 
         public void ReportMinerInventory(Miner miner)
         {
-            tableWidth = 77;
-            Console.ForegroundColor = ConsoleColor.Cyan;
-            PrintLine();
-            Console.ForegroundColor = ConsoleColor.Black;
-            Console.BackgroundColor = ConsoleColor.Cyan;
-            PrintRow(new[] { "Name", "Quantity" });
-            Console.ResetColor();
-            Console.ForegroundColor = ConsoleColor.Cyan;
-            if (miner.InventoryItems.Count < 1) return;
-            PrintLine();
+            var table = new TableOutput(77);
+            table.AddHeaders("Name", "Quantity");
             foreach (var minerInventoryItem in miner.InventoryItems)
             {
-                PrintRow(new[] { minerInventoryItem.Name, minerInventoryItem.Count.ToString() });
-                PrintLine();
+                table.AddRow(minerInventoryItem.Name, minerInventoryItem.Count.ToString() );
             }
-            Console.ResetColor();
-            ResetTableWidth();
+
+            Game.Write(table);
         }
 
         public void ReportDiggerEquipped(string newDiggerName)
@@ -348,23 +339,18 @@ namespace PotatoChipMine.Services
 
         public void ReportDiggers(List<ChipDigger> diggers)
         {
-            tableWidth = 100;
-            Console.ForegroundColor = ConsoleColor.DarkYellow;
-            PrintLine();
-            Console.ForegroundColor = ConsoleColor.Black;
-            Console.BackgroundColor = ConsoleColor.DarkYellow;
-            PrintRow(new[] { "Name", "Durability", "Chips in Hopper", "Hopper Size", "Hopper Space" });
-            Console.ResetColor();
-            Console.ForegroundColor = ConsoleColor.DarkYellow;
-            if (diggers.Count < 1) return;
-            PrintLine();
+            var table = new TableOutput(100);
+            table.AddHeaders("Name", "Durability", "Chips in Hopper", "Hopper Size", "Hopper Space");
             foreach (var digger in diggers)
             {
-                PrintRow(digger.Name, digger.Durability.ToString(), digger.Hopper.Count.ToString(), digger.Hopper.Max.ToString(), $"{digger.Hopper.Max - digger.Hopper.Count}/{digger.Hopper.Max}");
-                PrintLine();
+                table.AddRow(digger.Name,
+                    digger.Durability.ToString(),
+                    digger.Hopper.Count.ToString(),
+                    digger.Hopper.Max.ToString(),
+                    $"{digger.Hopper.Max - digger.Hopper.Count}/{digger.Hopper.Max}");
             }
-            Console.ResetColor();
-            ResetTableWidth();
+
+            Game.Write(table);
         }
 
         private void ResetTableWidth()
@@ -496,21 +482,6 @@ namespace PotatoChipMine.Services
                 }
             } while (saveName == string.Empty);
             return saveName;
-        }
-
-        public void ReportEvent(string message)
-        {
-            HideCommandPrompt();
-            Console.ForegroundColor = ConsoleColor.Magenta;
-            PrintLine();
-            Console.ForegroundColor = ConsoleColor.Black;
-            Console.BackgroundColor = ConsoleColor.Magenta;
-            TypeWriterWrite(new List<string> { AlignCenter($"*** {message} ****", Console.WindowWidth) });
-            Console.ResetColor();
-            Console.ForegroundColor = ConsoleColor.Magenta;
-            PrintLine();
-            Console.ResetColor();
-            ShowCommandPrompt();
         }
 
         public void ShowCommandPrompt()
