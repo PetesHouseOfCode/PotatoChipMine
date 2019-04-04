@@ -16,5 +16,16 @@ namespace PotatoChipMine.Models
         {
             return InventoryItems.FirstOrDefault(x => x.Name == name);
         }
+
+        public static Miner Default()
+        {
+            return new Miner
+            {
+                Diggers = new List<ChipDigger>(),
+                TaterTokens = 100,
+                InventoryItems = new List<InventoryItem>
+                    {new InventoryItem {Name = "chips", Count = 0, InventoryId = 0}}
+            };
+        }
     }
 }

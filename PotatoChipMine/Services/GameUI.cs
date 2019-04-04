@@ -425,31 +425,6 @@ namespace PotatoChipMine.Services
             tableWidth = defaultTableWidth;
         }
 
-        public void ReportSaveGames(FileInfo[] getFiles)
-        {
-            Console.ForegroundColor = ConsoleColor.Green;
-            PrintLine();
-            PrintRow("Game saves");
-            PrintLine();
-            PrintRow("Save Name", "Saved Date");
-            PrintLine();
-            foreach (var file in getFiles)
-            {
-                var saveName = Path.GetFileName(file.Name).Split(".")[0];
-                var updated = file.LastWriteTime.ToString();
-                PrintRow(saveName, updated);
-                PrintLine();
-            }
-            Console.ResetColor();
-        }
-
-        public string CollectGameSaveToLoad(FileInfo[] files)
-        {
-            ReportSaveGames(files);
-            FastWrite(new[] { "Enter the name of the saved game you'd like to Resume" });
-            return Console.ReadLine() ?? string.Empty;
-        }
-
         public string SavePrompt(bool newSave)
         {
             var promptMessage = new List<string>

@@ -4,7 +4,7 @@ using PotatoChipMine.Models;
 using PotatoChipMine.Services;
 using PotatoChipMine.GameEngine;
 
-namespace PotatoChipMine
+namespace PotatoChipMine.Entities
 {
     public class CollectMineNameEntity : GameEntity
     {
@@ -24,6 +24,7 @@ namespace PotatoChipMine
                 return;
             }
          
+            GameState.Miner = Miner.Default();
             GameState.Miner.Name = command.CommandText;
             GameState.PromptText = null;
             Game.SwitchScene(Scene.Create(new List<IGameEntity>{

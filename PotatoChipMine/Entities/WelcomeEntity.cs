@@ -5,7 +5,7 @@ using PotatoChipMine.Services;
 using PotatoChipMine.Services.Events;
 using PotatoChipMine.GameEngine;
 
-namespace PotatoChipMine
+namespace PotatoChipMine.Entities
 {
     public class WelcomeEntity : GameEntity
     {

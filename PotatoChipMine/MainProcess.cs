@@ -9,6 +9,7 @@ using PotatoChipMine.GameRooms.Store.Services;
 using PotatoChipMine.Models;
 using PotatoChipMine.Services;
 using PotatoChipMine.GameEngine;
+using PotatoChipMine.Entities;
 
 namespace PotatoChipMine
 {
@@ -31,13 +32,6 @@ namespace PotatoChipMine
 
             _gameState = new GameState
             {
-                Miner = new Miner
-                {
-                    Diggers = new List<ChipDigger>(),
-                    TaterTokens = 100,
-                    InventoryItems = new List<InventoryItem>
-                        {new InventoryItem {Name = "chips", Count = 0, InventoryId = 0}}
-                },
                 Running = true
             };
             _gameUi = new GameUI(_gameState);
@@ -47,7 +41,6 @@ namespace PotatoChipMine
             _gameState.Lobby = new LobbyRoom(_gameUi, _gameState, new[] { "Welcome to the Lobby" }, GameMode.Lobby, _commandsGroup);
             _gameState.Store = new MinerStoreFactory(_gameUi, _gameState, _commandsGroup).BuildMineStore();
             _gameState.ControlRoom = new ControlRoomFactory(_gameUi, _gameState, _commandsGroup).BuildControlRoom();
-            _gameState.Miner.Diggers = new List<ChipDigger>();
             _gameState.SaveDirectory = @"c:\chipMiner\saves";
 
             Console.WindowWidth = 125;

@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using PotatoChipMine.Entities;
+using PotatoChipMine.GameEngine;
 using PotatoChipMine.Models;
 
 namespace PotatoChipMine.Services
@@ -116,22 +118,7 @@ namespace PotatoChipMine.Services
         {
             return (userCommand, gameState) =>
             {
-                if (!_gameUi.ConfirmDialog(new[]
-                {
-                    "Loading a new game will end this game and overwrite it with the loaded game data.",
-                    "Do you wish to proceed?"
-                }))
-                    return;
-                if (!userCommand.Parameters.Any())
-                {
-                    var name = _gameUi.CollectGameSaveToLoad(_gamePersistenceService.SaveFiles(gameState));
-                    _gamePersistenceService.LoadGame(gameState, name);
-                    _gameUi.FastWrite(new[] {$"{gameState.SaveName} loaded.  Good Luck {gameState.Miner.Name} !"});
-                    return;
-                }
-
-                _gamePersistenceService.LoadGame(gameState, userCommand.Parameters[0]);
-                _gameUi.FastWrite(new[] {$"{gameState.SaveName} loaded.  Good Luck {gameState.Miner.Name} !"});
+                Game.PushScene(Scene.Create(new[] { new LoadGameEntity(gameState, _gamePersistenceService) }));
             };
         }
 
