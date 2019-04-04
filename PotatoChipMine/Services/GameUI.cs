@@ -120,7 +120,6 @@ namespace PotatoChipMine.Services
         public void ReportVault(GameState gameState)
         {
             FastWrite(new[] { $"Chip Vault: {gameState.Miner.Inventory("chips").Count}" });
-            Console.WriteLine();
         }
 
         internal void ReportHopperIsFull(string diggerName)
@@ -179,22 +178,14 @@ namespace PotatoChipMine.Services
 
         public void ReportStoreStock(List<StoreItem> stock, ConsoleColor color = ConsoleColor.Gray)
         {
-
-            Console.ForegroundColor = ConsoleColor.Cyan;
-            PrintLine();
-            Console.ForegroundColor = ConsoleColor.Black;
-            Console.BackgroundColor = ConsoleColor.Cyan;
-            PrintRow(new[] { "Name", "Price", "Quantity" });
-            Console.ResetColor();
-            Console.ForegroundColor = ConsoleColor.Cyan;
-            if (stock.Count < 1) return;
-            PrintLine();
+            var table = new TableOutput(77, ConsoleColor.Green);
+            table.AddHeaders("Name", "Price", "Quantity");
             foreach (var storeItem in stock)
             {
-                PrintRow(storeItem.Name, storeItem.Price.ToString(), storeItem.Count.ToString());
-                PrintLine();
+                table.AddRow(storeItem.Name, storeItem.Price.ToString(), storeItem.Count.ToString());
             }
-            Console.ResetColor();
+
+            Game.Write(table);
         }
 
         public void ReportBuyingItems(List<StoreItem> buying, ConsoleColor color = ConsoleColor.Gray)
