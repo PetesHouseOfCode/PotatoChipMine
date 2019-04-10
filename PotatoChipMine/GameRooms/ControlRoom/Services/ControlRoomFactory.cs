@@ -25,7 +25,6 @@ namespace PotatoChipMine.GameRooms.ControlRoom.Services
                 "Welcome to digger control.", "From here you can prepare your diggers to dig."
             };
             var controlRoom = new DiggerControlRoom(
-                _ui,
                 _gameState,
                 greeting,
                 _baseCommandsGroup.Join(new ControlRoomCommandsGroupFactory(_ui).Build())

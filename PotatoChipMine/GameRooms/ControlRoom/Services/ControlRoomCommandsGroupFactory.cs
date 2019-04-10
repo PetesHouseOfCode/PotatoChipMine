@@ -76,14 +76,21 @@ namespace PotatoChipMine.GameRooms.ControlRoom.Services
         {
             return (userCommand, gameState) =>
             {
+                if (!userCommand.Parameters.Any())
+                {
+                    Game.WriteLine("You will need to provide a digger name!", ConsoleColor.Red);
+                    return;
+                }
+                
                 var random = new Random();
                             
                 var digger = gameState.Miner.Diggers.FirstOrDefault(x =>
                     string.Equals(x.Name, userCommand.Parameters[0], StringComparison.CurrentCultureIgnoreCase));
                 if (digger == null)
                 {
-                    _gameUi.ReportException(new []{$"No digger named {userCommand.Parameters[0]} could be found."});
+                    Game.WriteLine($"No digger named {userCommand.Parameters[0]} could be found.", ConsoleColor.Red);
                 }
+
                 var responseList = new List<string>();
                 var tokensCost = random.Next(1,10);
                 var boltsCost =random.Next(1, 15);
@@ -101,7 +108,7 @@ namespace PotatoChipMine.GameRooms.ControlRoom.Services
                 if(responseList.Any())
                 {
                     responseList.Insert(0,$"Repairs will cost {tokensCost} tater tokens and {boltsCost} bolts.");
-                    _gameUi.ReportException(responseList.ToArray());
+                    Game.WriteLine(string.Join(Environment.NewLine, responseList.ToArray()), ConsoleColor.Red);
                 }
                 else
                 {
@@ -121,11 +128,17 @@ namespace PotatoChipMine.GameRooms.ControlRoom.Services
         {
             return (userCommand, gameState) =>
             {
+                if (!userCommand.Parameters.Any())
+                {
+                    Game.WriteLine("You will need to provide a digger name!", ConsoleColor.Red);
+                    return;
+                }
+                
                 var digger = gameState.Miner.Diggers.FirstOrDefault(x =>
                     string.Equals(x.Name, userCommand.Parameters[0], StringComparison.CurrentCultureIgnoreCase));
                 if (digger == null)
                 {
-                    _gameUi.ReportException(new []{$"There are no diggers named {userCommand.Parameters[0]}."});
+                    Game.WriteLine($"There are no diggers named {userCommand.Parameters[0]}.", ConsoleColor.Red);
                     return;
                 }
                 gameState.Miner.Diggers.Remove(digger);
@@ -138,7 +151,7 @@ namespace PotatoChipMine.GameRooms.ControlRoom.Services
 
                 var boltsReceived = new Random().Next(3,10);
                 bolts.Count += boltsReceived;
-                _gameUi.ReportDiggerScrapped(digger,boltsReceived);
+                Game.WriteLine($"{digger.Name} was scrapped for {boltsReceived} bolts.", ConsoleColor.Yellow);
             };
         }
 
@@ -146,12 +159,19 @@ namespace PotatoChipMine.GameRooms.ControlRoom.Services
         {
             return (userCommand, gameState) =>
             {
+                if (!userCommand.Parameters.Any())
+                {
+                    Game.WriteLine("You will need to provide a digger name!", ConsoleColor.Red);
+                    return;
+                }
+                
+                var diggerName = userCommand.Parameters[0];
                 var digger = gameState.Miner.Diggers.FirstOrDefault(x =>
                     string.Equals(x.Name, userCommand.Parameters[0], StringComparison.CurrentCultureIgnoreCase));
                 var chips = gameState.Miner.InventoryItems.FirstOrDefault(x => x.Name == "chips");
                 if (digger == null)
                 {
-                    Console.WriteLine($"Could not find digger named {userCommand.Parameters[0]}");
+                    Game.WriteLine($"Could not find digger named {userCommand.Parameters[0]}", ConsoleColor.Red);
                     return;
                 }
 
@@ -161,9 +181,12 @@ namespace PotatoChipMine.GameRooms.ControlRoom.Services
                     chips.Count += digger.Hopper.Count;
                     gameState.Miner.LifetimeChips += digger.Hopper.Count;
                 }
-                
+
                 digger.Hopper.Count = 0;
-                _gameUi.ReportHopperEmptied(userCommand.Parameters[0],hopperCount,gameState.Miner.Inventory("chips").Count);
+
+                Game.WriteLine($"{hopperCount} was removed from {diggerName}'s hopper and moved into the chip vault.",
+                    ConsoleColor.Yellow);
+                Game.WriteLine($"Vault Chips:{gameState.Miner.Inventory("chips").Count}", ConsoleColor.Yellow);
             };
         }
 
@@ -182,8 +205,8 @@ namespace PotatoChipMine.GameRooms.ControlRoom.Services
                     Game.PushScene(scene);
                     return;
                 }
-
-                _gameUi.ReportException(new[] {"You don't have any diggers in your inventory!"});
+                
+                Game.WriteLine("You don't have any diggers in your inventory!", ConsoleColor.Red);
             };
         }
 
@@ -196,7 +219,7 @@ namespace PotatoChipMine.GameRooms.ControlRoom.Services
                     DiggerRunnerService.RunDiggers(_gameUi, gameState);
                     return;
                 }
-
+                
                 var turns = Convert.ToInt32(userCommand.Parameters[0]);
                 DiggerRunnerService.RunDiggers(_gameUi,gameState, turns);
             };

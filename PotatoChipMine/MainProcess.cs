@@ -38,7 +38,7 @@ namespace PotatoChipMine
 
 
             _commandsGroup = new TopCommandGroupFactory(_gameUi).Build();
-            _gameState.Lobby = new LobbyRoom(_gameUi, _gameState, new[] { "Welcome to the Lobby" }, GameMode.Lobby, _commandsGroup);
+            _gameState.Lobby = new LobbyRoom(_gameState, new[] { "Welcome to the Lobby" }, GameMode.Lobby, _commandsGroup);
             _gameState.Store = new MinerStoreFactory(_gameUi, _gameState, _commandsGroup).BuildMineStore();
             _gameState.ControlRoom = new ControlRoomFactory(_gameUi, _gameState, _commandsGroup).BuildControlRoom();
             _gameState.SaveDirectory = @"c:\chipMiner\saves";
@@ -90,19 +90,19 @@ namespace PotatoChipMine
 
             fpsFrames++;
 
-            if (frame.TimeSinceStart.Subtract(fpsElapsed).TotalSeconds >= 1)
-            {
-                var fps = fpsFrames / (frame.TimeSinceStart.Subtract(fpsElapsed).TotalSeconds);
-                fpsAvg = approxRollingAverage(fpsAvg, fps);
-                Console.Title = $"Miner - fps: {fpsAvg:0.##}";
-                fpsFrames = 0;
-            }
+            if (!(frame.TimeSinceStart.Subtract(fpsElapsed).TotalSeconds >= 1))
+                return;
+            
+            var fps = fpsFrames / (frame.TimeSinceStart.Subtract(fpsElapsed).TotalSeconds);
+            fpsAvg = ApproxRollingAverage(fpsAvg, fps);
+            Console.Title = $"Miner - fps: {fpsAvg:0.##}";
+            fpsFrames = 0;
         }
 
-        private double approxRollingAverage(double avg, double new_sample)
+        private double ApproxRollingAverage(double avg, double newSample)
         {
             avg -= avg / 10;
-            avg += new_sample / 10;
+            avg += newSample / 10;
             return avg;
         }
 
@@ -122,7 +122,7 @@ namespace PotatoChipMine
             }
         }
 
-        public void Update(Frame frame)
+        private void Update(Frame frame)
         {
             foreach (var entity in CurrentScene.Entities)
                 entity.Update(frame);

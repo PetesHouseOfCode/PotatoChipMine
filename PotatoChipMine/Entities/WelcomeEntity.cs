@@ -53,22 +53,22 @@ namespace PotatoChipMine.Entities
             Game.PushScene(initialScene);
         }
 
-        public override void Update(Frame frame){
+        public override void Update(Frame frame)
+        {
+            if (sentMessage)
+                return;
             
-            if (!sentMessage)
+            GameState.NewEvents.Add(new GameEvent
             {
-                GameState.NewEvents.Add(new GameEvent
-                {
-                    Name = "WelcomeMessage",
-                    Description = "",
-                    Message =$"Very pleased to meet you {GameState.Miner.Name}." + Environment.NewLine +
-                    "If you're new to 'tater mining you may want some instructions..." + Environment.NewLine +
-                    "You look like maybe you know your way around a chip digger though."
-                });
+                Name = "WelcomeMessage",
+                Description = "",
+                Message =$"Very pleased to meet you {GameState.Miner.Name}." + Environment.NewLine +
+                         "If you're new to 'tater mining you may want some instructions..." + Environment.NewLine +
+                         "You look like maybe you know your way around a chip digger though."
+            });
 
-                GameState.PromptText = "Do you need instructions?";
-                sentMessage = true;
-            }
+            GameState.PromptText = "Do you need instructions?";
+            sentMessage = true;
         }
     }
 }

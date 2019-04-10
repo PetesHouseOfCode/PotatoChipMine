@@ -82,7 +82,7 @@ namespace PotatoChipMine.Services
 
             DrawCommandPrompt();
 
-            var commandEntry = GetInput()?.Split(' ');
+            var commandEntry = GetInput()?.Trim().Split(' ');
             if (commandEntry == null)
             {
                 return new List<UserCommand>();
@@ -116,12 +116,7 @@ namespace PotatoChipMine.Services
             tableWidth = defaultTableWidth;
             Console.ResetColor();
         }
-
-        public void ReportVault(GameState gameState)
-        {
-            FastWrite(new[] { $"Chip Vault: {gameState.Miner.Inventory("chips").Count}" });
-        }
-
+        
         internal void ReportHopperIsFull(string diggerName)
         {
             Console.BackgroundColor = ConsoleColor.DarkYellow;
@@ -132,6 +127,7 @@ namespace PotatoChipMine.Services
             Console.ResetColor();
             tableWidth = defaultTableWidth;
         }
+        
         private string GetInput()
         {
             if (Console.KeyAvailable)
@@ -175,25 +171,7 @@ namespace PotatoChipMine.Services
                     {$"Command: [{command}]", $"Description: {commandsDefinition.Description}", "--------"});
             }
         }
-
-        public void ReportStoreStock(List<StoreItem> stock, ConsoleColor color = ConsoleColor.Gray)
-        {
-            var table = new TableOutput(77, ConsoleColor.Green);
-            table.AddHeaders("Name", "Price", "Quantity");
-            foreach (var storeItem in stock)
-            {
-                table.AddRow(storeItem.Name, storeItem.Price.ToString(), storeItem.Count.ToString());
-            }
-
-            Game.Write(table);
-        }
-
-        public void ReportBuyingItems(List<StoreItem> buying, ConsoleColor color = ConsoleColor.Gray)
-        {
-            var list = buying.Select(x => $"Item Name:{x.Name} Price Paid:{x.Price} tt").ToArray();
-            FastWrite(list);
-        }
-
+        
         private void TypeWriterWrite(List<string> linesList, int charSpeed = 3)
         {
             foreach (var line in linesList)
@@ -216,64 +194,9 @@ namespace PotatoChipMine.Services
             TypeWriterWrite(linesArray, charSpeed);
         }
 
-        public void ReportMinerState(Miner miner)
-        {
-            var minerState = new List<string>
-            {
-                $"Name: {miner.Name}",
-                $"Chip Vault:{miner.Inventory("chips").Count}",
-                $"Tater Tokens:{miner.TaterTokens}",
-                $"Diggers Count:{miner.Diggers.Count}"
-            };
-            FastWrite(minerState.ToArray());
-        }
-
-        public void ReportMinerInventory(Miner miner)
-        {
-            var table = new TableOutput(77);
-            table.AddHeaders("Name", "Quantity");
-            foreach (var minerInventoryItem in miner.InventoryItems)
-            {
-                table.AddRow(minerInventoryItem.Name, minerInventoryItem.Count.ToString() );
-            }
-
-            Game.Write(table);
-        }
-
-        public void ReportDiggerEquipped(string newDiggerName)
-        {
-            FastWrite(new[] { $"Digger {newDiggerName} is has been equipped" }, ConsoleColor.Yellow);
-        }
-
-        public void ReportBadCommand(string badCommand)
-        {
-            FastWrite(new[] { $"{badCommand} is not a valid command.", "Type [help] to see a list of commands." },
-                ConsoleColor.Red);
-        }
-
-        public void ReportException(string[] message)
+        private void ReportException(string[] message)
         {
             FastWrite(message, ConsoleColor.Red);
-        }
-
-        public void ReportHopperEmptied(string diggerName, int hopperCount, int vaultCount)
-        {
-            FastWrite(
-                new[]
-                {
-                    $"{hopperCount} was removed from {diggerName}'s hopper and moved into the chip vault.",
-                    $"Vault Chips:{vaultCount}"
-                }, ConsoleColor.Yellow);
-        }
-
-        public void ReportDiggerScrapped(ChipDigger digger, int bolts)
-        {
-            FastWrite(
-                new[]
-                {
-                    $"{digger.Name} was scrapped for {bolts} bolts."
-                }, ConsoleColor.Yellow);
-
         }
 
         public bool ConfirmDialog(string[] message)
@@ -326,27 +249,6 @@ namespace PotatoChipMine.Services
             {
                 return text.PadRight(width - (width - text.Length) / 2).PadLeft(width);
             }
-        }
-
-        public void ReportDiggers(List<ChipDigger> diggers)
-        {
-            var table = new TableOutput(100);
-            table.AddHeaders("Name", "Durability", "Chips in Hopper", "Hopper Size", "Hopper Space");
-            foreach (var digger in diggers)
-            {
-                table.AddRow(digger.Name,
-                    digger.Durability.ToString(),
-                    digger.Hopper.Count.ToString(),
-                    digger.Hopper.Max.ToString(),
-                    $"{digger.Hopper.Max - digger.Hopper.Count}/{digger.Hopper.Max}");
-            }
-
-            Game.Write(table);
-        }
-
-        private void ResetTableWidth()
-        {
-            tableWidth = defaultTableWidth;
         }
 
         private readonly string[] intro = new[]

@@ -7,11 +7,10 @@ namespace PotatoChipMine.GameRooms.ControlRoom
     public class DiggerControlRoom : GameRoom
     {
         public DiggerControlRoom(
-            GameUI ui,
             GameState gameState,
             string[] greeting,
             CommandsGroup commandsGroup)
-         : base(ui, gameState, greeting, GameMode.ControlRoom)
+         : base(gameState, greeting, GameMode.ControlRoom)
         {
             this.Name = "control-room";
             CommandsGroup = commandsGroup;

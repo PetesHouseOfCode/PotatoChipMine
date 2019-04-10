@@ -42,13 +42,23 @@ namespace PotatoChipMine.Services
                 {
                     Command = "miner",
                     Description = "Displays the miner's current chip vault, tater tokens, and diggers",
-                    Execute = (userCommand, gameState) => { _gameUi.ReportMinerState(gameState.Miner); }
+                    Execute = (userCommand, gameState) =>
+                    {
+                        var miner = gameState.Miner;
+                        Game.WriteLine($"Name: {miner.Name}", ConsoleColor.Yellow);
+                        Game.WriteLine($"Chip Vault:{miner.Inventory("chips").Count}", ConsoleColor.Yellow);
+                        Game.WriteLine($"Tater Tokens:{miner.TaterTokens}", ConsoleColor.Yellow);
+                        Game.WriteLine($"Diggers Count:{miner.Diggers.Count}", ConsoleColor.Yellow);
+                    }
                 },
                 new CommandsDefinition
                 {
                     Command = "vault",
                     Description = "Shows the number of chips currently in your vault.",
-                    Execute = (userCommand, gameState) => { _gameUi.ReportVault(gameState); }
+                    Execute = (userCommand, gameState) =>
+                    {
+                        Game.WriteLine($"Chip Vault: {gameState.Miner.Inventory("chips").Count}");
+                    }
                 },
                 new CommandsDefinition
                 {
@@ -63,7 +73,7 @@ namespace PotatoChipMine.Services
                     Execute = (userCommand, gameState) =>
                     {
                         if (gameState.Mode == GameMode.Lobby) return;
-                        _gameUi.FastWrite(new[] {$"Leaving {gameState.Mode}..."});
+                        Game.WriteLine($"Leaving {gameState.Mode}...");
                         gameState.Lobby.EnterRoom();
                     }
                 },
@@ -83,7 +93,17 @@ namespace PotatoChipMine.Services
                 {
                     Command = "inventory",
                     Description = "Shows the miners items inventory",
-                    Execute = (userCommand, gameState) => { _gameUi.ReportMinerInventory(gameState.Miner); }
+                    Execute = (userCommand, gameState) =>
+                    {
+                        var table = new TableOutput(77);
+                        table.AddHeaders("Name", "Quantity");
+                        foreach (var minerInventoryItem in gameState.Miner.InventoryItems)
+                        {
+                            table.AddRow(minerInventoryItem.Name, minerInventoryItem.Count.ToString() );
+                        }
+
+                        Game.Write(table);
+                    }
                 },
                 new CommandsDefinition
                 {
@@ -95,7 +115,21 @@ namespace PotatoChipMine.Services
                 {
                     Command = "diggers",
                     Description = "Displays a list of all of the miner's equipped diggers.",
-                    Execute = (userCommand, gameState) => { _gameUi.ReportDiggers(gameState.Miner.Diggers); }
+                    Execute = (userCommand, gameState) =>
+                    {
+                        var table = new TableOutput(100, ConsoleColor.Yellow);
+                        table.AddHeaders("Name", "Durability", "Chips in Hopper", "Hopper Size", "Hopper Space");
+                        foreach (var digger in gameState.Miner.Diggers)
+                        {
+                            table.AddRow(digger.Name,
+                                digger.Durability.ToString(),
+                                digger.Hopper.Count.ToString(),
+                                digger.Hopper.Max.ToString(),
+                                $"{digger.Hopper.Max - digger.Hopper.Count}/{digger.Hopper.Max}");
+                        }
+
+                        Game.Write(table);
+                    }
                 },
                 new CommandsDefinition
                 {

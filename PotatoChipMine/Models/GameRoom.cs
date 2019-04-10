@@ -8,22 +8,19 @@ namespace PotatoChipMine.Models
     public class GameRoom : IGameEntity
     {
         protected string[] Greeting { get; set; }
-        protected static GameUI Ui { get; set; }
         protected GameState GameState { get; set; }
         public CommandsGroup CommandsGroup { get; protected set; }
         protected GameMode ActiveMode { get; set; }
         public string Name { get; set; }
         private Scene roomScene;
 
-        public GameRoom(
-            GameUI ui,
+        protected GameRoom(
             GameState gameState,
             string[] greeting,
             GameMode activeMode)
         {
             ActiveMode = activeMode;
             GameState = gameState;
-            Ui = ui;
             Greeting = greeting;
         }
 
@@ -35,7 +32,7 @@ namespace PotatoChipMine.Models
 
         public void HandleInput(UserCommand command)
         {
-            CommandsGroup.ExecuteCommand(Ui, command, GameState);
+            CommandsGroup.ExecuteCommand(command, GameState);
         }
 
         public void Update(Frame frame)
