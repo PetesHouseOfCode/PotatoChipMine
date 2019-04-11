@@ -3,7 +3,7 @@ using PotatoChipMine.Models;
 using PotatoChipMine.Services;
 using PotatoChipMine.GameEngine;
 
-namespace PotatoChipMine
+namespace PotatoChipMine.Entities
 {
     public class GameLoaderEntity : GameEntity
     {

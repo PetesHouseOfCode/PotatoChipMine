@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using PotatoChipMine.Entities;
+using PotatoChipMine.GameEngine;
 using PotatoChipMine.Models;
 
 namespace PotatoChipMine.Services
@@ -31,22 +33,29 @@ namespace PotatoChipMine.Services
                 {
                     Command = "store",
                     Description = "Opens the store mode and makes the store commands accessible.",
-                    Execute = (command, gameState) =>
-                    {
-                        gameState.Store.EnterRoom();
-                    }
+                    Execute = (command, gameState) => { gameState.Store.EnterRoom(); }
                 },
                 new CommandsDefinition
                 {
                     Command = "miner",
                     Description = "Displays the miner's current chip vault, tater tokens, and diggers",
-                    Execute = (userCommand, gameState) => { _gameUi.ReportMinerState(gameState.Miner); }
+                    Execute = (userCommand, gameState) =>
+                    {
+                        var miner = gameState.Miner;
+                        Game.WriteLine($"Name: {miner.Name}", ConsoleColor.Yellow);
+                        Game.WriteLine($"Chip Vault:{miner.Inventory("chips").Count}", ConsoleColor.Yellow);
+                        Game.WriteLine($"Tater Tokens:{miner.TaterTokens}", ConsoleColor.Yellow);
+                        Game.WriteLine($"Diggers Count:{miner.Diggers.Count}", ConsoleColor.Yellow);
+                    }
                 },
                 new CommandsDefinition
                 {
                     Command = "vault",
                     Description = "Shows the number of chips currently in your vault.",
-                    Execute = (userCommand, gameState) => { _gameUi.ReportVault(gameState); }
+                    Execute = (userCommand, gameState) =>
+                    {
+                        Game.WriteLine($"Chip Vault: {gameState.Miner.Inventory("chips").Count}");
+                    }
                 },
                 new CommandsDefinition
                 {
@@ -61,7 +70,7 @@ namespace PotatoChipMine.Services
                     Execute = (userCommand, gameState) =>
                     {
                         if (gameState.Mode == GameMode.Lobby) return;
-                        _gameUi.FastWrite(new[] {$"Leaving {gameState.Mode}..."});
+                        Game.WriteLine($"Leaving {gameState.Mode}...");
                         gameState.Lobby.EnterRoom();
                     }
                 },
@@ -81,7 +90,17 @@ namespace PotatoChipMine.Services
                 {
                     Command = "inventory",
                     Description = "Shows the miners items inventory",
-                    Execute = (userCommand, gameState) => { _gameUi.ReportMinerInventory(gameState.Miner); }
+                    Execute = (userCommand, gameState) =>
+                    {
+                        var table = new TableOutput(77);
+                        table.AddHeaders("Name", "Quantity");
+                        foreach (var minerInventoryItem in gameState.Miner.InventoryItems)
+                        {
+                            table.AddRow(minerInventoryItem.Name, minerInventoryItem.Count.ToString());
+                        }
+
+                        Game.Write(table);
+                    }
                 },
                 new CommandsDefinition
                 {
@@ -93,7 +112,21 @@ namespace PotatoChipMine.Services
                 {
                     Command = "diggers",
                     Description = "Displays a list of all of the miner's equipped diggers.",
-                    Execute = (userCommand, gameState) => { _gameUi.ReportDiggers(gameState.Miner.Diggers); }
+                    Execute = (userCommand, gameState) =>
+                    {
+                        var table = new TableOutput(100, ConsoleColor.Yellow);
+                        table.AddHeaders("Name", "Durability", "Chips in Hopper", "Hopper Size", "Hopper Space");
+                        foreach (var digger in gameState.Miner.Diggers)
+                        {
+                            table.AddRow(digger.Name,
+                                digger.Durability.ToString(),
+                                digger.Hopper.Count.ToString(),
+                                digger.Hopper.Max.ToString(),
+                                $"{digger.Hopper.Max - digger.Hopper.Count}/{digger.Hopper.Max}");
+                        }
+
+                        Game.Write(table);
+                    }
                 },
                 new CommandsDefinition
                 {
@@ -116,22 +149,7 @@ namespace PotatoChipMine.Services
         {
             return (userCommand, gameState) =>
             {
-                if (!_gameUi.ConfirmDialog(new[]
-                {
-                    "Loading a new game will end this game and overwrite it with the loaded game data.",
-                    "Do you wish to proceed?"
-                }))
-                    return;
-                if (!userCommand.Parameters.Any())
-                {
-                    var name = _gameUi.CollectGameSaveToLoad(_gamePersistenceService.SaveFiles(gameState));
-                    _gamePersistenceService.LoadGame(gameState, name);
-                    _gameUi.FastWrite(new[] {$"{gameState.SaveName} loaded.  Good Luck {gameState.Miner.Name} !"});
-                    return;
-                }
-
-                _gamePersistenceService.LoadGame(gameState, userCommand.Parameters[0]);
-                _gameUi.FastWrite(new[] {$"{gameState.SaveName} loaded.  Good Luck {gameState.Miner.Name} !"});
+                Game.PushScene(Scene.Create(new[] { new LoadGameEntity(gameState, _gamePersistenceService) }));
             };
         }
 
@@ -139,9 +157,7 @@ namespace PotatoChipMine.Services
         {
             return (userCommand, gameState) =>
             {
-                
-                SetSaveName(gameState);
-                _gamePersistenceService.SaveGame(_gamePersistenceService.BuildFromGameState(gameState));
+                Game.PushScene(Scene.Create(new[] {new SaveGameEntity(gameState, _gamePersistenceService)}));
             };
         }
 
@@ -149,40 +165,8 @@ namespace PotatoChipMine.Services
         {
             return (userCommand, gameState) =>
             {
-                _gameUi.ReportInfo(new[] {$"You have {gameState.Miner.TaterTokens} Tater Tokens"});
+                Game.WriteLine($"You have {gameState.Miner.TaterTokens} Tater Tokens", ConsoleColor.Green);
             };
         }
-
-        private void SetSaveName(GameState gameState)
-        {
-            var isNew = false;
-            while (true)
-                if (gameState.SaveName == string.Empty)
-                {
-                    isNew = true;
-                    var saveName = _gameUi.SavePrompt(true);
-                    if (saveName.Equals("cancel", StringComparison.CurrentCultureIgnoreCase)) return;
-                    gameState.SaveName = saveName;
-                }
-                else
-                {
-                    if (isNew)
-                    {
-
-                        return;
-                    }
-
-                    if (_gameUi.ConfirmDialog(new[]
-                        {$"Do you wish to overwrite your previous save of {gameState.SaveName}?"}))
-                    {
-                        return;
-                    }
-
-                    var saveName = _gameUi.SavePrompt(false);
-                    if (saveName == string.Empty) return;
-                    gameState.SaveName = saveName;
-                }
-        }
-
     }
 }

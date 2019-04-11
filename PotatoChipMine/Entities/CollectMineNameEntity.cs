@@ -4,7 +4,7 @@ using PotatoChipMine.Models;
 using PotatoChipMine.Services;
 using PotatoChipMine.GameEngine;
 
-namespace PotatoChipMine
+namespace PotatoChipMine.Entities
 {
     public class CollectMineNameEntity : GameEntity
     {
@@ -19,11 +19,12 @@ namespace PotatoChipMine
         {
             if (string.IsNullOrEmpty(command.CommandText))
             {
-                Game.Write("Please enter a name.", ConsoleColor.Red);
+                Game.WriteLine("Please enter a name.", ConsoleColor.Red);
 
                 return;
             }
          
+            GameState.Miner = Miner.Default();
             GameState.Miner.Name = command.CommandText;
             GameState.PromptText = null;
             Game.SwitchScene(Scene.Create(new List<IGameEntity>{
@@ -35,7 +36,7 @@ namespace PotatoChipMine
         {
             if (!sentMessage)
             {
-                Game.Write("Howdy pilgrim!  Welcome to glamorous world of 'tater chip mining!" + Environment.NewLine +
+                Game.WriteLine("Howdy pilgrim!  Welcome to glamorous world of 'tater chip mining!" + Environment.NewLine +
                     "I'm Earl, your mine bot. I'll be you're right hand man ... 'er bot, around this here mining operation.");
                 GameState.PromptText = "Whats your name pilgrim?";
                 sentMessage = true;

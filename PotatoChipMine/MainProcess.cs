@@ -9,6 +9,7 @@ using PotatoChipMine.GameRooms.Store.Services;
 using PotatoChipMine.Models;
 using PotatoChipMine.Services;
 using PotatoChipMine.GameEngine;
+using PotatoChipMine.Entities;
 
 namespace PotatoChipMine
 {
@@ -31,23 +32,15 @@ namespace PotatoChipMine
 
             _gameState = new GameState
             {
-                Miner = new Miner
-                {
-                    Diggers = new List<ChipDigger>(),
-                    TaterTokens = 100,
-                    InventoryItems = new List<InventoryItem>
-                        {new InventoryItem {Name = "chips", Count = 0, InventoryId = 0}}
-                },
                 Running = true
             };
             _gameUi = new GameUI(_gameState);
 
 
             _commandsGroup = new TopCommandGroupFactory(_gameUi).Build();
-            _gameState.Lobby = new LobbyRoom(_gameUi, _gameState, new[] { "Welcome to the Lobby" }, GameMode.Lobby, _commandsGroup);
+            _gameState.Lobby = new LobbyRoom(_gameState, new[] { "Welcome to the Lobby" }, GameMode.Lobby, _commandsGroup);
             _gameState.Store = new MinerStoreFactory(_gameUi, _gameState, _commandsGroup).BuildMineStore();
             _gameState.ControlRoom = new ControlRoomFactory(_gameUi, _gameState, _commandsGroup).BuildControlRoom();
-            _gameState.Miner.Diggers = new List<ChipDigger>();
             _gameState.SaveDirectory = @"c:\chipMiner\saves";
 
             Console.WindowWidth = 125;
@@ -97,19 +90,19 @@ namespace PotatoChipMine
 
             fpsFrames++;
 
-            if (frame.TimeSinceStart.Subtract(fpsElapsed).TotalSeconds >= 1)
-            {
-                var fps = fpsFrames / (frame.TimeSinceStart.Subtract(fpsElapsed).TotalSeconds);
-                fpsAvg = approxRollingAverage(fpsAvg, fps);
-                Console.Title = $"Miner - fps: {fpsAvg:0.##}";
-                fpsFrames = 0;
-            }
+            if (!(frame.TimeSinceStart.Subtract(fpsElapsed).TotalSeconds >= 1))
+                return;
+            
+            var fps = fpsFrames / (frame.TimeSinceStart.Subtract(fpsElapsed).TotalSeconds);
+            fpsAvg = ApproxRollingAverage(fpsAvg, fps);
+            Console.Title = $"Miner - fps: {fpsAvg:0.##}";
+            fpsFrames = 0;
         }
 
-        private double approxRollingAverage(double avg, double new_sample)
+        private double ApproxRollingAverage(double avg, double newSample)
         {
             avg -= avg / 10;
-            avg += new_sample / 10;
+            avg += newSample / 10;
             return avg;
         }
 
@@ -129,7 +122,7 @@ namespace PotatoChipMine
             }
         }
 
-        public void Update(Frame frame)
+        private void Update(Frame frame)
         {
             foreach (var entity in CurrentScene.Entities)
                 entity.Update(frame);
@@ -139,7 +132,7 @@ namespace PotatoChipMine
         {
             foreach (var newEvent in _gameState.NewEvents)
             {
-                Game.Write(newEvent.Message + Environment.NewLine, ConsoleColor.Green);
+                Game.WriteLine(newEvent.Message + Environment.NewLine, ConsoleColor.Green);
                 _gameState.EventsHistory.Add(new EventLog
                 {
                     Name = newEvent.Name,

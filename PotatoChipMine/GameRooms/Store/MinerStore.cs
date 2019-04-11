@@ -8,11 +8,10 @@ namespace PotatoChipMine.GameRooms.Store
     public class MinerStore : GameRoom
     {
         public MinerStore(
-            GameUI ui,
             GameState gameState,
             string[] greeting,
             CommandsGroup commandsGroup)
-            : base(ui, gameState, greeting, GameMode.Store)
+            : base(gameState, greeting, GameMode.Store)
         {
             CommandsGroup = commandsGroup;
             this.Name = "store";

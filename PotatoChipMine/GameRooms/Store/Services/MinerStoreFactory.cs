@@ -30,7 +30,6 @@ namespace PotatoChipMine.GameRooms.Store.Services
             storeState.ItemsForSale.Add(new StoreItem { Name = "bolts", Count = 500, Price = 5, InventoryId = 2 });
             storeState.ItemsBuying.Add(new StoreItem { Name = "RawChips", Price = 10 });
             var store = new MinerStore(
-                _ui,
                 _gameState,
                 greeting,
                 _baseCommandsGroup.Join(new StoreCommandsGroupFactory(_ui, _gameState, storeState).Build())

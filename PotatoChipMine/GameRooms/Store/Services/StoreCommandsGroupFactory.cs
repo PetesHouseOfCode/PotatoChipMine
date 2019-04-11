@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using PotatoChipMine.GameEngine;
 using PotatoChipMine.GameRooms.Store.Models;
 using PotatoChipMine.Models;
 using PotatoChipMine.Services;
@@ -71,14 +72,27 @@ namespace PotatoChipMine.GameRooms.Store.Services
 
         private Action<UserCommand, GameState> BuyingHandler()
         {
-            return (userCommand, gameState) => { _gameUi.ReportBuyingItems(_storeState.ItemsBuying); };
+            return (userCommand, gameState) =>
+            {
+                foreach (var itemBought in _storeState.ItemsBuying)
+                {
+                    Game.WriteLine($"Item Name:{itemBought.Name} Price Paid:{itemBought.Price} tt");
+                }
+            };
         }
 
         private Action<UserCommand, GameState> StockHandler()
         {
             return (userCommand, gameState) =>
             {
-                _gameUi.ReportStoreStock(_storeState.ItemsForSale);
+                var table = new TableOutput(77, ConsoleColor.Green);
+                table.AddHeaders("Name", "Price", "Quantity");
+                foreach (var storeItem in _storeState.ItemsForSale)
+                {
+                    table.AddRow(storeItem.Name, storeItem.Price.ToString(), storeItem.Count.ToString());
+                }
+
+                Game.Write(table);
             };
         }
 
@@ -103,11 +117,11 @@ namespace PotatoChipMine.GameRooms.Store.Services
                 var result = Sell(userCommand.Parameters);
                 if (!result.sold)
                 {
-                    _gameUi.ReportException(new[] { result.message });
+                    Game.WriteLine(result.message, ConsoleColor.Red);
                     return;
                 }
-                
-                _gameUi.FastWrite(new[]{result.message});
+
+                Game.WriteLine(result.message);
             };
         }
 

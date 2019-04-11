@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Security.Cryptography.X509Certificates;
 using System.Threading;
+using PotatoChipMine.GameEngine;
 using PotatoChipMine.GameRooms.Store.Models;
 using PotatoChipMine.Models;
 
@@ -47,9 +48,8 @@ namespace PotatoChipMine.Services
 
         public void FastWrite(string[] linesToReport, ConsoleColor color = ConsoleColor.Cyan)
         {
-            Console.ForegroundColor = color;
-            TypeWriterWrite(linesToReport.ToList(), 3);
-            Console.ResetColor();
+            foreach(var line in linesToReport)
+                Game.WriteLine(line, color);
         }
 
         public void WritePrompt(string commandPrompt, bool force = false, bool showCursor= true)
@@ -82,7 +82,7 @@ namespace PotatoChipMine.Services
 
             DrawCommandPrompt();
 
-            var commandEntry = GetInput()?.Split(' ');
+            var commandEntry = GetInput()?.Trim().Split(' ');
             if (commandEntry == null)
             {
                 return new List<UserCommand>();
@@ -116,13 +116,7 @@ namespace PotatoChipMine.Services
             tableWidth = defaultTableWidth;
             Console.ResetColor();
         }
-
-        public void ReportVault(GameState gameState)
-        {
-            FastWrite(new[] { $"Chip Vault: {gameState.Miner.Inventory("chips").Count}" });
-            Console.WriteLine();
-        }
-
+        
         internal void ReportHopperIsFull(string diggerName)
         {
             Console.BackgroundColor = ConsoleColor.DarkYellow;
@@ -133,6 +127,7 @@ namespace PotatoChipMine.Services
             Console.ResetColor();
             tableWidth = defaultTableWidth;
         }
+        
         private string GetInput()
         {
             if (Console.KeyAvailable)
@@ -176,33 +171,7 @@ namespace PotatoChipMine.Services
                     {$"Command: [{command}]", $"Description: {commandsDefinition.Description}", "--------"});
             }
         }
-
-        public void ReportStoreStock(List<StoreItem> stock, ConsoleColor color = ConsoleColor.Gray)
-        {
-
-            Console.ForegroundColor = ConsoleColor.Cyan;
-            PrintLine();
-            Console.ForegroundColor = ConsoleColor.Black;
-            Console.BackgroundColor = ConsoleColor.Cyan;
-            PrintRow(new[] { "Name", "Price", "Quantity" });
-            Console.ResetColor();
-            Console.ForegroundColor = ConsoleColor.Cyan;
-            if (stock.Count < 1) return;
-            PrintLine();
-            foreach (var storeItem in stock)
-            {
-                PrintRow(storeItem.Name, storeItem.Price.ToString(), storeItem.Count.ToString());
-                PrintLine();
-            }
-            Console.ResetColor();
-        }
-
-        public void ReportBuyingItems(List<StoreItem> buying, ConsoleColor color = ConsoleColor.Gray)
-        {
-            var list = buying.Select(x => $"Item Name:{x.Name} Price Paid:{x.Price} tt").ToArray();
-            FastWrite(list);
-        }
-
+        
         private void TypeWriterWrite(List<string> linesList, int charSpeed = 3)
         {
             foreach (var line in linesList)
@@ -223,75 +192,6 @@ namespace PotatoChipMine.Services
         {
             var linesArray = new List<string>() { line };
             TypeWriterWrite(linesArray, charSpeed);
-        }
-
-        public void ReportMinerState(Miner miner)
-        {
-            var minerState = new List<string>
-            {
-                $"Name: {miner.Name}",
-                $"Chip Vault:{miner.Inventory("chips").Count}",
-                $"Tater Tokens:{miner.TaterTokens}",
-                $"Diggers Count:{miner.Diggers.Count}"
-            };
-            FastWrite(minerState.ToArray());
-        }
-
-        public void ReportMinerInventory(Miner miner)
-        {
-            tableWidth = 77;
-            Console.ForegroundColor = ConsoleColor.Cyan;
-            PrintLine();
-            Console.ForegroundColor = ConsoleColor.Black;
-            Console.BackgroundColor = ConsoleColor.Cyan;
-            PrintRow(new[] { "Name", "Quantity" });
-            Console.ResetColor();
-            Console.ForegroundColor = ConsoleColor.Cyan;
-            if (miner.InventoryItems.Count < 1) return;
-            PrintLine();
-            foreach (var minerInventoryItem in miner.InventoryItems)
-            {
-                PrintRow(new[] { minerInventoryItem.Name, minerInventoryItem.Count.ToString() });
-                PrintLine();
-            }
-            Console.ResetColor();
-            ResetTableWidth();
-        }
-
-        public void ReportDiggerEquipped(string newDiggerName)
-        {
-            FastWrite(new[] { $"Digger {newDiggerName} is has been equipped" }, ConsoleColor.Yellow);
-        }
-
-        public void ReportBadCommand(string badCommand)
-        {
-            FastWrite(new[] { $"{badCommand} is not a valid command.", "Type [help] to see a list of commands." },
-                ConsoleColor.Red);
-        }
-
-        public void ReportException(string[] message)
-        {
-            FastWrite(message, ConsoleColor.Red);
-        }
-
-        public void ReportHopperEmptied(string diggerName, int hopperCount, int vaultCount)
-        {
-            FastWrite(
-                new[]
-                {
-                    $"{hopperCount} was removed from {diggerName}'s hopper and moved into the chip vault.",
-                    $"Vault Chips:{vaultCount}"
-                }, ConsoleColor.Yellow);
-        }
-
-        public void ReportDiggerScrapped(ChipDigger digger, int bolts)
-        {
-            FastWrite(
-                new[]
-                {
-                    $"{digger.Name} was scrapped for {bolts} bolts."
-                }, ConsoleColor.Yellow);
-
         }
 
         public bool ConfirmDialog(string[] message)
@@ -344,32 +244,6 @@ namespace PotatoChipMine.Services
             {
                 return text.PadRight(width - (width - text.Length) / 2).PadLeft(width);
             }
-        }
-
-        public void ReportDiggers(List<ChipDigger> diggers)
-        {
-            tableWidth = 100;
-            Console.ForegroundColor = ConsoleColor.DarkYellow;
-            PrintLine();
-            Console.ForegroundColor = ConsoleColor.Black;
-            Console.BackgroundColor = ConsoleColor.DarkYellow;
-            PrintRow(new[] { "Name", "Durability", "Chips in Hopper", "Hopper Size", "Hopper Space" });
-            Console.ResetColor();
-            Console.ForegroundColor = ConsoleColor.DarkYellow;
-            if (diggers.Count < 1) return;
-            PrintLine();
-            foreach (var digger in diggers)
-            {
-                PrintRow(digger.Name, digger.Durability.ToString(), digger.Hopper.Count.ToString(), digger.Hopper.Max.ToString(), $"{digger.Hopper.Max - digger.Hopper.Count}/{digger.Hopper.Max}");
-                PrintLine();
-            }
-            Console.ResetColor();
-            ResetTableWidth();
-        }
-
-        private void ResetTableWidth()
-        {
-            tableWidth = defaultTableWidth;
         }
 
         private readonly string[] intro = new[]
@@ -446,71 +320,6 @@ namespace PotatoChipMine.Services
             PrintRow($"{chipDigger.Name}--The digger needs repair!");
             Console.ResetColor();
             tableWidth = defaultTableWidth;
-        }
-
-        public void ReportSaveGames(FileInfo[] getFiles)
-        {
-            Console.ForegroundColor = ConsoleColor.Green;
-            PrintLine();
-            PrintRow("Game saves");
-            PrintLine();
-            PrintRow("Save Name", "Saved Date");
-            PrintLine();
-            foreach (var file in getFiles)
-            {
-                var saveName = Path.GetFileName(file.Name).Split(".")[0];
-                var updated = file.LastWriteTime.ToString();
-                PrintRow(saveName, updated);
-                PrintLine();
-            }
-            Console.ResetColor();
-        }
-
-        public string CollectGameSaveToLoad(FileInfo[] files)
-        {
-            ReportSaveGames(files);
-            FastWrite(new[] { "Enter the name of the saved game you'd like to Resume" });
-            return Console.ReadLine() ?? string.Empty;
-        }
-
-        public string SavePrompt(bool newSave)
-        {
-            var promptMessage = new List<string>
-            {
-                "Enter the name you would like to use to save this game.",
-                "Type [cancel] to cancel the save operation."
-            };
-            if (newSave)
-            {
-                promptMessage.Insert(0, "You have not previously saved this game.");
-            }
-            string saveName;
-            do
-            {
-                FastWrite(promptMessage.ToArray());
-                saveName = Console.ReadLine() ?? string.Empty;
-                if (saveName.Equals("cancel", StringComparison.CurrentCultureIgnoreCase))
-                {
-                    ReportException(new[] { "Save cancelled." });
-                    return string.Empty;
-                }
-            } while (saveName == string.Empty);
-            return saveName;
-        }
-
-        public void ReportEvent(string message)
-        {
-            HideCommandPrompt();
-            Console.ForegroundColor = ConsoleColor.Magenta;
-            PrintLine();
-            Console.ForegroundColor = ConsoleColor.Black;
-            Console.BackgroundColor = ConsoleColor.Magenta;
-            TypeWriterWrite(new List<string> { AlignCenter($"*** {message} ****", Console.WindowWidth) });
-            Console.ResetColor();
-            Console.ForegroundColor = ConsoleColor.Magenta;
-            PrintLine();
-            Console.ResetColor();
-            ShowCommandPrompt();
         }
 
         public void ShowCommandPrompt()

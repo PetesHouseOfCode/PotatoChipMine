@@ -5,7 +5,7 @@ using PotatoChipMine.Services;
 using PotatoChipMine.Services.Events;
 using PotatoChipMine.GameEngine;
 
-namespace PotatoChipMine
+namespace PotatoChipMine.Entities
 {
     public class WelcomeEntity : GameEntity
     {
@@ -32,7 +32,7 @@ namespace PotatoChipMine
                         "** You can take actions related to your diggers in the control-room." + Environment.NewLine +
                         "** Type [control-room] to enter the control-room"  + Environment.NewLine  + Environment.NewLine;
 
-                Game.Write(message, ConsoleColor.Blue);
+                Game.WriteLine(message, ConsoleColor.Blue);
 
                 StartGame();          
             }
@@ -40,7 +40,7 @@ namespace PotatoChipMine
 
         private void StartGame()
         {
-            Game.Write($"Well ok then.  Good luck to you {GameState.Miner.Name}!", ConsoleColor.Blue);
+            Game.WriteLine($"Well ok then.  Good luck to you {GameState.Miner.Name}!", ConsoleColor.Blue);
             
             var initialScene = Scene.Create(new List<IGameEntity>
                 {
@@ -53,22 +53,22 @@ namespace PotatoChipMine
             Game.PushScene(initialScene);
         }
 
-        public override void Update(Frame frame){
+        public override void Update(Frame frame)
+        {
+            if (sentMessage)
+                return;
             
-            if (!sentMessage)
+            GameState.NewEvents.Add(new GameEvent
             {
-                GameState.NewEvents.Add(new GameEvent
-                {
-                    Name = "WelcomeMessage",
-                    Description = "",
-                    Message =$"Very pleased to meet you {GameState.Miner.Name}." + Environment.NewLine +
-                    "If you're new to 'tater mining you may want some instructions..." + Environment.NewLine +
-                    "You look like maybe you know your way around a chip digger though."
-                });
+                Name = "WelcomeMessage",
+                Description = "",
+                Message =$"Very pleased to meet you {GameState.Miner.Name}." + Environment.NewLine +
+                         "If you're new to 'tater mining you may want some instructions..." + Environment.NewLine +
+                         "You look like maybe you know your way around a chip digger though."
+            });
 
-                GameState.PromptText = "Do you need instructions?";
-                sentMessage = true;
-            }
+            GameState.PromptText = "Do you need instructions?";
+            sentMessage = true;
         }
     }
 }
