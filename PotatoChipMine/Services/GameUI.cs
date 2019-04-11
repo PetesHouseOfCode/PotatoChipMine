@@ -194,11 +194,6 @@ namespace PotatoChipMine.Services
             TypeWriterWrite(linesArray, charSpeed);
         }
 
-        private void ReportException(string[] message)
-        {
-            FastWrite(message, ConsoleColor.Red);
-        }
-
         public bool ConfirmDialog(string[] message)
         {
             ReportInfo(message);
@@ -325,31 +320,6 @@ namespace PotatoChipMine.Services
             PrintRow($"{chipDigger.Name}--The digger needs repair!");
             Console.ResetColor();
             tableWidth = defaultTableWidth;
-        }
-
-        public string SavePrompt(bool newSave)
-        {
-            var promptMessage = new List<string>
-            {
-                "Enter the name you would like to use to save this game.",
-                "Type [cancel] to cancel the save operation."
-            };
-            if (newSave)
-            {
-                promptMessage.Insert(0, "You have not previously saved this game.");
-            }
-            string saveName;
-            do
-            {
-                FastWrite(promptMessage.ToArray());
-                saveName = Console.ReadLine() ?? string.Empty;
-                if (saveName.Equals("cancel", StringComparison.CurrentCultureIgnoreCase))
-                {
-                    ReportException(new[] { "Save cancelled." });
-                    return string.Empty;
-                }
-            } while (saveName == string.Empty);
-            return saveName;
         }
 
         public void ShowCommandPrompt()

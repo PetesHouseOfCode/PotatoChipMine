@@ -33,10 +33,7 @@ namespace PotatoChipMine.Services
                 {
                     Command = "store",
                     Description = "Opens the store mode and makes the store commands accessible.",
-                    Execute = (command, gameState) =>
-                    {
-                        gameState.Store.EnterRoom();
-                    }
+                    Execute = (command, gameState) => { gameState.Store.EnterRoom(); }
                 },
                 new CommandsDefinition
                 {
@@ -99,7 +96,7 @@ namespace PotatoChipMine.Services
                         table.AddHeaders("Name", "Quantity");
                         foreach (var minerInventoryItem in gameState.Miner.InventoryItems)
                         {
-                            table.AddRow(minerInventoryItem.Name, minerInventoryItem.Count.ToString() );
+                            table.AddRow(minerInventoryItem.Name, minerInventoryItem.Count.ToString());
                         }
 
                         Game.Write(table);
@@ -160,9 +157,7 @@ namespace PotatoChipMine.Services
         {
             return (userCommand, gameState) =>
             {
-                
-                SetSaveName(gameState);
-                _gamePersistenceService.SaveGame(_gamePersistenceService.BuildFromGameState(gameState));
+                Game.PushScene(Scene.Create(new[] {new SaveGameEntity(gameState, _gamePersistenceService)}));
             };
         }
 
@@ -170,40 +165,8 @@ namespace PotatoChipMine.Services
         {
             return (userCommand, gameState) =>
             {
-                _gameUi.ReportInfo(new[] {$"You have {gameState.Miner.TaterTokens} Tater Tokens"});
+                Game.WriteLine($"You have {gameState.Miner.TaterTokens} Tater Tokens", ConsoleColor.Green);
             };
         }
-
-        private void SetSaveName(GameState gameState)
-        {
-            var isNew = false;
-            while (true)
-                if (gameState.SaveName == string.Empty)
-                {
-                    isNew = true;
-                    var saveName = _gameUi.SavePrompt(true);
-                    if (saveName.Equals("cancel", StringComparison.CurrentCultureIgnoreCase)) return;
-                    gameState.SaveName = saveName;
-                }
-                else
-                {
-                    if (isNew)
-                    {
-
-                        return;
-                    }
-
-                    if (_gameUi.ConfirmDialog(new[]
-                        {$"Do you wish to overwrite your previous save of {gameState.SaveName}?"}))
-                    {
-                        return;
-                    }
-
-                    var saveName = _gameUi.SavePrompt(false);
-                    if (saveName == string.Empty) return;
-                    gameState.SaveName = saveName;
-                }
-        }
-
     }
 }
