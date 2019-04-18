@@ -32,7 +32,6 @@ namespace PotatoChipMine.GameRooms.ControlRoom.Services
                 {
                     if (chipDigger.Durability > 0 && chipDigger.Hopper.Count < chipDigger.Hopper.Max)
                     {
-                        var oldDurabiliity = chipDigger.Durability;
                         Console.Write($"{chipDigger.Name}--Digging chips.");
                         var x = 0;
                         var consoleSpinner = new ConsoleSpinner();
@@ -49,39 +48,40 @@ namespace PotatoChipMine.GameRooms.ControlRoom.Services
                             x++;
                         }
 
-                        var scoop = chipDigger.Dig();
-                        var diggerDamage = oldDurabiliity - chipDigger.Durability;
-                        chipDigger.Hopper.Count += scoop.Chips;
-                        gameUi.ReportScoopResult(chipDigger, diggerDamage, scoop);
+                        var digResult = chipDigger.Dig(TimeSpan.MaxValue);
+
+                        gameUi.ReportScoopResult(chipDigger, digResult.DurabilityLost, digResult);
                         if (chipDigger.Hopper.IsFull)
                         {
                             gameUi.ReportHopperIsFull(chipDigger.Name);
                             Console.ReadLine();
                             miner.Inventory("chips").Count += chipDigger.Hopper.Count;
-                            chipDigger.Hopper.Count = 0;
+                            chipDigger.Hopper.Empty();
                         }
-                    }
-                    else
-                    {
-                        Console.ForegroundColor = ConsoleColor.Red;
-                        if (chipDigger.Durability < 1)
+                        else
                         {
-                            gameUi.ReportDiggerNeedsRepair(chipDigger);
+                            Console.ForegroundColor = ConsoleColor.Red;
+                            if (chipDigger.Durability < 1)
+                            {
+                                gameUi.ReportDiggerNeedsRepair(chipDigger);
+                            }
                         }
                     }
+
+                    turnsCounter++;
                 }
-                turnsCounter++;
-            }
 
-            Console.WriteLine("Dig Complete");
-            foreach (var chipDigger in miner.Diggers)
-            {
-                Console.WriteLine(
-                    $"Digger Report:{chipDigger.Name} Chips in Hopper:{chipDigger.Hopper.Count}, Durability{chipDigger.Durability}");
-            }
+                Console.WriteLine("Dig Complete");
+                foreach (var chipDigger in miner.Diggers)
+                {
+                    Console.WriteLine(
+                        $"Digger Report:{chipDigger.Name} Chips in Hopper:{chipDigger.Hopper.Count}, Durability{chipDigger.Durability}");
+                }
 
-            Console.WriteLine($"Chip vault:{miner.Inventory("chips").Count}");
+                Console.WriteLine($"Chip vault:{miner.Inventory("chips").Count}");
+            }
         }
+
         private static bool CanDig(ChipDigger digger)
         {
             return !digger.Hopper.IsFull && digger.Durability > 0;

@@ -60,8 +60,8 @@ namespace PotatoChipMine.Services
             var cursorChar = showCursor ? "\x00A6" : "";
             oldCommandPrompt = commandPrompt;
             Console.ForegroundColor = ConsoleColor.White;
+            Console.BackgroundColor = ConsoleColor.Black;
             Console.Write($"\r{commandPrompt}{cursorChar} ");
-            Console.ResetColor();
         }
 
         private void DrawCommandPrompt(bool force = false,bool showCursor=true)
@@ -296,14 +296,14 @@ namespace PotatoChipMine.Services
             Console.ResetColor();
             tableWidth = defaultTableWidth;
         }
-        public void ReportScoopResult(ChipDigger chipDigger, int diggerDamage, Scoop scoop)
+        public void ReportScoopResult(ChipDigger chipDigger, int diggerDamage, DigResult digResult)
         {
             tableWidth = 100;
             Console.ForegroundColor = ConsoleColor.DarkYellow;
             Console.CursorLeft = 0;
             PrintRow(
                 chipDigger.Name,
-                scoop.Chips.ToString(),
+                digResult.ChipsDug.ToString(),
                 diggerDamage.ToString(),
                 $"{chipDigger.Durability}/{chipDigger.MaxDurability}",
                 $"{chipDigger.Hopper.Count}/{chipDigger.Hopper.Max}");

@@ -182,7 +182,7 @@ namespace PotatoChipMine.GameRooms.ControlRoom.Services
                     gameState.Miner.LifetimeChips += digger.Hopper.Count;
                 }
 
-                digger.Hopper.Count = 0;
+                digger.Hopper.Empty();
 
                 Game.WriteLine($"{hopperCount} was removed from {diggerName}'s hopper and moved into the chip vault.",
                     ConsoleColor.Yellow);

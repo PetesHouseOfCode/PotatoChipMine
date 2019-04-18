@@ -6,11 +6,13 @@ namespace PotatoChipMine
     public class ChipDigger
     {
         private readonly Random _random = new Random();
+        private TimeSpan lastDig = TimeSpan.Zero;
+        private readonly int secondsBetweenDigs = 15;
 
         public ChipDigger(MineSite mineSite)
         {
             MineSite = mineSite;
-            Hopper = new ChipsHopper {Count = 0, Max = 30};
+            Hopper = new ChipsHopper(30);
             Durability = 25;
             MaxDurability = 25;
         }
@@ -20,14 +22,17 @@ namespace PotatoChipMine
         public int MaxDurability { get; set; }
         public ChipsHopper Hopper { get; set; }
         public MineSite MineSite { get; set; }
-        public Scoop Dig()
+
+        public DigResult Dig(TimeSpan gameTime)
         {
-            var scoop = new Scoop();
-            if (Durability < 1) return scoop;
-            Durability -= RollDurabilityHit();
+            var durabilityHit = RollDurabilityHit();
+            Durability -= durabilityHit;
             Durability = Durability < 0 ? 0 : Durability;
-            scoop.Chips = RollChips();
-            return scoop;
+            
+            var chips = RollChips();
+            Hopper.AddChips(chips);
+            lastDig = gameTime;
+            return new DigResult(chips, durabilityHit);
         }
 
         private int RollChips()
@@ -61,12 +66,17 @@ namespace PotatoChipMine
                     return -1;
             }
         }
-    }
+        
 
-    public class ChipsHopper
-    {
-        public int Max { get; set; } = 0;
-        public int Count { get; set; } = 0;
-        public bool IsFull => Count >= Max;
+        public bool CanDig(TimeSpan gameTime)
+        {
+            if (lastDig != TimeSpan.Zero && gameTime.Subtract(lastDig).TotalSeconds < secondsBetweenDigs)
+            {
+                return false;
+            }
+            
+            return !Hopper.IsFull && Durability > 0;
+        }
+
     }
 }

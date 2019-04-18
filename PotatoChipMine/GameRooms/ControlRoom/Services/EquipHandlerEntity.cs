@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 using PotatoChipMine.GameEngine;
 using PotatoChipMine.Models;
@@ -14,20 +15,33 @@ namespace PotatoChipMine.GameRooms.ControlRoom.Services
 
         public override void HandleInput(UserCommand command)
         {
+            if (string.IsNullOrEmpty(command.CommandText))
+            {
+                Game.WriteLine("A name is required!", ConsoleColor.Red);
+                return;
+            }
+            
+            var newDiggerName = command.CommandText.Trim().Replace(" ", "-");
+
+            if (GameState.Miner.Diggers.Exists(x => x.Name == newDiggerName))
+            {
+                Game.WriteLine($"Digger with the name {newDiggerName} already exists.", ConsoleColor.Red);
+                return;
+            }
+            
             var digger = GameState.Miner.InventoryItems.FirstOrDefault(x => x.Name.ToLower() == "digger");
             var factory = new MineSiteFactory();
             var newDigger = new ChipDigger(factory.BuildSite()) { Durability = 20 };
-            newDigger.Name = command.CommandText.Trim().Replace(" ", "-");
+            newDigger.Name = newDiggerName;
             digger.Count--;
+
+            Game.Write($"Digger {newDigger.Name} has been equipped on ");
+            Game.Write($"{newDigger.MineSite.ChipDensity.ToString()} density", ConsoleColor.Blue);
+            Game.Write(" with a ");
+            Game.Write($"{newDigger.MineSite.Hardness.ToString()} hardness", ConsoleColor.Cyan);
+            Game.WriteLine("");
             GameState.Miner.Diggers.Add(newDigger);
             
-            GameState.NewEvents.Add(new GameEvent
-            {
-                Name = "DiggerEquipped",
-                Description = "Equips a digger from your inventory",
-                Message = $"Digger {newDigger.Name} has been equipped"
-            });
-
             GameState.PromptText = null;
             Game.PopScene();
         }

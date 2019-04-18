@@ -91,6 +91,7 @@ namespace PotatoChipMine.Entities
                 {
                     new RestockingEvent(GameState),
                     new LotteryEvent(GameState),
+                    new DigManagerEntity(GameState),
                     new GameRoomManager(GameState)
                 });
 

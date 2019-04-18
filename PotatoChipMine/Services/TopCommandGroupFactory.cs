@@ -115,13 +115,13 @@ namespace PotatoChipMine.Services
                     Execute = (userCommand, gameState) =>
                     {
                         var table = new TableOutput(100, ConsoleColor.Yellow);
-                        table.AddHeaders("Name", "Durability", "Chips in Hopper", "Hopper Size", "Hopper Space");
+                        table.AddHeaders("Name", "Durability","Density", "Hardness", "Hopper Space");
                         foreach (var digger in gameState.Miner.Diggers)
                         {
                             table.AddRow(digger.Name,
                                 digger.Durability.ToString(),
-                                digger.Hopper.Count.ToString(),
-                                digger.Hopper.Max.ToString(),
+                                digger.MineSite.ChipDensity.ToString(),
+                                digger.MineSite.Hardness.ToString(),
                                 $"{digger.Hopper.Max - digger.Hopper.Count}/{digger.Hopper.Max}");
                         }
 
