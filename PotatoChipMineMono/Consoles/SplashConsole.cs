@@ -95,19 +95,25 @@ namespace PotatoChipMineMono.Consoles
             base.Draw(timeElapsed);
         }
 
-        private bool IsDown = true;
+        private bool isDown = true;
+        private int gradients = 0;
         bool MoveGradient(Console console, TimeSpan delta)
         {
-            if(IsDown)
+            if(isDown)
                 _gradientPositionX += delta.TotalSeconds * 25;
             else
                 _gradientPositionX -= delta.TotalSeconds * 25;
 
             if (_gradientPositionX > Height + 10)
-                IsDown = false;
+            {
+                isDown = false;
+                gradients++;
+                if (gradients > 1)
+                    return true;
+            }
 
             if (_gradientPositionX < -10)
-                IsDown = true;
+                isDown = true;
 
             var colors = new[] { Color.Black, Color.Yellow, Color.White, Color.Green, Color.Black };
             var colorStops = new[] { 0f, 0.2f, 0.5f, 0.8f, 1f };

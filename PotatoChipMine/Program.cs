@@ -1,4 +1,5 @@
-﻿using System;
+using PotatoChipMine.Core;
+using System;
 
 namespace PotatoChipMine
 {

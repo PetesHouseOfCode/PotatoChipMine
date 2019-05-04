@@ -1,6 +1,6 @@
-﻿using System;
-using PotatoChipMine;
-using PotatoChipMine.Models;
+using System;
+using PotatoChipMine.Core;
+using PotatoChipMine.Core.Models;
 using Shouldly;
 using Xunit;
 
