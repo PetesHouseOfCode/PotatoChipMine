@@ -1,4 +1,5 @@
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using SadConsole;
 using SadConsole.DrawCalls;
 using SadConsole.Input;
@@ -8,19 +9,20 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 using Console = SadConsole.Console;
 
 namespace PotatoChipMineMono.Consoles
 {
     public class SplashConsole : ScrollingConsole
     {
-        private double _gradientPositionX = -10;
+        private double _gradientPositionX = -50;
         Console splashConsole;
-        private readonly Point _consoleImagePosition = new Point(0, 0);
+        private readonly Point consoleSplashPosition = new Point(0, 0);
+        private Console consoleImage;
+        private Point consoleImagePosition = new Point(0, 0);
 
         public SplashConsole()
-            :base(125, 40)
+            : base(125, 40)
         {
             Init();
         }
@@ -39,17 +41,30 @@ namespace PotatoChipMineMono.Consoles
         {
             splashConsole = new Console(140, 40);
             ShowIntro(splashConsole);
-
             splashConsole.Tint = Color.Black;
 
-            const string textTemplate = "Potato Chip Miner ";
-            var text = new System.Text.StringBuilder(Width * Height);
+            //const string textTemplate = "Pete's House of Code";
+            //var text = new System.Text.StringBuilder(Width * Height);
 
-            for (var i = 0; i < Width * Height; i++)
+            //for (var i = 0; i < Width * Height; i++)
+            //{
+            //    text.Append(textTemplate);
+            //}
+            //Print(0, 0, text.ToString(), Color.Black, Color.Transparent);
+
+            using (var imageStream = Microsoft.Xna.Framework.TitleContainer.OpenStream("Resources/PHOC-Splash.jpg"))
             {
-                text.Append(textTemplate);
+                using (var image = Texture2D.FromStream(Global.GraphicsDevice, imageStream))
+                {
+                    var logo = image.ToSurface(Global.FontDefault, false);
+                    
+                    consoleImage = Console.FromSurface(logo, Global.FontDefault);
+                    consoleImagePosition = new Point(Width / 2 - consoleImage.Width / 2, -1);
+                    //consoleImage.Tint = Color.Black;
+                }
             }
-            Print(0, 0, text.ToString(), Color.Black, Color.Transparent);
+
+            Children.Add(consoleImage);
 
             var animation = new InstructionSet()
                 .Wait(TimeSpan.FromSeconds(0.2d))
@@ -74,7 +89,7 @@ namespace PotatoChipMineMono.Consoles
                                                       TimeSpan.FromSeconds(1.0d)))
 
                     // Animation has completed, call the callback this console uses to indicate it's complete
-                    .Code((con, delta) => { return true; })
+                    .Code((con, delta) => { SplashDone.Invoke(); return true; })
                 ;
 
             animation.Finished += (s, e) => Components.Remove(animation);
@@ -89,36 +104,27 @@ namespace PotatoChipMineMono.Consoles
 
         public override void Draw(TimeSpan timeElapsed)
         {
+            //Renderer.Render(consoleImage);
+            //Global.DrawCalls.Add(new DrawCallScreenObject(consoleImage, consoleImagePosition, false));
             Renderer.Render(splashConsole);
-            Global.DrawCalls.Add(new DrawCallScreenObject(splashConsole, _consoleImagePosition, false));
+            Global.DrawCalls.Add(new DrawCallScreenObject(splashConsole, consoleSplashPosition, false));
 
             base.Draw(timeElapsed);
         }
 
-        private bool isDown = true;
-        private int gradients = 0;
         bool MoveGradient(Console console, TimeSpan delta)
         {
-            if(isDown)
-                _gradientPositionX += delta.TotalSeconds * 25;
-            else
-                _gradientPositionX -= delta.TotalSeconds * 25;
+            _gradientPositionX += delta.TotalSeconds * 25;
 
-            if (_gradientPositionX > Height + 10)
+            if (_gradientPositionX > Height + 55)
             {
-                isDown = false;
-                gradients++;
-                if (gradients > 1)
-                    return true;
+                return true;
             }
 
-            if (_gradientPositionX < -10)
-                isDown = true;
-
-            var colors = new[] { Color.Black, Color.Yellow, Color.White, Color.Green, Color.Black };
+            var colors = new[] { Color.Black, Color.Yellow, Color.White, Color.Yellow, Color.Black };
             var colorStops = new[] { 0f, 0.2f, 0.5f, 0.8f, 1f };
 
-            Algorithms.GradientFill(Font.Size, new Point(0, Convert.ToInt32(_gradientPositionX)), 10, 0, new Rectangle(0, 0, Width, Height), new ColorGradient(colors, colorStops), SetForeground);
+            Algorithms.GradientFill(Font.Size, new Point(0, Convert.ToInt32(_gradientPositionX)), 10, 35, new Rectangle(0, 0, Width, Height), new ColorGradient(colors, colorStops), SetForeground);
 
             return false;
         }
@@ -164,7 +170,7 @@ namespace PotatoChipMineMono.Consoles
                     x++;
                 }
 
-                Debug.WriteLine("");
+                Debug.WriteLine(string.Empty);
 
                 y++;
             }
@@ -204,5 +210,7 @@ namespace PotatoChipMineMono.Consoles
             @"║                                                                                        ║",
             @"╚════════════════════════════════════════════════════════════════════════════════════════╝"
         };
+
+        public Action SplashDone { get; internal set; }
     }
 }

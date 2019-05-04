@@ -13,8 +13,19 @@ namespace PotatoChipMineMono
     {
         public Container()
         {
-            var console = new SplashConsole();
+            var console = new SplashConsole() { SplashDone = SplashCompleted };
             Children.Add(console);
+        }
+
+        public void SplashCompleted()
+        {
+            var console = new PromptConsole();
+            Children.Clear();
+            Children.Add(console);
+            console.IsVisible = true;
+            console.IsFocused = true;
+
+            Global.FocusedConsoles.Set(console);
         }
 
         public override bool ProcessKeyboard(Keyboard info)
