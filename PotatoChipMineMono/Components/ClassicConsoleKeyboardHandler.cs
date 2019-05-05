@@ -60,7 +60,8 @@ namespace PotatoChipMineMono.Components
 
                     // Get the prompt to exclude it in determining the total length of the string the user has typed.
                     string prompt = ((Consoles.PromptConsole)console).Prompt;
-                    int startingIndex = console.GetIndexFromPoint(new Point(prompt.Length, CursorLastY));
+                    //int startingIndex = console.GetIndexFromPoint(new Point(prompt.Length, CursorLastY));
+                    int startingIndex = console.GetIndexFromPoint(new Point(prompt.Length, console.Cursor.Position.Y));
                     string data = ((ScrollingConsole)console).GetString(startingIndex, console.GetIndexFromPoint(console.Cursor.Position) - startingIndex);
 
                     // Move the cursor to the next line before we send the string data to the processor

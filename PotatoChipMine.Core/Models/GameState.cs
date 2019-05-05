@@ -1,6 +1,7 @@
 using PotatoChipMine.Core.GameRooms;
 using PotatoChipMine.Core.GameRooms.ControlRoom;
 using PotatoChipMine.Core.GameRooms.Store;
+using System;
 using System.Collections.Generic;
 
 namespace PotatoChipMine.Core.Models
@@ -18,6 +19,20 @@ namespace PotatoChipMine.Core.Models
         public string SaveName { get; set; } = string.Empty;
         public List<EventLog> EventsHistory { get; set; } = new List<EventLog>();
         public LobbyRoom Lobby { get; set; }
-        public string PromptText { get; set; }
+        string promptText;
+        public string PromptText
+        {
+            get
+            {
+                return promptText;
+            }
+            set
+            {
+                promptText = value;
+                PromptTextChanged?.Invoke();
+            }
+        }
+
+        public Action PromptTextChanged { get; set; }
     }
 }

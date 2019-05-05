@@ -6,8 +6,8 @@ namespace PotatoChipMine.Core.GameEngine
 {
     public static class Game
     {
-        private static MainProcess mainProcess;
-        public static void SetMainProcess(MainProcess mainProcess)
+        private static IPotatoChipGame mainProcess;
+        public static void SetMainProcess(IPotatoChipGame mainProcess)
         {
             Game.mainProcess = mainProcess;
         }

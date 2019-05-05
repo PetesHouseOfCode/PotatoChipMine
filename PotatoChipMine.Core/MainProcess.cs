@@ -13,7 +13,16 @@ using PotatoChipMine.Core.Entities;
 
 namespace PotatoChipMine.Core
 {
-    public class MainProcess
+    public interface IPotatoChipGame
+    {
+        void StartGame();
+
+        Scene CurrentScene { get; set; }
+        ConsoleBuffer Output { get; set; }
+        Stack<Scene> SceneStack { get; }
+    }
+
+    public class MainProcess : IPotatoChipGame
     {
         private readonly CommandsGroup _commandsGroup;
         private readonly GameUI _gameUi;
@@ -92,7 +101,7 @@ namespace PotatoChipMine.Core
 
             if (!(frame.TimeSinceStart.Subtract(fpsElapsed).TotalSeconds >= 1))
                 return;
-            
+
             var fps = fpsFrames / (frame.TimeSinceStart.Subtract(fpsElapsed).TotalSeconds);
             fpsAvg = ApproxRollingAverage(fpsAvg, fps);
             Console.Title = $"Miner - fps: {fpsAvg:0.##}";

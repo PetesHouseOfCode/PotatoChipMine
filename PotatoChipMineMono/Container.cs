@@ -15,6 +15,7 @@ namespace PotatoChipMineMono
         {
             var console = new SplashConsole() { SplashDone = SplashCompleted };
             Children.Add(console);
+            SplashCompleted();
         }
 
         public void SplashCompleted()

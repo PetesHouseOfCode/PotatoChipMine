@@ -43,34 +43,38 @@ namespace PotatoChipMineMono.Consoles
             ShowIntro(splashConsole);
             splashConsole.Tint = Color.Black;
 
-            //const string textTemplate = "Pete's House of Code";
-            //var text = new System.Text.StringBuilder(Width * Height);
+            const string textTemplate = "Pete's House of Code";
+            var text = new System.Text.StringBuilder(Width * Height);
 
-            //for (var i = 0; i < Width * Height; i++)
-            //{
-            //    text.Append(textTemplate);
-            //}
-            //Print(0, 0, text.ToString(), Color.Black, Color.Transparent);
+            for (var i = 0; i < Width * Height; i++)
+            {
+                text.Append(textTemplate);
+            }
 
-            using (var imageStream = Microsoft.Xna.Framework.TitleContainer.OpenStream("Resources/PHOC-Splash.jpg"))
+            Print(0, 0, text.ToString(), Color.Black, Color.Transparent);
+
+            using (var imageStream = Microsoft.Xna.Framework.TitleContainer.OpenStream("Resources/PHOC-Splash.png"))
             {
                 using (var image = Texture2D.FromStream(Global.GraphicsDevice, imageStream))
                 {
-                    var logo = image.ToSurface(Global.FontDefault, false);
+                    var logo = image.ToSurface(Global.FontDefault, true);
                     
                     consoleImage = Console.FromSurface(logo, Global.FontDefault);
                     consoleImagePosition = new Point(Width / 2 - consoleImage.Width / 2, -1);
                     //consoleImage.Tint = Color.Black;
+                    consoleImage.Fill(Color.Black, null, null);
                 }
             }
 
             Children.Add(consoleImage);
+            consoleImage.Position = consoleImagePosition;
 
             var animation = new InstructionSet()
                 .Wait(TimeSpan.FromSeconds(0.2d))
                 .Code(MoveGradient)
                 .Code((console, delta) =>
                 {
+                    Children.Clear();
                     console.Fill(Color.Black, Color.Transparent, 0);
                     return true;
                 })
@@ -124,6 +128,7 @@ namespace PotatoChipMineMono.Consoles
             var colors = new[] { Color.Black, Color.Yellow, Color.White, Color.Yellow, Color.Black };
             var colorStops = new[] { 0f, 0.2f, 0.5f, 0.8f, 1f };
 
+            Algorithms.GradientFill(Font.Size, new Point(0, Convert.ToInt32(_gradientPositionX)), 10, 35, new Rectangle(0, 0, Width, Height), new ColorGradient(colors, colorStops), consoleImage.SetForeground);
             Algorithms.GradientFill(Font.Size, new Point(0, Convert.ToInt32(_gradientPositionX)), 10, 35, new Rectangle(0, 0, Width, Height), new ColorGradient(colors, colorStops), SetForeground);
 
             return false;
