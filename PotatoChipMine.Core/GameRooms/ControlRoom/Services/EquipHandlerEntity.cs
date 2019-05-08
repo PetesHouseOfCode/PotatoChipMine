@@ -17,7 +17,7 @@ namespace PotatoChipMine.Core.GameRooms.ControlRoom.Services
         {
             if (string.IsNullOrEmpty(command.CommandText))
             {
-                Game.WriteLine("A name is required!", ConsoleColor.Red);
+                Game.WriteLine("A name is required!", PcmColor.Red);
                 return;
             }
             
@@ -25,7 +25,7 @@ namespace PotatoChipMine.Core.GameRooms.ControlRoom.Services
 
             if (GameState.Miner.Diggers.Exists(x => x.Name == newDiggerName))
             {
-                Game.WriteLine($"Digger with the name {newDiggerName} already exists.", ConsoleColor.Red);
+                Game.WriteLine($"Digger with the name {newDiggerName} already exists.", PcmColor.Red);
                 return;
             }
             
@@ -36,9 +36,9 @@ namespace PotatoChipMine.Core.GameRooms.ControlRoom.Services
             digger.Count--;
 
             Game.Write($"Digger {newDigger.Name} has been equipped on ");
-            Game.Write($"{newDigger.MineSite.ChipDensity.ToString()} density", ConsoleColor.Blue);
+            Game.Write($"{newDigger.MineSite.ChipDensity.ToString()} density", PcmColor.Blue);
             Game.Write(" with a ");
-            Game.Write($"{newDigger.MineSite.Hardness.ToString()} hardness", ConsoleColor.Cyan);
+            Game.Write($"{newDigger.MineSite.Hardness.ToString()} hardness", PcmColor.Cyan);
             Game.WriteLine("");
             GameState.Miner.Diggers.Add(newDigger);
             

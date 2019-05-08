@@ -17,5 +17,16 @@ namespace PotatoChipMine.Core.GameEngine
             Buffer.TryDequeue(out ConsoleChar character);
             return character;
         }
+
+        public IEnumerable<ConsoleChar> Read(int numChars)
+        {
+            for(int x = 0; x < numChars; x++)
+            {
+                Buffer.TryDequeue(out ConsoleChar character);
+                if (character == null)
+                    continue;
+                yield return character;
+            }
+        }
     }
 }

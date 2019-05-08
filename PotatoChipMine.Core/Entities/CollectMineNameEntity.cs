@@ -19,7 +19,7 @@ namespace PotatoChipMine.Core.Entities
         {
             if (string.IsNullOrEmpty(command.CommandText))
             {
-                Game.WriteLine("Please enter a name.", ConsoleColor.Red);
+                Game.WriteLine("Please enter a name.", PcmColor.Red);
 
                 return;
             }

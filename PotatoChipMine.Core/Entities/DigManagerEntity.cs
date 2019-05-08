@@ -26,7 +26,7 @@ namespace PotatoChipMine.Core.Entities
             foreach (var digger in diggers.Where(x => x.CanDig(frame.TimeSinceStart)))
             {
                 var digResult = digger.Dig(frame.TimeSinceStart);
-                var table = new TableOutput(100, ConsoleColor.DarkYellow);
+                var table = new TableOutput(100, PcmColor.DarkYellow);
                 table.AddHeaders("Name", "Chips Dug", "Durability Lost", "Durability", "Hopper");
                 table.AddRow(
                     digger.Name,
@@ -41,16 +41,16 @@ namespace PotatoChipMine.Core.Entities
                 {
                     Game.WriteLine(
                         $"{digger.Name}--The digger hopper is full.",
-                        ConsoleColor.Black,
-                        ConsoleColor.DarkYellow);
+                        PcmColor.Black,
+                        PcmColor.DarkYellow);
                 }
 
                 if (digger.Durability < 1)
                 {
                     Game.WriteLine(
                         $"{digger.Name}--The digger needs repair!",
-                        ConsoleColor.Black,
-                        ConsoleColor.Red);
+                        PcmColor.Black,
+                        PcmColor.Red);
                 }
             }
         }

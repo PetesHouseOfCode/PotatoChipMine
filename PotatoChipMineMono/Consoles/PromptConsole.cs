@@ -28,7 +28,6 @@ namespace PotatoChipMineMono.Consoles
 
         bool isShowingPrompt;
         private readonly CommandsGroup _commandsGroup;
-        private readonly GameUI _gameUi;
         private readonly GameState _gameState;
         private readonly GamePersistenceService _gamePersistenceService = new GamePersistenceService();
         Stopwatch gameTime = Stopwatch.StartNew();
@@ -45,13 +44,12 @@ namespace PotatoChipMineMono.Consoles
                 Running = true
             };
             _gameState.PromptTextChanged += () => { Prompt = _gameState.PromptText ?? $"{_gameState.CurrentRoom.Name} Command >>" ?? string.Empty; };
-            _gameUi = new GameUI(_gameState);
 
 
-            _commandsGroup = new TopCommandGroupFactory(_gameUi).Build();
+            _commandsGroup = new TopCommandGroupFactory().Build();
             _gameState.Lobby = new LobbyRoom(_gameState, new[] { "Welcome to the Lobby" }, GameMode.Lobby, _commandsGroup);
-            _gameState.Store = new MinerStoreFactory(_gameUi, _gameState, _commandsGroup).BuildMineStore();
-            _gameState.ControlRoom = new ControlRoomFactory(_gameUi, _gameState, _commandsGroup).BuildControlRoom();
+            _gameState.Store = new MinerStoreFactory(_gameState, _commandsGroup).BuildMineStore();
+            _gameState.ControlRoom = new ControlRoomFactory(_gameState, _commandsGroup).BuildControlRoom();
             _gameState.SaveDirectory = @"c:\chipMiner\saves";
 
             IsVisible = false;
@@ -113,7 +111,7 @@ namespace PotatoChipMineMono.Consoles
         {
             foreach (var newEvent in _gameState.NewEvents)
             {
-                MineGame.WriteLine(newEvent.Message + Environment.NewLine, ConsoleColor.Green);
+                MineGame.WriteLine(newEvent.Message + Environment.NewLine, PcmColor.Green);
                 _gameState.EventsHistory.Add(new EventLog
                 {
                     Name = newEvent.Name,
@@ -125,38 +123,17 @@ namespace PotatoChipMineMono.Consoles
             _gameState.NewEvents.Clear();
         }
 
-        private TimeSpan lastCharOut = TimeSpan.Zero;
         public override void Draw(TimeSpan timeElapsed)
         {
-            if (lastCharOut != TimeSpan.Zero && gameTime.Elapsed.Subtract(lastCharOut).Milliseconds < 3)
+            var characters = Output.Read(3).ToList();
+            if (characters.Any())
             {
-                return;
-            }
-
-            var character = Output.Read();
-            if (character != null)
-            {
-                lastCharOut = gameTime.Elapsed;
                 HideCommandPrompt();
-                //Console.ForegroundColor = character.ForegroundColor;
-                //Console.BackgroundColor = character.BackgroundColor;
-                //Console.Write(character.Char);
-                switch(character.Char)
-                {
-                    case '\r':
-                        Cursor.CarriageReturn();
-                        break;
-                    case '\n':
-                        Cursor.LineFeed();
-                        break;
-                    default:
-                        Cursor.Print(new ColoredString(character.Char.ToString(), Color.WhiteSmoke, Color.Black));
-                        break;
-                }
+                foreach (var character in characters)
+                    Cursor.Print(new ColoredString(character.Char.ToString(), character.ForegroundColor.ToColor(), character.BackgroundColor.ToColor()));
             }
             else
             {
-                lastCharOut = TimeSpan.Zero;
                 ShowCommandPrompt();
             }
 
@@ -180,7 +157,6 @@ namespace PotatoChipMineMono.Consoles
                 return;
 
             isShowingPrompt = true;
-
             Cursor.DisableWordBreak = true;
             Cursor.Print(Prompt);
             Cursor.DisableWordBreak = false;
@@ -206,38 +182,46 @@ namespace PotatoChipMineMono.Consoles
                 entity.HandleInput(command);
             }
 
-//            if (value.ToLower() == "help")
-//            {
-//                Cursor.NewLine().
-//                              Print("  Advanced Example: Command Prompt - HELP").NewLine().
-//                              Print("  =======================================").NewLine().NewLine().
-//                              Print("  help      - Display this help info").NewLine().
-//                              Print("  ver       - Display version info").NewLine().
-//                              Print("  cls       - Clear the screen").NewLine().
-//                              Print("  look      - Example adventure game cmd").NewLine().
-//                              Print("  exit,quit - Quit the program").NewLine().
-//                              Print("  ").NewLine();
-//            }
-//            else if (value.ToLower() == "ver")
-//                Cursor.Print("  SadConsole for MonoGame").NewLine();
+            //            if (value.ToLower() == "help")
+            //            {
+            //                Cursor.NewLine().
+            //                              Print("  Advanced Example: Command Prompt - HELP").NewLine().
+            //                              Print("  =======================================").NewLine().NewLine().
+            //                              Print("  help      - Display this help info").NewLine().
+            //                              Print("  ver       - Display version info").NewLine().
+            //                              Print("  cls       - Clear the screen").NewLine().
+            //                              Print("  look      - Example adventure game cmd").NewLine().
+            //                              Print("  exit,quit - Quit the program").NewLine().
+            //                              Print("  ").NewLine();
+            //            }
+            //            else if (value.ToLower() == "ver")
+            //                Cursor.Print("  SadConsole for MonoGame").NewLine();
 
-//            else if (value.ToLower() == "cls")
-//                ClearText();
+            //            else if (value.ToLower() == "cls")
+            //                ClearText();
 
-//            else if (value.ToLower() == "look")
-//                Cursor.Print("  Looking around you discover that you are in a dark and empty room. To your left there is a computer monitor in front of you and Visual Studio is opened, waiting for your next command.").NewLine();
+            //            else if (value.ToLower() == "look")
+            //                Cursor.Print("  Looking around you discover that you are in a dark and empty room. To your left there is a computer monitor in front of you and Visual Studio is opened, waiting for your next command.").NewLine();
 
-//            else if (value.ToLower() == "exit" || value.ToLower() == "quit")
-//            {
-//#if WINDOWS_UAP
-//                //Windows.UI.Xaml.Application.Current.Exit();       Not working?
-//#else
-//                Environment.Exit(0);
-//#endif
-//            }
+            //            else if (value.ToLower() == "exit" || value.ToLower() == "quit")
+            //            {
+            //#if WINDOWS_UAP
+            //                //Windows.UI.Xaml.Application.Current.Exit();       Not working?
+            //#else
+            //                Environment.Exit(0);
+            //#endif
+            //            }
 
-//            else
-//                Cursor.Print("  Unknown command").NewLine();
+            //            else
+            //                Cursor.Print("  Unknown command").NewLine();
+        }
+    }
+
+    public static class PcmColorExtensions
+    {
+        public static Color ToColor(this PcmColor pcmColor)
+        {
+            return new Color(pcmColor.R, pcmColor.G, pcmColor.B, pcmColor.A);
         }
     }
 }

@@ -85,7 +85,7 @@ namespace PotatoChipMine.Core.Entities
 
         private void StartGame()
         {
-            Game.WriteLine($"Well ok then.  Good luck to you {GameState.Miner.Name}!", ConsoleColor.DarkGreen);
+            Game.WriteLine($"Well ok then.  Good luck to you {GameState.Miner.Name}!", PcmColor.DarkGreen);
 
             var initialScene = Scene.Create(new List<IGameEntity>
                 {

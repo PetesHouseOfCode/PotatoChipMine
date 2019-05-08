@@ -47,13 +47,13 @@ namespace PotatoChipMine.Core.Entities
             {
                 if (string.IsNullOrEmpty(command.CommandText))
                 {
-                    Game.WriteLine("File name or cancel is required!", ConsoleColor.Red);
+                    Game.WriteLine("File name or cancel is required!", PcmColor.Red);
                     return;
                 }
 
                 if (command.CommandText.ToLower() == "cancel")
                 {
-                    Game.WriteLine("Game save was cancelled!", ConsoleColor.Red);
+                    Game.WriteLine("Game save was cancelled!", PcmColor.Red);
                     GameState.PromptText = null;
                     Game.PopScene();
                     return;

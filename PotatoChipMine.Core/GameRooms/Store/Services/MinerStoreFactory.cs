@@ -1,4 +1,4 @@
-﻿using PotatoChipMine.Core.GameRooms.Store.Models;
+using PotatoChipMine.Core.GameRooms.Store.Models;
 using PotatoChipMine.Core.Models;
 using PotatoChipMine.Core.Services;
 
@@ -7,13 +7,11 @@ namespace PotatoChipMine.Core.GameRooms.Store.Services
     public class MinerStoreFactory
     {
         private readonly GameState _gameState;
-        private readonly GameUI _ui;
         private readonly CommandsGroup _baseCommandsGroup;
 
-        public MinerStoreFactory(GameUI ui, GameState gameState, CommandsGroup baseCommandsGroup)
+        public MinerStoreFactory(GameState gameState, CommandsGroup baseCommandsGroup)
         {
             _gameState = gameState;
-            _ui = ui;
             _baseCommandsGroup = baseCommandsGroup;
         }
 
@@ -32,7 +30,7 @@ namespace PotatoChipMine.Core.GameRooms.Store.Services
             var store = new MinerStore(
                 _gameState,
                 greeting,
-                _baseCommandsGroup.Join(new StoreCommandsGroupFactory(_ui, _gameState, storeState).Build())
+                _baseCommandsGroup.Join(new StoreCommandsGroupFactory(_gameState, storeState).Build())
                 );
             store.StoreState = storeState;
             return store;

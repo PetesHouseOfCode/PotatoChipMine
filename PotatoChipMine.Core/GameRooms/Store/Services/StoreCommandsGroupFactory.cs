@@ -1,4 +1,4 @@
-﻿using PotatoChipMine.Core.GameEngine;
+using PotatoChipMine.Core.GameEngine;
 using PotatoChipMine.Core.GameRooms.Store.Models;
 using PotatoChipMine.Core.Models;
 using PotatoChipMine.Core.Services;
@@ -10,14 +10,12 @@ namespace PotatoChipMine.Core.GameRooms.Store.Services
 {
     public class StoreCommandsGroupFactory
     {
-        private readonly GameUI _gameUi;
         private readonly StoreState _storeState;
         private readonly GameState _gameState;
 
-        public StoreCommandsGroupFactory(GameUI gameUi, GameState gameState, StoreState storeState)
+        public StoreCommandsGroupFactory(GameState gameState, StoreState storeState)
         {
             _gameState = gameState;
-            _gameUi = gameUi;
             _storeState = storeState;
         }
 
@@ -58,15 +56,23 @@ namespace PotatoChipMine.Core.GameRooms.Store.Services
                 }
             };
 
-            commandsGroup.LocalCommands.Add(new CommandsDefinition()
-            {
-                Command = "help",
-                Description = "Shows a description of all the currently available commands.",
-                Execute = (userCommand, gameState) =>
-                {
-                    _gameUi.ReportAvailableCommands(gameState);
-                }
-            });
+            //commandsGroup.LocalCommands.Add(new CommandsDefinition()
+            //{
+            //    Command = "help",
+            //    Description = "Shows a description of all the currently available commands.",
+            //    Execute = (userCommand, gameState) =>
+            //    {
+            //        Game.WriteLine($"-----------   {gameState.Mode.ToString().ToUpper()} Commands  ---------------");
+
+            //        foreach (var commandsDefinition in gameState.CurrentRoom.CommandsGroup.LocalCommands.OrderBy(x => x.Command))
+            //        {
+            //            var command = commandsDefinition.EntryDescription ?? commandsDefinition.Command;
+            //            Game.WriteLine($"Command: [{command}]");
+            //            Game.WriteLine($"Description: {commandsDefinition.Description}");
+            //            Game.WriteLine("--------");
+            //        }
+            //    }
+            //});
             return commandsGroup;
         }
 
@@ -85,7 +91,7 @@ namespace PotatoChipMine.Core.GameRooms.Store.Services
         {
             return (userCommand, gameState) =>
             {
-                var table = new TableOutput(77, ConsoleColor.Green);
+                var table = new TableOutput(77, PcmColor.Green);
                 table.AddHeaders("Name", "Price", "Quantity");
                 foreach (var storeItem in _storeState.ItemsForSale)
                 {
@@ -100,13 +106,12 @@ namespace PotatoChipMine.Core.GameRooms.Store.Services
         {
             return (userCommand, gameState) =>
             {
-                _gameUi.FastWrite(
-                    new[] {Buy(
+                Game.WriteLine(Buy(
                             userCommand.Parameters.Count > 1
                                 ? userCommand.Parameters[1]
                                 : userCommand.Parameters[0]
                             , userCommand.Parameters.Count == 1 ? 1 : int.Parse(userCommand.Parameters[0]))
-                        .message});
+                        .message);
             };
         }
 
@@ -117,7 +122,7 @@ namespace PotatoChipMine.Core.GameRooms.Store.Services
                 var result = Sell(userCommand.Parameters);
                 if (!result.sold)
                 {
-                    Game.WriteLine(result.message, ConsoleColor.Red);
+                    Game.WriteLine(result.message, PcmColor.Red);
                     return;
                 }
 

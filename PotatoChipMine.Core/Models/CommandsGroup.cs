@@ -15,8 +15,8 @@ namespace PotatoChipMine.Core.Models
                 x.Command.Trim().ToLower().Equals(userCommand.CommandText.Trim().ToLower()));
             if (command == null)
             {
-                Game.WriteLine($"{userCommand.CommandText} is not a valid command.", ConsoleColor.Red);
-                Game.WriteLine("Type [help] to see a list of commands.", ConsoleColor.Red);
+                Game.WriteLine($"{userCommand.CommandText} is not a valid command.", PcmColor.Red);
+                Game.WriteLine("Type [help] to see a list of commands.", PcmColor.Red);
                 return;
             }
             

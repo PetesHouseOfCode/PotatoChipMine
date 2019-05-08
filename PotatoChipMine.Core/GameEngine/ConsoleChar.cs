@@ -5,15 +5,14 @@ namespace PotatoChipMine.Core.GameEngine
     public class ConsoleChar
     {
         public char Char { get; }
+        public PcmColor ForegroundColor { get; }
+        public PcmColor BackgroundColor { get; }
 
-        public ConsoleColor ForegroundColor { get; }
-        public ConsoleColor BackgroundColor { get; }
-
-        public ConsoleChar(char character, ConsoleColor foregroundColor = ConsoleColor.White, ConsoleColor backgroundColor = ConsoleColor.Black)
+        public ConsoleChar(char character, PcmColor foregroundColor = null, PcmColor backgroundColor = null)
         {
             Char = character;
-            ForegroundColor = foregroundColor;
-            BackgroundColor = backgroundColor;
+            ForegroundColor = foregroundColor ?? PcmColor.White;
+            BackgroundColor = backgroundColor ?? PcmColor.Black;
         }
     }
 }

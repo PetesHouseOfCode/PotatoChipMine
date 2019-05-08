@@ -1,4 +1,4 @@
-﻿using PotatoChipMine.Core.Entities;
+using PotatoChipMine.Core.Entities;
 using PotatoChipMine.Core.GameEngine;
 using PotatoChipMine.Core.Models;
 using System;
@@ -10,11 +10,9 @@ namespace PotatoChipMine.Core.Services
     public class TopCommandGroupFactory : ICommandGroupFactory
     {
         private readonly GamePersistenceService _gamePersistenceService;
-        private readonly GameUI _gameUi;
 
-        public TopCommandGroupFactory(GameUI gameUi)
+        public TopCommandGroupFactory()
         {
-            _gameUi = gameUi;
             _gamePersistenceService = new GamePersistenceService();
         }
 
@@ -27,7 +25,18 @@ namespace PotatoChipMine.Core.Services
                 {
                     Command = "help",
                     Description = "Display all of the commands available.",
-                    Execute = (command, gameState) => { _gameUi.ReportAvailableCommands(gameState); }
+                    Execute = (command, gameState) =>
+                    {
+                        Game.WriteLine($"-----------   {gameState.Mode.ToString().ToUpper()} Commands  ---------------");
+
+                        foreach (var commandsDefinition in gameState.CurrentRoom.CommandsGroup.LocalCommands.OrderBy(x => x.Command))
+                        {
+                            var commandName = commandsDefinition.EntryDescription ?? commandsDefinition.Command;
+                            Game.WriteLine($"Command: [{commandName}]");
+                            Game.WriteLine($"Description: {commandsDefinition.Description}");
+                            Game.WriteLine("--------");
+                        }
+                    }
                 },
                 new CommandsDefinition
                 {
@@ -42,10 +51,10 @@ namespace PotatoChipMine.Core.Services
                     Execute = (userCommand, gameState) =>
                     {
                         var miner = gameState.Miner;
-                        Game.WriteLine($"Name: {miner.Name}", ConsoleColor.Yellow);
-                        Game.WriteLine($"Chip Vault:{miner.Inventory("chips").Count}", ConsoleColor.Yellow);
-                        Game.WriteLine($"Tater Tokens:{miner.TaterTokens}", ConsoleColor.Yellow);
-                        Game.WriteLine($"Diggers Count:{miner.Diggers.Count}", ConsoleColor.Yellow);
+                        Game.WriteLine($"Name: {miner.Name}", PcmColor.Yellow);
+                        Game.WriteLine($"Chip Vault:{miner.Inventory("chips").Count}", PcmColor.Yellow);
+                        Game.WriteLine($"Tater Tokens:{miner.TaterTokens}", PcmColor.Yellow);
+                        Game.WriteLine($"Diggers Count:{miner.Diggers.Count}", PcmColor.Yellow);
                     }
                 },
                 new CommandsDefinition
@@ -114,7 +123,7 @@ namespace PotatoChipMine.Core.Services
                     Description = "Displays a list of all of the miner's equipped diggers.",
                     Execute = (userCommand, gameState) =>
                     {
-                        var table = new TableOutput(100, ConsoleColor.Yellow);
+                        var table = new TableOutput(100, PcmColor.Yellow);
                         table.AddHeaders("Name", "Durability","Density", "Hardness", "Hopper Space");
                         foreach (var digger in gameState.Miner.Diggers)
                         {
@@ -165,7 +174,7 @@ namespace PotatoChipMine.Core.Services
         {
             return (userCommand, gameState) =>
             {
-                Game.WriteLine($"You have {gameState.Miner.TaterTokens} Tater Tokens", ConsoleColor.Green);
+                Game.WriteLine($"You have {gameState.Miner.TaterTokens} Tater Tokens", PcmColor.Green);
             };
         }
     }

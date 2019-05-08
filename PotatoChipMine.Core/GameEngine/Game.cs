@@ -33,22 +33,22 @@ namespace PotatoChipMine.Core.GameEngine
             mainProcess.Output.Write(character);
         }
 
-        public static void WriteLine(string text, ConsoleColor color = ConsoleColor.White, ConsoleColor backgroundColor = ConsoleColor.Black)
+        public static void WriteLine(string text, PcmColor color = null, PcmColor backgroundColor = null)
         {
             if (!text.EndsWith(Environment.NewLine))
                 text = text + Environment.NewLine;
 
             foreach (var c in text)
             {
-                mainProcess.Output.Write(new ConsoleChar(c, color, backgroundColor));
+                mainProcess.Output.Write(new ConsoleChar(c, color ?? PcmColor.White, backgroundColor ?? PcmColor.Black));
             }
         }
 
-        public static void Write(string text, ConsoleColor color = ConsoleColor.White, ConsoleColor backgroundColor = ConsoleColor.Black)
+        public static void Write(string text, PcmColor color = null, PcmColor backgroundColor = null)
         {
             foreach (var c in text)
             {
-                mainProcess.Output.Write(new ConsoleChar(c, color, backgroundColor));
+                mainProcess.Output.Write(new ConsoleChar(c, color ?? PcmColor.White, backgroundColor ?? PcmColor.Black));
             }
         }
 
@@ -67,12 +67,12 @@ namespace PotatoChipMine.Core.GameEngine
             }
         }
 
-        private static void PrintLine(int width, ConsoleColor color, ConsoleColor backgroundColor)
+        private static void PrintLine(int width, PcmColor color, PcmColor backgroundColor)
         {
             WriteLine(new string('-', width), color, backgroundColor);
         }
 
-        private static void PrintRow(int width, ConsoleColor color, ConsoleColor backgroundColor, params string[] columns)
+        private static void PrintRow(int width, PcmColor color, PcmColor backgroundColor, params string[] columns)
         {
             var columnWidth = (width - columns.Length) / columns.Length;
             var row = "|";
@@ -103,11 +103,11 @@ namespace PotatoChipMine.Core.GameEngine
     {
         private readonly int width;
 
-        public TableOutput(int width, ConsoleColor foregroundColor = ConsoleColor.Cyan, ConsoleColor backgroundColor = ConsoleColor.Black)
+        public TableOutput(int width, PcmColor foregroundColor = null, PcmColor backgroundColor = null)
         {
             this.width = width;
-            ForegroundColor = foregroundColor;
-            BackgroundColor = backgroundColor;
+            ForegroundColor = foregroundColor ?? PcmColor.Cyan;
+            BackgroundColor = backgroundColor ?? PcmColor.Black;
         }
 
         public int Width => width;
@@ -117,8 +117,8 @@ namespace PotatoChipMine.Core.GameEngine
         public List<string> Header { get; set; } = new List<string>();
 
         public List<List<string>> Rows { get; set; } = new List<List<string>>();
-        public ConsoleColor ForegroundColor { get; }
-        public ConsoleColor BackgroundColor { get; }
+        public PcmColor ForegroundColor { get; }
+        public PcmColor BackgroundColor { get; }
 
         public void AddHeaders(params string[] headers)
         {

@@ -32,7 +32,7 @@ namespace PotatoChipMine.Core.Entities
                         "** You can take actions related to your diggers in the control-room." + Environment.NewLine +
                         "** Type [control-room] to enter the control-room"  + Environment.NewLine  + Environment.NewLine;
 
-                Game.WriteLine(message, ConsoleColor.Blue);
+                Game.WriteLine(message, PcmColor.Blue);
 
                 StartGame();          
             }
@@ -40,7 +40,7 @@ namespace PotatoChipMine.Core.Entities
 
         private void StartGame()
         {
-            Game.WriteLine($"Well ok then.  Good luck to you {GameState.Miner.Name}!", ConsoleColor.Blue);
+            Game.WriteLine($"Well ok then.  Good luck to you {GameState.Miner.Name}!", PcmColor.Blue);
             
             var initialScene = Scene.Create(new List<IGameEntity>
                 {
