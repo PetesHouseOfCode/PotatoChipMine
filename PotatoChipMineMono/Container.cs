@@ -17,7 +17,7 @@ namespace PotatoChipMineMono
 
         public void SplashCompleted()
         {
-            var console = new PromptConsole();
+            var console = new GameConsole();
             Children.Clear();
             Children.Add(console);
             console.IsVisible = true;

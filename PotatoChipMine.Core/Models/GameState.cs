@@ -28,6 +28,9 @@ namespace PotatoChipMine.Core.Models
             }
             set
             {
+                if (promptText == value)
+                    return;
+
                 promptText = value;
                 PromptTextChanged?.Invoke();
             }
