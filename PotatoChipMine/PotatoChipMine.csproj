@@ -7,6 +7,7 @@
     <OutputType>Exe</OutputType>
     <StartupObject />
     <Version>0.0.1-local</Version>
+    <LangVersion>7.1</LangVersion>
   </PropertyGroup>
 
   <ItemGroup>

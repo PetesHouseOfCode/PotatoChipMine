@@ -9,8 +9,8 @@ namespace PotatoChipMineMono.Consoles
     {
         readonly IPotatoChipGame game;
 
-        public OutputConsole(IPotatoChipGame game)
-            : base(125, 34)
+        public OutputConsole(IPotatoChipGame game,int width = 60, int height = 32)
+            : base(width, height)
         {
             this.game = game;
         }
@@ -29,6 +29,29 @@ namespace PotatoChipMineMono.Consoles
                 //ShowCommandPrompt();
             }
 
+            base.Draw(timeElapsed);
+        }
+    }
+
+    class GameEventsConsole : ScrollingConsole
+    {
+        readonly IPotatoChipGame game;
+
+        public GameEventsConsole(IPotatoChipGame game, int width = 60, int height = 32)
+            : base(width, height)
+        {
+            this.game = game;
+            
+        }
+
+        public override void Draw(TimeSpan timeElapsed)
+        {
+            var characters = game.Events.Read(3).ToList();
+            if (characters.Any())
+            {
+                foreach (var character in characters)
+                    Cursor.Print(new ColoredString(character.Char.ToString(), character.ForegroundColor.ToColor(), character.BackgroundColor.ToColor()));
+            }
             base.Draw(timeElapsed);
         }
     }

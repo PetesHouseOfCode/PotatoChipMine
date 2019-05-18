@@ -10,6 +10,7 @@ namespace PotatoChipMine.Core
 
         Scene CurrentScene { get; set; }
         ConsoleBuffer Output { get; set; }
+        ConsoleBuffer Events { get; set; }
         Stack<Scene> SceneStack { get; }
     }
 }

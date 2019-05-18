@@ -29,6 +29,7 @@ namespace PotatoChipMineMono.Consoles
         public Stack<Scene> SceneStack { get; } = new Stack<Scene>();
         public Scene CurrentScene { get; set; }
         public ConsoleBuffer Output { get; set; } = new ConsoleBuffer();
+        public ConsoleBuffer Events { get; set; } = new ConsoleBuffer();
 
 
         public GameConsole()
@@ -47,12 +48,12 @@ namespace PotatoChipMineMono.Consoles
             IsFocused = true;
 
             StartGame();
-            input = new InputConsole(this, gameState);
-            var output = new OutputConsole(this);
-            input.Position = new Point(1, 34);
+            input = new InputConsole(this, gameState) {Position = new Point(1, 34)};
+            var output = new OutputConsole(this,63){Position = new Point(1,1)};
+            var events = new GameEventsConsole(this, 60) {Position = new Point(65, 1)};
             Children.Add(input);
             Children.Add(output);
-
+            Children.Add(events);
             Global.FocusedConsoles.Set(input);
         }
 
@@ -85,7 +86,7 @@ namespace PotatoChipMineMono.Consoles
         {
             foreach (var newEvent in gameState.NewEvents)
             {
-                MineGame.WriteLine(newEvent.Message + Environment.NewLine, PcmColor.Green);
+                MineGame.WriteLine(newEvent.Message + Environment.NewLine, PcmColor.Green,null,GameConsoles.Events);
                 gameState.EventsHistory.Add(new EventLog
                 {
                     Name = newEvent.Name,

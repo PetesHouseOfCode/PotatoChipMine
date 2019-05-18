@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using PotatoChipMine.Core.Models;
 
 namespace PotatoChipMine.Core.GameEngine
 {
@@ -28,51 +29,83 @@ namespace PotatoChipMine.Core.GameEngine
             mainProcess.CurrentScene = mainProcess.SceneStack.Pop();
         }
 
-        public static void Write(ConsoleChar character)
+        public static void Write(ConsoleChar character,GameConsoles targetConsole = GameConsoles.Output)
         {
-            mainProcess.Output.Write(character);
+            ConsoleBuffer consoleBuffer;
+            switch (targetConsole)
+            {
+                case GameConsoles.Events:
+                    consoleBuffer = mainProcess.Events;
+                    break;
+                default:
+                    consoleBuffer = mainProcess.Output;
+                    break;
+            }
+            consoleBuffer.Write(character);
         }
 
-        public static void WriteLine(string text, PcmColor color = null, PcmColor backgroundColor = null)
+        public static void WriteLine(string text, PcmColor color = null, PcmColor backgroundColor = null,GameConsoles targetConsole = GameConsoles.Output)
         {
+            ConsoleBuffer consoleBuffer;
+            switch (targetConsole)
+            {
+
+                case GameConsoles.Events:
+                    consoleBuffer = mainProcess.Events;
+                    break;
+                default:
+                    consoleBuffer = mainProcess.Output;
+                    break;
+            }
             if (!text.EndsWith(Environment.NewLine))
-                text = text + Environment.NewLine;
+                text += Environment.NewLine;
 
             foreach (var c in text)
             {
-                mainProcess.Output.Write(new ConsoleChar(c, color ?? PcmColor.White, backgroundColor ?? PcmColor.Black));
+                consoleBuffer.Write(new ConsoleChar(c, color ?? PcmColor.White, backgroundColor ?? PcmColor.Black));
             }
         }
 
-        public static void Write(string text, PcmColor color = null, PcmColor backgroundColor = null)
+        public static void Write(string text, PcmColor color = null, PcmColor backgroundColor = null,GameConsoles targetConsole = GameConsoles.Output)
         {
+            ConsoleBuffer consoleBuffer;
+            switch (targetConsole)
+            {
+
+                case GameConsoles.Events:
+                    consoleBuffer = mainProcess.Events;
+                    break;
+                default:
+                    consoleBuffer = mainProcess.Output;
+                    break;
+            }
             foreach (var c in text)
             {
-                mainProcess.Output.Write(new ConsoleChar(c, color ?? PcmColor.White, backgroundColor ?? PcmColor.Black));
+                consoleBuffer.Write(new ConsoleChar(c, color ?? PcmColor.White, backgroundColor ?? PcmColor.Black));
             }
         }
 
-        public static void Write(TableOutput table)
+        public static void Write(TableOutput table, GameConsoles targetConsole = GameConsoles.Output)
         {
-            PrintLine(table.Width, table.ForegroundColor, table.BackgroundColor);
-            PrintRow(table.Width, table.BackgroundColor, table.ForegroundColor, table.Header.ToArray());
-            PrintLine(table.Width, table.ForegroundColor, table.BackgroundColor);
+            PrintLine(table.Width, table.ForegroundColor, table.BackgroundColor, targetConsole);
+            PrintRow(table.Width, table.BackgroundColor, table.ForegroundColor,targetConsole, table.Header.ToArray());
+            PrintLine(table.Width, table.ForegroundColor, table.BackgroundColor, targetConsole);
             if (!table.Rows.Any())
-                PrintLine(table.Width, table.ForegroundColor, table.BackgroundColor);
+                PrintLine(table.Width, table.ForegroundColor, table.BackgroundColor, targetConsole);
 
             foreach (var row in table.Rows)
             {
-                PrintRow(table.Width, table.ForegroundColor, table.BackgroundColor, row.ToArray());
-                PrintLine(table.Width, table.ForegroundColor, table.BackgroundColor);
+                PrintRow(table.Width, table.ForegroundColor, table.BackgroundColor,targetConsole, row.ToArray());
+                PrintLine(table.Width, table.ForegroundColor, table.BackgroundColor, targetConsole);
             }
         }
 
-        private static void PrintLine(int width, PcmColor color, PcmColor backgroundColor)
+        private static void PrintLine(int width, PcmColor color, PcmColor backgroundColor, GameConsoles targetConsole = GameConsoles.Output)
         {
-            WriteLine(new string('-', width), color, backgroundColor);
+            WriteLine(new string('-', width), color, backgroundColor,targetConsole);
         }
 
-        private static void PrintRow(int width, PcmColor color, PcmColor backgroundColor, params string[] columns)
+        private static void PrintRow(int width, PcmColor color, PcmColor backgroundColor, GameConsoles targetConsole = GameConsoles.Output, params string[] columns)
         {
             var columnWidth = (width - columns.Length) / columns.Length;
             var row = "|";
@@ -81,7 +114,7 @@ namespace PotatoChipMine.Core.GameEngine
                 row += AlignCenter(column, columnWidth) + "|";
             }
 
-            WriteLine(row, color, backgroundColor);
+            WriteLine(row, color, backgroundColor,targetConsole);
         }
 
         private static string AlignCenter(string text, int width)
