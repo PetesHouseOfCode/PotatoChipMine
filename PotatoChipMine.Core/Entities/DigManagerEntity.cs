@@ -41,17 +41,17 @@ namespace PotatoChipMine.Core.Entities
                 {
                     Game.WriteLine(
                         $"{digger.Name}--The digger hopper is full.",
+                        PcmColor.Cyan,
                         PcmColor.Black,
-                        PcmColor.DarkYellow,
                         GameConsoles.Events);
                 }
 
                 if (digger.Durability < 1)
                 {
                     Game.WriteLine(
-                        $"{digger.Name}--The digger needs repair!",
-                        PcmColor.Black,
+                        $"****** {digger.Name} needs repair! ******",
                         PcmColor.Red,
+                        PcmColor.Black,
                         GameConsoles.Events);
                 }
             }

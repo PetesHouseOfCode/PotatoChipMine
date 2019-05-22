@@ -64,6 +64,8 @@
   <ItemGroup>
     <Compile Include="Components\ClassicConsoleKeyboardHandler.cs" />
     <Compile Include="Consoles\GameConsole.cs" />
+    <Compile Include="Consoles\GameEventsConsole.cs" />
+    <Compile Include="Consoles\HudConsole.cs" />
     <Compile Include="Consoles\OutputConsole.cs" />
     <Compile Include="Consoles\InputConsole.cs" />
     <Compile Include="Consoles\PcmColorExtensions.cs" />
