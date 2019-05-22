@@ -91,7 +91,7 @@ namespace PotatoChipMine.Core.GameRooms.Store.Services
         {
             return (userCommand, gameState) =>
             {
-                var table = new TableOutput(60, PcmColor.Green);
+                var table = new TableOutput(80, PcmColor.Green);
                 table.AddHeaders("Name", "Price", "Quantity");
                 foreach (var storeItem in _storeState.ItemsForSale)
                 {

@@ -100,6 +100,11 @@ namespace PotatoChipMine.Core.GameEngine
             }
         }
 
+        public static void ClearConsole(GameConsoles targetConsole = GameConsoles.Output)
+        {
+            mainProcess.ClearConsole(targetConsole);
+        }
+
         private static void PrintLine(int width, PcmColor color, PcmColor backgroundColor, GameConsoles targetConsole = GameConsoles.Output)
         {
             WriteLine(new string('-', width), color, backgroundColor,targetConsole);

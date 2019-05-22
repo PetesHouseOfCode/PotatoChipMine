@@ -101,7 +101,7 @@ namespace PotatoChipMine.Core.Services
                     Description = "Shows the miners items inventory",
                     Execute = (userCommand, gameState) =>
                     {
-                        var table = new TableOutput(60);
+                        var table = new TableOutput(80);
                         table.AddHeaders("Name", "Quantity");
                         foreach (var minerInventoryItem in gameState.Miner.InventoryItems)
                         {
@@ -123,7 +123,7 @@ namespace PotatoChipMine.Core.Services
                     Description = "Displays a list of all of the miner's equipped diggers.",
                     Execute = (userCommand, gameState) =>
                     {
-                        var table = new TableOutput(60, PcmColor.Yellow);
+                        var table = new TableOutput(80, PcmColor.Yellow);
                         table.AddHeaders("Name", "Durability","Density", "Hardness", "Hopper Space");
                         foreach (var digger in gameState.Miner.Diggers)
                         {

@@ -13,7 +13,7 @@ namespace PotatoChipMineMono
     {
         static void Main(string[] args)
         {
-            SadConsole.Game.Create(125, 40);
+            SadConsole.Game.Create(175, 40);
 
             SadConsole.Game.OnInitialize = Init;
             SadConsole.Game.OnUpdate = Update;

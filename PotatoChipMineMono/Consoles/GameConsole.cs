@@ -24,7 +24,10 @@ namespace PotatoChipMineMono.Consoles
         private readonly GameState gameState;
         private readonly GamePersistenceService gamePersistenceService = new GamePersistenceService();
         private Stopwatch gameTime = Stopwatch.StartNew();
-        InputConsole input;
+        private InputConsole input;
+        private OutputConsole output;
+        private GameEventsConsole events;
+        private HudConsole hud;
 
         public Stack<Scene> SceneStack { get; } = new Stack<Scene>();
         public Scene CurrentScene { get; set; }
@@ -48,13 +51,36 @@ namespace PotatoChipMineMono.Consoles
             IsFocused = true;
 
             StartGame();
+            hud = new HudConsole (gameState) {Position = new Point(0, 0)};
             input = new InputConsole(this, gameState) {Position = new Point(1, 34)};
-            var output = new OutputConsole(this,63){Position = new Point(1,1)};
-            var events = new GameEventsConsole(this, 60) {Position = new Point(65, 1)};
+            output = new OutputConsole(this,83){Position = new Point(1,1)};
+            events = new GameEventsConsole(this, 83) {Position = new Point(85, 1)};
+            Children.Add(hud);
             Children.Add(input);
             Children.Add(output);
             Children.Add(events);
             Global.FocusedConsoles.Set(input);
+        }
+
+        public void ClearConsole(GameConsoles targetConsole = GameConsoles.Output)
+        {
+            switch (targetConsole)
+            {
+                case GameConsoles.Events:
+                    if (events == null) return;
+                    events.Clear();
+                    events.Cursor.Position = Point.Zero;
+                    break;
+                case GameConsoles.Input:
+                    if (input == null) return;
+                    input.ClearText();
+                    break;
+                default:
+                    if (output == null) return;
+                    output.Clear();
+                    output.Cursor.Position = Point.Zero;
+                    break;
+            }
         }
 
         public override bool ProcessKeyboard(Keyboard info)
@@ -65,7 +91,6 @@ namespace PotatoChipMineMono.Consoles
         public void StartGame()
         {
             MineGame.SetMainProcess(this);
-
             gameState.Lobby.EnterRoom();
             MineGame.SwitchScene(Scene.Create(new List<IGameEntity>{
                 new GameLoaderEntity(gameState)

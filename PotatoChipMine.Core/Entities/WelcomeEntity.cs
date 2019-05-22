@@ -25,6 +25,7 @@ namespace PotatoChipMine.Core.Entities
 
             if (command.CommandText.ToLower() == "yes")
             {
+                Game.ClearConsole();
                 var message ="I'm sorry to report that the tutorial is under construction, but here's what we've got so far..." + Environment.NewLine + Environment.NewLine +
                         "** You can type [help] at any time to see a list of available commands." + Environment.NewLine + Environment.NewLine +
                         "** You can buy and sell things in the store." + Environment.NewLine +
@@ -59,15 +60,11 @@ namespace PotatoChipMine.Core.Entities
             if (sentMessage)
                 return;
             
-            GameState.NewEvents.Add(new GameEvent
-            {
-                Name = "WelcomeMessage",
-                Description = "",
-                Message =$"Very pleased to meet you {GameState.Miner.Name}." + Environment.NewLine +
-                         "If you're new to 'tater mining you may want some instructions..." + Environment.NewLine +
-                         "You look like maybe you know your way around a chip digger though."
-            });
-
+            Game.ClearConsole();
+            Game.WriteLine($"Very pleased to meet you {GameState.Miner.Name}." + Environment.NewLine +
+                           "If you're new to 'tater mining you may want some instructions..." + Environment.NewLine +
+                           "You look like maybe you know your way around a chip digger though." + Environment.NewLine +
+                           "To learn more about playing the game, type [yes].  If you're ready to start mining some chips type [no].");
             GameState.PromptText = "Do you need instructions?";
             sentMessage = true;
         }

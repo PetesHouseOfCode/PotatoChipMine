@@ -73,7 +73,7 @@ namespace PotatoChipMine.Core.Entities
 
         private void ReportFiles()
         {
-            var table = new TableOutput(60);
+            var table = new TableOutput(80);
             table.AddHeaders("File Name", "Save Date");
             foreach( var file in persistenceService.SaveFiles(GameState))
             {

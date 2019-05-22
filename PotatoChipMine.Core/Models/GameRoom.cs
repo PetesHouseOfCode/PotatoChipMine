@@ -25,6 +25,7 @@ namespace PotatoChipMine.Core.Models
 
         public virtual void EnterRoom()
         {
+            Game.ClearConsole();
             Game.WriteLine(string.Join(Environment.NewLine, Greeting), PcmColor.Cyan);
             GameState.CurrentRoom = this;
         }

@@ -38,7 +38,8 @@ namespace PotatoChipMine.Core.Entities
             {
                 Game.WriteLine("Howdy pilgrim!  Welcome to glamorous world of 'tater chip mining!" + Environment.NewLine +
                     "I'm Earl, your mine bot. I'll be you're right hand man ... 'er bot, around this here mining operation.");
-                GameState.PromptText = "Whats your name pilgrim?";
+                Game.WriteLine( "Whats your name pilgrim?");
+                GameState.PromptText = "Enter your name:";
                 sentMessage = true;
             }
         }

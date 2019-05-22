@@ -1,4 +1,4 @@
-﻿using PotatoChipMine.Core.GameRooms.Store.Models;
+using PotatoChipMine.Core.GameRooms.Store.Models;
 using PotatoChipMine.Core.Models;
 
 namespace PotatoChipMine.Core.GameRooms.Store

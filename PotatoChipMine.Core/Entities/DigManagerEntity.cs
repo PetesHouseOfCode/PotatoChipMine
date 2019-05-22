@@ -26,7 +26,7 @@ namespace PotatoChipMine.Core.Entities
             foreach (var digger in diggers.Where(x => x.CanDig(frame.TimeSinceStart)))
             {
                 var digResult = digger.Dig(frame.TimeSinceStart);
-                var table = new TableOutput(54, PcmColor.DarkYellow);
+                var table = new TableOutput(80, PcmColor.DarkYellow);
                 table.AddHeaders("Name", "Dug", "Damage", "Durability", "Hopper");
                 table.AddRow(
                     digger.Name,
