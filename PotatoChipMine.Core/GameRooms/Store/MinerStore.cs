@@ -1,3 +1,4 @@
+using PotatoChipMine.Core.Commands;
 using PotatoChipMine.Core.GameRooms.Store.Models;
 using PotatoChipMine.Core.Models;
 
@@ -20,6 +21,7 @@ namespace PotatoChipMine.Core.GameRooms.Store
         public override void EnterRoom()
         {
             GameState.Mode = GameMode.Store;
+            CommandRunner.Run(new StockCommand() { State = StoreState });
             base.EnterRoom();
         }
     }

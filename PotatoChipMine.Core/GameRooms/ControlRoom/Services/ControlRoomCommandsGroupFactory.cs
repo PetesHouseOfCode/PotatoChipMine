@@ -24,14 +24,14 @@ namespace PotatoChipMine.Core.GameRooms.ControlRoom.Services
                     //},
                     new CommandsDefinition()
                     {
-                        Command = "equip",
+                        CommandText = "equip",
                         Description = "Begins the process to equip a digger from your inventory to dig.",
                         Execute = EquipHandler()
                         
                     },
                     new CommandsDefinition()
                     {
-                        Command = "empty",
+                        CommandText = "empty",
                         EntryDescription = "empty [digger name]",
                         Description = "Empties the indicated diggers hopper into the chip vault.",
                         Execute = EmptyHandler()
@@ -39,14 +39,14 @@ namespace PotatoChipMine.Core.GameRooms.ControlRoom.Services
                     },
                     new CommandsDefinition()
                     {
-                        Command = "scrap",
+                        CommandText = "scrap",
                         EntryDescription = "scrap [digger name]",
                         Description = "Destroys the digger indicated for bolts.",
                         Execute = ScrapHandler()
                     },
                     new CommandsDefinition()
                     {
-                        Command = "repair",
+                        CommandText = "repair",
                         EntryDescription = "repair [digger name]",
                         Description = "After confirmation repairs the digger to max durability for the quoted price.",
                         Execute = RepairHandler()

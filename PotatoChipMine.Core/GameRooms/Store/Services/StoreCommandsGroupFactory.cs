@@ -1,3 +1,4 @@
+using PotatoChipMine.Core.Commands;
 using PotatoChipMine.Core.GameEngine;
 using PotatoChipMine.Core.GameRooms.Store.Models;
 using PotatoChipMine.Core.Models;
@@ -25,17 +26,35 @@ namespace PotatoChipMine.Core.GameRooms.Store.Services
             {
                 LocalCommands = new List<CommandsDefinition>()
                 {
-
                     new CommandsDefinition()
                     {
-                        Command = "sell",
+                        CommandText = "sell",
                         EntryDescription = "sell [quantity] [item name] || sell [item name] (sells all) ",
                         Description = "Sell all of the indicated items in your inventory.",
-                        Execute = SellHandler()
+                        Command = (userCommand, gameState) => {
+                            
+                            // TODO: Check if no parameters
+                            if(userCommand.Parameters.Count() == 0 || userCommand.Parameters.Count() > 2)
+                            {
+                                // return FailedMessageCommand{Message = $"Invalid Quantity {userCommand.Parameters[0]}"};
+                            }
+
+                            if(userCommand.Parameters.Count() == 2)
+                            {
+                                if(!int.TryParse(userCommand.Parameters[0], out var quantity))
+                                {
+                                    // return FailedMessageCommand{Message = $"Invalid Quantity {userCommand.Parameters[0]}"};
+                                }                                
+                                
+                                return new SellCommand{GameState = gameState, StoreState = _storeState, ItemName = userCommand.Parameters[1].Trim(), Quantity = quantity};
+                            }
+
+                            return new SellCommand{GameState = gameState, StoreState = _storeState, ItemName = userCommand.Parameters[0].Trim() };
+                        }
                     },
                     new CommandsDefinition
                     {
-                        Command = "buy",
+                        CommandText = "buy",
                         EntryDescription = "buy [quantity] [item name] || buy [item name] (to buy single item)",
                         Description = "Purchases the quantity indicated of the item requested.",
                         Execute = BuyHandler()
@@ -43,36 +62,19 @@ namespace PotatoChipMine.Core.GameRooms.Store.Services
                     },
                     new CommandsDefinition()
                     {
-                        Command="stock",
+                        CommandText="stock",
                         Description = "Displays the items and quantities and unit prices available to purchase.",
-                        Execute = StockHandler()
+                        Command = (userCommand, gameState) => new StockCommand { State = _storeState }
                     },
                     new CommandsDefinition()
                     {
-                        Command = "buying",
+                        CommandText = "buying",
                         Description = "Displays the items the store is currently buying and the price paid per item.",
                         Execute = BuyingHandler()
                     }
                 }
             };
 
-            //commandsGroup.LocalCommands.Add(new CommandsDefinition()
-            //{
-            //    Command = "help",
-            //    Description = "Shows a description of all the currently available commands.",
-            //    Execute = (userCommand, gameState) =>
-            //    {
-            //        Game.WriteLine($"-----------   {gameState.Mode.ToString().ToUpper()} Commands  ---------------");
-
-            //        foreach (var commandsDefinition in gameState.CurrentRoom.CommandsGroup.LocalCommands.OrderBy(x => x.Command))
-            //        {
-            //            var command = commandsDefinition.EntryDescription ?? commandsDefinition.Command;
-            //            Game.WriteLine($"Command: [{command}]");
-            //            Game.WriteLine($"Description: {commandsDefinition.Description}");
-            //            Game.WriteLine("--------");
-            //        }
-            //    }
-            //});
             return commandsGroup;
         }
 
@@ -87,21 +89,6 @@ namespace PotatoChipMine.Core.GameRooms.Store.Services
             };
         }
 
-        private Action<UserCommand, GameState> StockHandler()
-        {
-            return (userCommand, gameState) =>
-            {
-                var table = new TableOutput(80, PcmColor.Green);
-                table.AddHeaders("Name", "Price", "Quantity");
-                foreach (var storeItem in _storeState.ItemsForSale)
-                {
-                    table.AddRow(storeItem.Name, storeItem.Price.ToString(), storeItem.Count.ToString());
-                }
-
-                Game.Write(table);
-            };
-        }
-
         private Action<UserCommand, GameState> BuyHandler()
         {
             return (userCommand, gameState) =>
@@ -113,67 +100,6 @@ namespace PotatoChipMine.Core.GameRooms.Store.Services
                             , userCommand.Parameters.Count == 1 ? 1 : int.Parse(userCommand.Parameters[0]))
                         .message);
             };
-        }
-
-        private Action<UserCommand, GameState> SellHandler()
-        {
-            return (userCommand, gameState) =>
-            {
-                var result = Sell(userCommand.Parameters);
-                if (!result.sold)
-                {
-                    Game.WriteLine(result.message, PcmColor.Red);
-                    return;
-                }
-
-                Game.WriteLine(result.message);
-            };
-        }
-
-        private (bool sold, string message) Sell(IReadOnlyList<string> paramsList)
-        {
-            try
-            {
-                int quantity;
-                InventoryItem item;
-                if (paramsList.Count >= 2)
-                {
-                    if (!int.TryParse(paramsList[0], out quantity))
-                    {
-                        return (false, "Sell command was not in the correct format.");
-                    }
-
-                    item = _gameState.Miner.Inventory(paramsList[1]);
-                    if (item == null)
-                    {
-                        return (false, $"You don't have any {paramsList[0]} to sell");
-                    }
-                }
-                else
-                {
-
-                    item = _gameState.Miner.Inventory(paramsList[0]);
-                    if (item == null)
-                    {
-                        return (false, $"You don't have any {paramsList[0]} to sell");
-                    }
-
-                    quantity = item.Count;
-                }
-
-                var price = _storeState.ItemsBuying.Any(x => x.Name.ToLower() == item.Name)
-                    ? _storeState.ItemsBuying.First(x => x.Name.ToLower() == item.Name).Price
-                    : 1;
-                item.Count -= quantity;
-                _gameState.Miner.TaterTokens += quantity * price;
-                _gameState.Miner.LifetimeTokens += quantity * price;
-                return (true, $"Sold {quantity} chips for {quantity * price}.");
-            }
-            catch (ArgumentOutOfRangeException)
-            {
-                return (false, "Invalid entry. Indicate an item to sell.");
-            }
-
         }
 
         public (bool sold, string message) Buy(string itemName, int quantity)

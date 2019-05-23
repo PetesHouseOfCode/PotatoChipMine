@@ -15,13 +15,13 @@ namespace PotatoChipMine.Core.GameRooms.ControlRoom.Services
 
         public override void HandleInput(UserCommand command)
         {
-            if (string.IsNullOrEmpty(command.CommandText))
+            if (string.IsNullOrEmpty(command.FullCommand))
             {
                 Game.WriteLine("A name is required!", PcmColor.Red);
                 return;
             }
             
-            var newDiggerName = command.CommandText.Trim().Replace(" ", "-");
+            var newDiggerName = command.FullCommand.Trim().Replace(" ", "-");
 
             if (GameState.Miner.Diggers.Exists(x => x.Name == newDiggerName))
             {

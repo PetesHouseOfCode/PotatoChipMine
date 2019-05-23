@@ -42,7 +42,7 @@ namespace PotatoChipMine.Core.Entities
                 }
             }
 
-            persistenceService.LoadGame(GameState, command.CommandText);
+            persistenceService.LoadGame(GameState, command.FullCommand);
             StartGame();
         }
 

@@ -17,7 +17,7 @@ namespace PotatoChipMine.Core.Entities
 
         public override void HandleInput(UserCommand command)
         {
-            if (string.IsNullOrEmpty(command.CommandText))
+            if (string.IsNullOrEmpty(command.FullCommand))
             {
                 Game.WriteLine("Please enter a name.", PcmColor.Red);
 
@@ -25,7 +25,7 @@ namespace PotatoChipMine.Core.Entities
             }
          
             GameState.Miner = Miner.Default();
-            GameState.Miner.Name = command.CommandText;
+            GameState.Miner.Name = command.FullCommand;
             GameState.PromptText = null;
             Game.SwitchScene(Scene.Create(new List<IGameEntity>{
                 new WelcomeEntity(GameState)

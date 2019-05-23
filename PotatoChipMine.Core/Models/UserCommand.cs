@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+using System;
+using System.Collections.Generic;
 
 namespace PotatoChipMine.Core.Models
 {
@@ -6,5 +7,6 @@ namespace PotatoChipMine.Core.Models
     {
         public string CommandText { get; set; }
         public List<string> Parameters { get; set; }
+        public string FullCommand { get; set; }
     }
 }

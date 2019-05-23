@@ -1,4 +1,5 @@
-﻿using PotatoChipMine.Core.GameEngine;
+using PotatoChipMine.Core.Commands;
+using PotatoChipMine.Core.GameEngine;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,15 +13,21 @@ namespace PotatoChipMine.Core.Models
         public void ExecuteCommand(UserCommand userCommand, GameState gameState)
         {
             var command = LocalCommands.FirstOrDefault(x =>
-                x.Command.Trim().ToLower().Equals(userCommand.CommandText.Trim().ToLower()));
+                x.CommandText.Trim().ToLower().Equals(userCommand.CommandText.Trim().ToLower()));
             if (command == null)
             {
                 Game.WriteLine($"{userCommand.CommandText} is not a valid command.", PcmColor.Red);
                 Game.WriteLine("Type [help] to see a list of commands.", PcmColor.Red);
                 return;
             }
-            
-            command.Execute(userCommand, gameState);
+
+            if (command.Command == null)
+            {
+                command.Execute(userCommand, gameState);
+                return;
+            }
+
+            CommandRunner.Run(command.Command(userCommand, gameState));
         }
 
         public CommandsGroup Join(CommandsGroup joinedCommandsGroup)

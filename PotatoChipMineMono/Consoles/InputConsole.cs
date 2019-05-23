@@ -96,7 +96,7 @@ namespace PotatoChipMineMono.Consoles
                 return;
             }
 
-            var command = new UserCommand { CommandText = commandEntry?[0], Parameters = commandEntry.Skip(1).ToList() };
+            var command = new UserCommand { CommandText = commandEntry?[0], Parameters = commandEntry.Skip(1).ToList(), FullCommand = value.Trim() };
 
             foreach (var entity in game.CurrentScene.Entities)
             {

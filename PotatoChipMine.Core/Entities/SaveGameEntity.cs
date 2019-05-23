@@ -45,13 +45,13 @@ namespace PotatoChipMine.Core.Entities
 
             if ((IsNewSaveFile || doNotOverwrite) && requestedFilename)
             {
-                if (string.IsNullOrEmpty(command.CommandText))
+                if (string.IsNullOrEmpty(command.FullCommand))
                 {
                     Game.WriteLine("File name or cancel is required!", PcmColor.Red);
                     return;
                 }
 
-                if (command.CommandText.ToLower() == "cancel")
+                if (command.FullCommand.ToLower() == "cancel")
                 {
                     Game.WriteLine("Game save was cancelled!", PcmColor.Red);
                     GameState.PromptText = null;
@@ -59,7 +59,7 @@ namespace PotatoChipMine.Core.Entities
                     return;
                 }
 
-                GameState.SaveName = command.CommandText;
+                GameState.SaveName = command.FullCommand;
                 SaveGame();
             }
         }

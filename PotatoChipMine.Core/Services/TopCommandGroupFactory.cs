@@ -23,15 +23,15 @@ namespace PotatoChipMine.Core.Services
             {
                 new CommandsDefinition
                 {
-                    Command = "help",
+                    CommandText = "help",
                     Description = "Display all of the commands available.",
                     Execute = (command, gameState) =>
                     {
                         Game.WriteLine($"-----------   {gameState.Mode.ToString().ToUpper()} Commands  ---------------");
 
-                        foreach (var commandsDefinition in gameState.CurrentRoom.CommandsGroup.LocalCommands.OrderBy(x => x.Command))
+                        foreach (var commandsDefinition in gameState.CurrentRoom.CommandsGroup.LocalCommands.OrderBy(x => x.CommandText))
                         {
-                            var commandName = commandsDefinition.EntryDescription ?? commandsDefinition.Command;
+                            var commandName = commandsDefinition.EntryDescription ?? commandsDefinition.CommandText;
                             Game.WriteLine($"Command: [{commandName}]");
                             Game.WriteLine($"Description: {commandsDefinition.Description}");
                             Game.WriteLine("--------");
@@ -40,13 +40,13 @@ namespace PotatoChipMine.Core.Services
                 },
                 new CommandsDefinition
                 {
-                    Command = "store",
+                    CommandText = "store",
                     Description = "Opens the store mode and makes the store commands accessible.",
                     Execute = (command, gameState) => { gameState.Store.EnterRoom(); }
                 },
                 new CommandsDefinition
                 {
-                    Command = "miner",
+                    CommandText = "miner",
                     Description = "Displays the miner's current chip vault, tater tokens, and diggers",
                     Execute = (userCommand, gameState) =>
                     {
@@ -59,7 +59,7 @@ namespace PotatoChipMine.Core.Services
                 },
                 new CommandsDefinition
                 {
-                    Command = "vault",
+                    CommandText = "vault",
                     Description = "Shows the number of chips currently in your vault.",
                     Execute = (userCommand, gameState) =>
                     {
@@ -68,13 +68,13 @@ namespace PotatoChipMine.Core.Services
                 },
                 new CommandsDefinition
                 {
-                    Command = "tokens",
+                    CommandText = "tokens",
                     Description = "Shows then number of tokens you currently have.",
                     Execute = TokensHandler()
                 },
                 new CommandsDefinition
                 {
-                    Command = "exit",
+                    CommandText = "exit",
                     Description = "Leaves the current room and returns you to the lobby.",
                     Execute = (userCommand, gameState) =>
                     {
@@ -85,19 +85,19 @@ namespace PotatoChipMine.Core.Services
                 },
                 new CommandsDefinition
                 {
-                    Command = "quit",
+                    CommandText = "quit",
                     Description = "Ends the game.",
                     Execute = (userCommand, gameState) => { gameState.Running = false; }
                 },
                 new CommandsDefinition
                 {
-                    Command = "end",
+                    CommandText = "end",
                     Description = "Ends the game.",
                     Execute = (userCommand, gameState) => { gameState.Running = false; }
                 },
                 new CommandsDefinition
                 {
-                    Command = "inventory",
+                    CommandText = "inventory",
                     Description = "Shows the miners items inventory",
                     Execute = (userCommand, gameState) =>
                     {
@@ -113,13 +113,13 @@ namespace PotatoChipMine.Core.Services
                 },
                 new CommandsDefinition
                 {
-                    Command = "control-room",
+                    CommandText = "control-room",
                     Description = "Enter the control room. Control room commands become available",
                     Execute = (userCommand, gameState) => { gameState.ControlRoom.EnterRoom(); }
                 },
                 new CommandsDefinition
                 {
-                    Command = "diggers",
+                    CommandText = "diggers",
                     Description = "Displays a list of all of the miner's equipped diggers.",
                     Execute = (userCommand, gameState) =>
                     {
@@ -139,13 +139,13 @@ namespace PotatoChipMine.Core.Services
                 },
                 new CommandsDefinition
                 {
-                    Command = "save",
+                    CommandText = "save",
                     Description = "Saves the current game.",
                     Execute = SaveHandler()
                 },
                 new CommandsDefinition
                 {
-                    Command = "load",
+                    CommandText = "load",
                     EntryDescription = "load || load [save name]",
                     Description = "Loads shows games available to load, or loads the indicated saved game.",
                     Execute = LoadHandler()

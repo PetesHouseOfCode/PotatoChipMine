@@ -29,7 +29,7 @@ namespace PotatoChipMine.Core.GameEngine
             mainProcess.CurrentScene = mainProcess.SceneStack.Pop();
         }
 
-        public static void Write(ConsoleChar character,GameConsoles targetConsole = GameConsoles.Output)
+        public static void Write(ConsoleChar character, GameConsoles targetConsole = GameConsoles.Output)
         {
             ConsoleBuffer consoleBuffer;
             switch (targetConsole)
@@ -41,6 +41,7 @@ namespace PotatoChipMine.Core.GameEngine
                     consoleBuffer = mainProcess.Output;
                     break;
             }
+
             consoleBuffer.Write(character);
         }
 
