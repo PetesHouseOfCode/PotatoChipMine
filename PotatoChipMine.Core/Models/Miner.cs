@@ -1,5 +1,6 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Linq;
+using PotatoChipMine.Core.Services;
 
 namespace PotatoChipMine.Core.Models
 {
@@ -10,6 +11,8 @@ namespace PotatoChipMine.Core.Models
         public int TaterTokens { get; set; }
         public int LifetimeChips { get; set; }
         public int LifetimeTokens { get; set; }
+        public List<PlayerAchievement> AttainedAchievements { get; set; } = new List<PlayerAchievement>();
+        public List<PlayerAchievement> PotentialAchievements { get; set; } = new List<PlayerAchievement>();
         public List<InventoryItem> InventoryItems { get; set; } = new List<InventoryItem>();
 
         public InventoryItem Inventory(string name)
@@ -24,7 +27,8 @@ namespace PotatoChipMine.Core.Models
                 Diggers = new List<ChipDigger>(),
                 TaterTokens = 100,
                 InventoryItems = new List<InventoryItem>
-                    {new InventoryItem {Name = "chips", Count = 0, InventoryId = 0}}
+                    {new InventoryItem {Name = "chips", Count = 0, InventoryId = 0}},
+                PotentialAchievements = AchievementsBuilder.GetPotentialAchievements()
             };
         }
     }

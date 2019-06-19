@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using PotatoChipMine.Core.Entities;
+using PotatoChipMine.Core.GameAchievements;
 using PotatoChipMine.Core.Models;
 
 namespace PotatoChipMine.Core.GameEngine
@@ -8,6 +10,8 @@ namespace PotatoChipMine.Core.GameEngine
     public static class Game
     {
         private static IPotatoChipGame mainProcess;
+        public static List<GameAchievement> Achievements { get; set; }
+
         public static void SetMainProcess(IPotatoChipGame mainProcess)
         {
             Game.mainProcess = mainProcess;
