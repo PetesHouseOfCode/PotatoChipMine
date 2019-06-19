@@ -48,7 +48,8 @@ namespace PotatoChipMine.Core.Entities
                     new RestockingEvent(GameState),
                     new LotteryEvent(GameState),
                     new DigManagerEntity(GameState),
-                    new GameRoomManager(GameState)
+                    new GameRoomManager(GameState),
+                    new MinerAchievementsMonitorEntity(GameState)
                 });
 
             GameState.PromptText = null;

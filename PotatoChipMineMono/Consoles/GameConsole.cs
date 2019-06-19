@@ -1,3 +1,6 @@
+using System;
+using System.Collections.Generic;
+using System.Diagnostics;
 using Microsoft.Xna.Framework;
 using PotatoChipMine.Core;
 using PotatoChipMine.Core.Entities;
@@ -9,30 +12,23 @@ using PotatoChipMine.Core.Models;
 using PotatoChipMine.Core.Services;
 using SadConsole;
 using SadConsole.Input;
-using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
 using EventLog = PotatoChipMine.Core.EventLog;
 using MineGame = PotatoChipMine.Core.GameEngine.Game;
 
 namespace PotatoChipMineMono.Consoles
 {
-    class GameConsole : ContainerConsole, IPotatoChipGame
+    internal class GameConsole : ContainerConsole, IPotatoChipGame
     {
         private readonly CommandsGroup commandsGroup;
         private readonly GameState gameState;
-        private readonly GamePersistenceService gamePersistenceService = new GamePersistenceService();
-        private Stopwatch gameTime = Stopwatch.StartNew();
-        private InputConsole input;
-        private OutputConsole output;
-        private GameEventsConsole events;
-        private HudConsole hud;
 
-        public Stack<Scene> SceneStack { get; } = new Stack<Scene>();
-        public Scene CurrentScene { get; set; }
-        public ConsoleBuffer Output { get; set; } = new ConsoleBuffer();
-        public ConsoleBuffer Events { get; set; } = new ConsoleBuffer();
+        private readonly GameEventsConsole events;
+
+        //private readonly GamePersistenceService gamePersistenceService = new GamePersistenceService();
+        private readonly Stopwatch gameTime = Stopwatch.StartNew();
+        private readonly HudConsole hud;
+        private readonly InputConsole input;
+        private readonly OutputConsole output;
 
 
         public GameConsole()
@@ -42,7 +38,7 @@ namespace PotatoChipMineMono.Consoles
                 Running = true
             };
             commandsGroup = new TopCommandGroupFactory().Build();
-            gameState.Lobby = new LobbyRoom(gameState, new[] { "Welcome to the Lobby" }, GameMode.Lobby, commandsGroup);
+            gameState.Lobby = new LobbyRoom(gameState, new[] {"Welcome to the Lobby"}, GameMode.Lobby, commandsGroup);
             gameState.Store = new MinerStoreFactory(gameState, commandsGroup).BuildMineStore();
             gameState.ControlRoom = new ControlRoomFactory(gameState, commandsGroup).BuildControlRoom();
             gameState.SaveDirectory = @"c:\chipMiner\saves";
@@ -51,9 +47,9 @@ namespace PotatoChipMineMono.Consoles
             IsFocused = true;
 
             StartGame();
-            hud = new HudConsole (gameState) {Position = new Point(0, 0)};
+            hud = new HudConsole(gameState) {Position = new Point(0, 0)};
             input = new InputConsole(this, gameState) {Position = new Point(1, 34)};
-            output = new OutputConsole(this,83){Position = new Point(1,1)};
+            output = new OutputConsole(this, 83) {Position = new Point(1, 1)};
             events = new GameEventsConsole(this, 83) {Position = new Point(85, 1)};
             Children.Add(hud);
             Children.Add(input);
@@ -61,6 +57,11 @@ namespace PotatoChipMineMono.Consoles
             Children.Add(events);
             Global.FocusedConsoles.Set(input);
         }
+
+        public Stack<Scene> SceneStack { get; } = new Stack<Scene>();
+        public Scene CurrentScene { get; set; }
+        public ConsoleBuffer Output { get; set; } = new ConsoleBuffer();
+        public ConsoleBuffer Events { get; set; } = new ConsoleBuffer();
 
         public void ClearConsole(GameConsoles targetConsole = GameConsoles.Output)
         {
@@ -83,18 +84,20 @@ namespace PotatoChipMineMono.Consoles
             }
         }
 
-        public override bool ProcessKeyboard(Keyboard info)
-        {
-            return input.ProcessKeyboard(info);
-        }
-
         public void StartGame()
         {
             MineGame.SetMainProcess(this);
+            MineGame.Achievements = AchievementsBuilder.BuildAchievementsList(gameState);
             gameState.Lobby.EnterRoom();
-            MineGame.SwitchScene(Scene.Create(new List<IGameEntity>{
+            MineGame.SwitchScene(Scene.Create(new List<IGameEntity>
+            {
                 new GameLoaderEntity(gameState)
             }));
+        }
+
+        public override bool ProcessKeyboard(Keyboard info)
+        {
+            return input.ProcessKeyboard(info);
         }
 
         public override void Update(TimeSpan timeElapsed)
@@ -111,7 +114,7 @@ namespace PotatoChipMineMono.Consoles
         {
             foreach (var newEvent in gameState.NewEvents)
             {
-                MineGame.WriteLine(newEvent.Message + Environment.NewLine, PcmColor.Green,null,GameConsoles.Events);
+                MineGame.WriteLine(newEvent.Message + Environment.NewLine, PcmColor.Green, null, GameConsoles.Events);
                 gameState.EventsHistory.Add(new EventLog
                 {
                     Name = newEvent.Name,
@@ -125,7 +128,6 @@ namespace PotatoChipMineMono.Consoles
 
         public override void Draw(TimeSpan timeElapsed)
         {
-
             base.Draw(timeElapsed);
         }
     }

@@ -68,5 +68,6 @@ namespace PotatoChipMine.Core.GameEngine
         public static readonly PcmColor Cyan = new PcmColor(0, 255, 255);
         public static readonly PcmColor Yellow = new PcmColor(255, 255, 0);
         public static readonly PcmColor DarkYellow = new PcmColor(204, 204, 0);
+        public static readonly PcmColor Magenta = new PcmColor(255,0,255);
     }
 }
