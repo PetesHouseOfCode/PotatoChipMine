@@ -55,7 +55,7 @@ namespace PotatoChipMine.Core.Services
                         Game.WriteLine($"Chip Vault:{miner.Inventory("chips").Count}", PcmColor.Yellow);
                         Game.WriteLine($"Tater Tokens:{miner.TaterTokens}", PcmColor.Yellow);
                         Game.WriteLine($"Diggers Count:{miner.Diggers.Count}", PcmColor.Yellow);
-                        Game.WriteLine($"Lifetime Chips Dug:{miner.LifetimeChips.ToString()}");
+                        Game.WriteLine($"Lifetime Chips Dug:{miner.GetLifeTimeStat(Stats.LifetimeChips)}");
                     }
                 },
                 new CommandsDefinition

@@ -7,6 +7,7 @@ namespace PotatoChipMine.Core.Events
 {
     public class LotteryEvent : GameEntity, IGameEntity
     {
+        private const int WinningNumberOfTokens = 10;
         private readonly Random _rnd = new Random();
 
         private TimeSpan _lastLotteryTime = TimeSpan.Zero;
@@ -28,14 +29,14 @@ namespace PotatoChipMine.Core.Events
             var x = _rnd.Next(1, 9);
             if (x == 7)
             {
-                GameState.Miner.TaterTokens += 10;
-                GameState.Miner.LifetimeTokens = +10;
+                GameState.Miner.TaterTokens += WinningNumberOfTokens;
+                GameState.Miner.UpdateLifetimeStat(Stats.LifetimeTokens, WinningNumberOfTokens);
 
                 GameState.NewEvents.Add(new GameEvent
                 {
                     Name = "TestEvent",
-                    Description = "Adds 10 tokens",
-                    Message = "You win 10 tokens in the lottery"
+                    Description = $"Adds {WinningNumberOfTokens} tokens",
+                    Message = $"You win {WinningNumberOfTokens} tokens in the lottery"
                 });
             }
         }

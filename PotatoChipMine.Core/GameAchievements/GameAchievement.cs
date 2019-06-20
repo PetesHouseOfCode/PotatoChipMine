@@ -1,5 +1,6 @@
 using System;
 using System.Linq;
+using PotatoChipMine.Core.GameEngine;
 using PotatoChipMine.Core.Models;
 
 namespace PotatoChipMine.Core.GameAchievements
@@ -16,14 +17,27 @@ namespace PotatoChipMine.Core.GameAchievements
             GameState = gameState;
         }
 
-        public virtual bool AchievementReached()
+        protected virtual bool AchievementReached()
         {
-            return GameState.Miner.AttainedAchievements.All(x => x.Name != Name);
+            return GameState.Miner.AttainedAchievements.Any(x => x.Name == Name);
         }
-        public virtual void RegisterAchievement()
+
+        public void CheckAchievement()
         {
-            GameState.Miner.AttainedAchievements.Add(new PlayerAchievement
-                { Achieved = DateTime.Now, Description =Description, Name = Name });
+            if (!AchievementReached())
+                return;
+
+            RegisterAchievement();
+            Game.WriteLine($"--Achievement: {Description} has been attained.", PcmColor.Black, PcmColor.Magenta, GameConsoles.Events);
+        }
+
+        private void RegisterAchievement()
+        {
+            var achievement = GameState.Miner.PotentialAchievements.First(x => x.Name == Name);
+            achievement.Achieved = DateTime.Now;
+
+            GameState.Miner.AttainedAchievements.Add(achievement);
+            GameState.Miner.PotentialAchievements.Remove(achievement);
         }
     }
 }

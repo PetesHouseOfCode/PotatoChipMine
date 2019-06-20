@@ -176,7 +176,7 @@ namespace PotatoChipMine.Core.GameRooms.ControlRoom.Services
                 if (chips != null)
                 {
                     chips.Count += digger.Hopper.Count;
-                    gameState.Miner.LifetimeChips += digger.Hopper.Count;
+                    gameState.Miner.UpdateLifetimeStat(Stats.LifetimeChips, digger.Hopper.Count);
                 }
 
                 digger.Hopper.Empty();

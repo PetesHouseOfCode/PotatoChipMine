@@ -19,16 +19,12 @@ namespace PotatoChipMine.Core.Entities
 
         public override void Update(Frame frame)
         {
-            foreach (var minerPotentialAchievement in GameState.Miner.PotentialAchievements)
+            foreach (var achievement in
+                Game.Achievements
+                .Where(x => GameState.Miner.PotentialAchievements.Any(y => y.Name == x.Name)))
             {
-                var gameAchievement = Game.Achievements.FirstOrDefault(x => x.Name == minerPotentialAchievement.Name);
-                if (gameAchievement==null|| !gameAchievement.AchievementReached()) continue;
-                gameAchievement.RegisterAchievement();
-                GameState.Miner.AttainedAchievements.Add(minerPotentialAchievement);
-                Game.WriteLine($"--Achievement: {minerPotentialAchievement.Description} has been attained.",PcmColor.Black,PcmColor.Magenta,GameConsoles.Events);
+                achievement.CheckAchievement();
             }
-
-            GameState.Miner.PotentialAchievements.RemoveAll(x => GameState.Miner.AttainedAchievements.Contains(x));
         }
     }
 }

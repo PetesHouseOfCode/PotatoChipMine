@@ -64,8 +64,9 @@ namespace PotatoChipMine.Core.Commands
                     ? storeState.ItemsBuying.First(x => x.Name.ToLower() == item.Name).Price
                     : 1;
                 item.Count -= quantity.Value;
-                gameState.Miner.TaterTokens += quantity.Value * price;
-                gameState.Miner.LifetimeTokens += quantity.Value * price;
+                var tokenChange = quantity.Value * price;
+                gameState.Miner.TaterTokens += tokenChange;
+                gameState.Miner.UpdateLifetimeStat(Stats.LifetimeTokens, tokenChange);
                 return (true, $"Sold {quantity} chips for {quantity.Value * price}.");
             }
             catch (ArgumentOutOfRangeException)
