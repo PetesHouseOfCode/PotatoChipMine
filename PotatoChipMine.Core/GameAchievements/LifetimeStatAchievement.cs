@@ -1,12 +1,19 @@
 using PotatoChipMine.Core.Models;
-using System;
-using System.Linq;
 
 namespace PotatoChipMine.Core.GameAchievements
 {
     public class LifetimeStatAchievement : GameAchievement
     {
         private readonly LifetimeStatAchievementSetting _setting;
+
+        public LifetimeStatAchievement(LifetimeStatAchievementSetting setting, GameState gameState)
+            : base(gameState)
+        {
+            Name = setting.Name;
+            Description = setting.Description;
+            Setting = setting;
+            _setting = setting;
+        }
 
         protected override bool AchievementReached()
         {
@@ -18,15 +25,6 @@ namespace PotatoChipMine.Core.GameAchievements
                 return true;
 
             return false;
-        }
-
-        public LifetimeStatAchievement(LifetimeStatAchievementSetting setting, GameState gameState)
-            : base(gameState)
-        {
-            Name = setting.Name;
-            Description = setting.Description;
-            Setting = (LifetimeStatAchievementSetting) setting;
-            _setting = setting;
         }
     }
 }

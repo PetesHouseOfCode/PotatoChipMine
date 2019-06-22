@@ -14,7 +14,7 @@ namespace PotatoChipMine.Core.Services
             var returnList = new List<GameAchievement>
                 {
                     new InventoryAchievement(InventoryAchievementSetting.DiggerAchievement(), gameState),
-                    new LifetimeStatAchievement(LifetimeStatAchievementSetting.ChipsTo50(), gameState)
+                    new LifetimeStatAchievement(LifetimeStatAchievementSetting.ChipsTo500(), gameState)
                 };
 
             playerAchievements = returnList.Select(x => new PlayerAchievement { Name = x.Name, Description = x.Description }).ToList();

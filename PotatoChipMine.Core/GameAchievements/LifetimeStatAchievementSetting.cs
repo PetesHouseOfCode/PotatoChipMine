@@ -9,15 +9,15 @@ namespace PotatoChipMine.Core.GameAchievements
         public long MinCount { get; set; }
 
 
-        public static LifetimeStatAchievementSetting ChipsTo50()
+        public static LifetimeStatAchievementSetting ChipsTo500()
         {
             return new LifetimeStatAchievementSetting
             {
                 Id = 2,
-                Name = "ChipsTo50",
-                Description = "YOU REACHED 50 CHIPS!!!",
+                Name = "ChipsTo500",
+                Description = "YOU REACHED 500 CHIPS!!!",
                 LifetimeStatName = Stats.LifetimeChips,
-                MinCount = 50,
+                MinCount = 500,
                 Rewards = new List<IAchievementReward>
                 {
                     new NewStoreItemReward

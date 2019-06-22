@@ -3,6 +3,7 @@ using PotatoChipMine.Core.Models;
 using PotatoChipMine.Core.Services;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 
 namespace PotatoChipMine.Core.GameRooms.ControlRoom.Services
@@ -50,6 +51,13 @@ namespace PotatoChipMine.Core.GameRooms.ControlRoom.Services
                         EntryDescription = "repair [digger name]",
                         Description = "After confirmation repairs the digger to max durability for the quoted price.",
                         Execute = RepairHandler()
+                    },
+                    new CommandsDefinition()
+                    {
+                        CommandText = "inspect",
+                        EntryDescription = "inspect [digger name] || inspect [digger name] lifetime || inspect [digger name] enhancements",
+                        Description = "Inspect the vital statistics of the digger.",
+                        Execute = InspectHandler()
                     }
                 }
 
@@ -65,6 +73,7 @@ namespace PotatoChipMine.Core.GameRooms.ControlRoom.Services
             return commandsGroup;
         }
 
+        
         private Action<UserCommand, GameState> RepairHandler()
         {
             return (userCommand, gameState) =>
@@ -207,19 +216,93 @@ namespace PotatoChipMine.Core.GameRooms.ControlRoom.Services
             };
         }
 
-    //    private Action<UserCommand, GameState> DigHandler()
-    //    {
-    //        return (userCommand, gameState) =>
-    //        {
-    //            if (userCommand.Parameters.Count == 0)
-    //            {
-    //                DiggerRunnerService.RunDiggers(_gameUi, gameState);
-    //                return;
-    //            }
-                
-    //            var turns = Convert.ToInt32(userCommand.Parameters[0]);
-    //            DiggerRunnerService.RunDiggers(_gameUi,gameState, turns);
-    //        };
-    //    }
+        private Action<UserCommand, GameState> InspectHandler()
+        {
+            return (userCommand, gameState) =>
+            {
+                if (!userCommand.Parameters.Any())
+                {
+                    Game.WriteLine("You will need to provide a digger name!", PcmColor.Red);
+                    return;
+                }
+
+                var diggerName = userCommand.Parameters[0];
+                var digger = gameState.Miner.Diggers.FirstOrDefault(x =>
+                    string.Equals(x.Name, userCommand.Parameters[0], StringComparison.CurrentCultureIgnoreCase));
+                if (digger == null)
+                {
+                    Game.WriteLine($"Could not find digger named {userCommand.Parameters[0]}", PcmColor.Red);
+                    return;
+                }
+
+                Game.ClearConsole();
+                var headTable = new TableOutput(80, PcmColor.Yellow);
+                headTable.AddHeaders("Name","Class","Equipped Date");
+                headTable.AddRow($"{diggerName}", $"{digger.Class.ToString()}",
+                    $"{digger.FirstEquipped}");
+                Game.Write(headTable);
+                if (userCommand.Parameters.Count < 2)
+                {
+                    var vitalsTable = new TableOutput(80,PcmColor.Yellow);
+                    vitalsTable.AddHeaders("Stat","Value");
+                    vitalsTable.AddRow("Site Hardness", digger.MineSite.Hardness.ToString());
+                    vitalsTable.AddRow("Site Chip Density", digger.MineSite.ChipDensity.ToString());
+                    vitalsTable.AddRow("Durablity (Left) / (Max)", $"{digger.Durability} / {digger.MaxDurability}");
+                    vitalsTable.AddRow("Hopper Space (Left) / (Max)",$"{digger.Hopper.Max - digger.Hopper.Count} / {digger.Hopper.Max}");
+                    Game.Write(vitalsTable);
+                    return;
+                }
+
+                if (userCommand.Parameters[1].Equals("lifetime", StringComparison.InvariantCultureIgnoreCase))
+                {
+                    var lifetimeTable = new TableOutput(80, PcmColor.Yellow);
+                    lifetimeTable.AddHeaders("Stat","Value");
+                    lifetimeTable.AddRow("First Equipped", digger.FirstEquipped.ToString(CultureInfo.InvariantCulture));
+                    lifetimeTable.AddRow("Lifetime Digs", digger.LifeTimeDigs.ToString());
+                    lifetimeTable.AddRow("Lifetime Chips", digger.LifeTimeChips.ToString());
+                    lifetimeTable.AddRow("Lifetime Repairs", digger.LifeTimeRepairs.ToString());
+                    lifetimeTable.AddRow("Lifetime Bolts Cost", digger.LifeTimeBoltsCost.ToString());
+                    lifetimeTable.AddRow("Lifetime Tokes Cost", digger.LifeTimeTokensCost.ToString());
+                    Game.Write(lifetimeTable);
+                    return;
+                }
+
+                if (userCommand.Parameters[1].Equals("enhancements", StringComparison.InvariantCultureIgnoreCase))
+                {
+                    Game.WriteLine("Available Enhancements", PcmColor.Black, PcmColor.Yellow);
+                    var enhancementsTable = new TableOutput(80, PcmColor.Yellow);
+                    enhancementsTable.AddHeaders("Name","Max Level", "Current Level", "Slot");
+                    foreach (var diggerEnhancement in digger.Enhancements)
+                    {
+                        enhancementsTable.AddRow(diggerEnhancement.Name,
+                            diggerEnhancement.MaxLevel.ToString(),
+                            diggerEnhancement.CurrentLevel.ToString(),
+                            diggerEnhancement.Slot.ToString()
+                        );
+                        enhancementsTable.AddRow(diggerEnhancement.Description);
+                    }
+                    Game.Write(enhancementsTable);
+                    return;
+                }
+                Game.WriteLine($"{userCommand.Parameters[1]} is not valid in this command position.");
+            };
+           
+        }
+
+
+        //    private Action<UserCommand, GameState> DigHandler()
+        //    {
+        //        return (userCommand, gameState) =>
+        //        {
+        //            if (userCommand.Parameters.Count == 0)
+        //            {
+        //                DiggerRunnerService.RunDiggers(_gameUi, gameState);
+        //                return;
+        //            }
+
+        //            var turns = Convert.ToInt32(userCommand.Parameters[0]);
+        //            DiggerRunnerService.RunDiggers(_gameUi,gameState, turns);
+        //        };
+        //    }
     }
 }

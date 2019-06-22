@@ -31,7 +31,7 @@ namespace PotatoChipMine.Core.GameRooms.ControlRoom.Services
             
             var digger = GameState.Miner.InventoryItems.FirstOrDefault(x => x.Name.ToLower() == "digger");
             var factory = new MineSiteFactory();
-            var newDigger = new ChipDigger(factory.BuildSite()) { Durability = 20 };
+            var newDigger = ChipDigger.StandardDigger(factory.BuildSite());
             newDigger.Name = newDiggerName;
             digger.Count--;
 
