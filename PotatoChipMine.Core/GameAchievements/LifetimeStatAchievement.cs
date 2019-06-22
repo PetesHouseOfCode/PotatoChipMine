@@ -6,15 +6,15 @@ namespace PotatoChipMine.Core.GameAchievements
 {
     public class LifetimeStatAchievement : GameAchievement
     {
-        LifetimeStatAchievementSetting setting;
+        private readonly LifetimeStatAchievementSetting _setting;
 
         protected override bool AchievementReached()
         {
             if (base.AchievementReached())
                 return true;
 
-            var stat = GameState.Miner.GetLifeTimeStat(setting.LifetimeStatName);
-            if (stat >= setting.MinCount)
+            var stat = GameState.Miner.GetLifeTimeStat(_setting.LifetimeStatName);
+            if (stat >= _setting.MinCount)
                 return true;
 
             return false;
@@ -25,7 +25,8 @@ namespace PotatoChipMine.Core.GameAchievements
         {
             Name = setting.Name;
             Description = setting.Description;
-            this.setting = setting;
+            Setting = (LifetimeStatAchievementSetting) setting;
+            _setting = setting;
         }
     }
 }

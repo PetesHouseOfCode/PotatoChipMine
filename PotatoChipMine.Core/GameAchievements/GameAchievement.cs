@@ -11,6 +11,7 @@ namespace PotatoChipMine.Core.GameAchievements
 
         public string Name { get; set; }
         public string Description { get; set; }
+        public AchievementSetting Setting { get; set; }
 
         public GameAchievement(GameState gameState)
         {
@@ -27,8 +28,13 @@ namespace PotatoChipMine.Core.GameAchievements
             if (!AchievementReached())
                 return;
 
-            RegisterAchievement();
             Game.WriteLine($"--Achievement: {Description} has been attained.", PcmColor.Black, PcmColor.Magenta, GameConsoles.Events);
+            RegisterAchievement();
+            foreach (var reward in Setting.Rewards)
+            {
+                reward.ApplyReward(GameState);
+            }
+           
         }
 
         private void RegisterAchievement()

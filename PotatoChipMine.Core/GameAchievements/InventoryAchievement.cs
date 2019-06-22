@@ -6,10 +6,9 @@ namespace PotatoChipMine.Core.GameAchievements
 {
     public class InventoryAchievement : GameAchievement
     {
-        InventoryAchievementSetting setting;
-
         protected override bool AchievementReached()
         {
+            var setting = (InventoryAchievementSetting) Setting;
             if (base.AchievementReached())
                 return true;
 
@@ -29,7 +28,7 @@ namespace PotatoChipMine.Core.GameAchievements
         {
             Name = setting.Name;
             Description = setting.Description;
-            this.setting = setting;
+            Setting = setting;
         }
     }
 }
