@@ -64,7 +64,7 @@ namespace PotatoChipMine.Core.GameRooms.Store.Services
                     {
                         CommandText="stock",
                         Description = "Displays the items and quantities and unit prices available to purchase.",
-                        Command = (userCommand, gameState) => new StockCommand { State = _storeState }
+                        Command = (userCommand, gameState) => new StockCommand { State = _gameState.Store.StoreState }
                     },
                     new CommandsDefinition()
                     {
@@ -104,7 +104,7 @@ namespace PotatoChipMine.Core.GameRooms.Store.Services
 
         public (bool sold, string message) Buy(string itemName, int quantity)
         {
-            var item = _storeState.ItemsForSale.FirstOrDefault(x => x.Name.ToLower() == itemName.ToLower());
+            var item = _gameState.Store.StoreState.ItemsForSale.FirstOrDefault(x => x.Name.ToLower() == itemName.ToLower());
             if (item == null) return (false, $"We do not carry {itemName}.  Try MINER-MART.");
             if (item.Count - quantity < 0 || quantity < 1)
                 return (false, $"We do not currently have {quantity} of {itemName} in stock.");
@@ -119,7 +119,7 @@ namespace PotatoChipMine.Core.GameRooms.Store.Services
             }
             else
             {
-                _gameState.Miner.InventoryItems.Add(new InventoryItem { ItemId = item.ItemId, Name = item.Name, Count = quantity });
+                _gameState.Miner.InventoryItems.Add(new InventoryItem { ItemId = item.ItemId, Name = item.Name, Count = quantity,Description = item.Description});
             }
 
             item.Count -= quantity;

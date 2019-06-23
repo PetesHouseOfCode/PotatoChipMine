@@ -25,7 +25,7 @@ namespace PotatoChipMine.Core.GameAchievements
                         ItemId = 0,
                         InventoryId = 3,
                         Name = "Large_Hopper",
-                        Description = "Allows digger to hold 50 chips before requiring emptying.",
+                        Description = "Allows digger to hold 100 chips before requiring emptying.",
                         Count = 10,
                         Price = 1200
                     }

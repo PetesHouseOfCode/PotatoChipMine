@@ -2,7 +2,7 @@ namespace PotatoChipMine.Core
 {
     public class ChipsHopper
     {
-        public int Max { get; } = 0;
+        public int Max { get; set; } = 0;
         public int Count { get; private set; } = 0;
         public bool IsFull => Count >= Max;
 

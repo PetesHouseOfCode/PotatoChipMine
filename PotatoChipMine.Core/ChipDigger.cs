@@ -21,7 +21,7 @@ namespace PotatoChipMine.Core
         public int MaxDurability { get; set; }
         public ChipsHopper Hopper { get; set; }
         public MineSite MineSite { get; set; }
-        public List<DiggerEnhancement> Enhancements { get; set; }
+        public List<DiggerUpgrade> Upgrades { get; set; }
         public int LifeTimeBoltsCost { get; set; }
         public int LifeTimeTokensCost { get; set; }
 
@@ -91,39 +91,19 @@ namespace PotatoChipMine.Core
                 Hopper = new ChipsHopper(30),
                 Durability = 25,
                 MaxDurability = 25,
-                Enhancements = new List<DiggerEnhancement>
+                Upgrades = new List<DiggerUpgrade>
                 {
-                    new DiggerEnhancement()
+                    new DiggerUpgrade()
                     {
                         Name = "Hopper +2",
                         Description = "The hopper can be upgraded to level 2 (210 chips)",
                         MaxLevel = 2,
                         CurrentLevel = 0,
-                        Slot = DiggerEnhancementSlot.Hopper
+                        Slot = DiggerUpgradeSlot.Hopper
                     }
                 }
             };
         }
 
-    }
-
-
-    public class DiggerEnhancement
-    {
-        public DiggerEnhancementSlot Slot { get; set; }
-        public string Name { get; set; }
-        public string Description { get; set; }
-        public int MaxLevel { get; set; }
-        public int CurrentLevel { get; set; } = 0;
-    }
-
-    public enum DiggerClass
-    {
-        Standard = 1
-    }
-
-    public enum DiggerEnhancementSlot
-    {
-        Hopper = 1
     }
 }
