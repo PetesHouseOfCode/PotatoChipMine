@@ -39,7 +39,7 @@ namespace PotatoChipMineMono.Consoles
             };
             commandsGroup = new TopCommandGroupFactory().Build();
             gameState.Lobby = new LobbyRoom(gameState, new[] {"Welcome to the Lobby"}, GameMode.Lobby, commandsGroup);
-            gameState.Store = new MinerStoreFactory(gameState, commandsGroup).BuildMineStore();
+            gameState.Store = gameState.Store?? new MinerStoreFactory(gameState, commandsGroup).BuildMineStore();
             gameState.ControlRoom = new ControlRoomFactory(gameState, commandsGroup).BuildControlRoom();
             gameState.SaveDirectory = @"c:\chipMiner\saves";
 

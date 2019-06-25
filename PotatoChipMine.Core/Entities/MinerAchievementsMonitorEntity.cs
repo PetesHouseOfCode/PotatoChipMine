@@ -12,7 +12,7 @@ namespace PotatoChipMine.Core.Entities
         {
         }
 
-        public void HandleInput(UserCommand command)
+        public override void HandleInput(UserCommand command)
         {
             //throw new NotImplementedException();
         }

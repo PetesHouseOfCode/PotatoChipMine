@@ -5,8 +5,6 @@ namespace PotatoChipMine.Core.Models
 {
     public class GameRoom : IGameEntity
     {
-        private Scene roomScene;
-
         protected GameRoom(
             GameState gameState,
             string[] greeting,

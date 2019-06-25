@@ -312,11 +312,11 @@ namespace PotatoChipMine.Core.GameRooms.ControlRoom.Services
             var lifetimeTable = new TableOutput(80, PcmColor.Yellow);
             lifetimeTable.AddHeaders("Stat", "Value");
             lifetimeTable.AddRow("First Equipped", digger.FirstEquipped.ToString(CultureInfo.InvariantCulture));
-            lifetimeTable.AddRow("Lifetime Digs", digger.LifeTimeDigs.ToString());
-            lifetimeTable.AddRow("Lifetime Chips", digger.LifeTimeChips.ToString());
-            lifetimeTable.AddRow("Lifetime Repairs", digger.LifeTimeRepairs.ToString());
-            lifetimeTable.AddRow("Lifetime Bolts Cost", digger.LifeTimeBoltsCost.ToString());
-            lifetimeTable.AddRow("Lifetime Tokes Cost", digger.LifeTimeTokensCost.ToString());
+            lifetimeTable.AddRow("Lifetime Digs", digger.GetLifeTimeStat(DiggerStats.LifetimeDigs).ToString());
+            lifetimeTable.AddRow("Lifetime Chips", digger.GetLifeTimeStat(DiggerStats.LifetimeChips).ToString());
+            lifetimeTable.AddRow("Lifetime Repairs", digger.GetLifeTimeStat(DiggerStats.LifetimeRepairs).ToString());
+            lifetimeTable.AddRow("Lifetime Bolts Cost", digger.GetLifeTimeStat(DiggerStats.LifeTimeBoltsCost).ToString());
+            lifetimeTable.AddRow("Lifetime Tokes Cost", digger.GetLifeTimeStat(DiggerStats.LifeTimeTokensCost).ToString());
             Game.Write(lifetimeTable);
         }
 

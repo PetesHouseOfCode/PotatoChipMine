@@ -1,6 +1,7 @@
 using PotatoChipMine.Core.Models;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace PotatoChipMine.Core
 {
@@ -13,28 +14,23 @@ namespace PotatoChipMine.Core
         public DiggerClass Class { get; set; }
         public string Name { get; set; }
         public DateTime FirstEquipped { get; set; }
-        public int LifeTimeDigs { get; set; } = 0;
-        public int LifeTimeChips { get; set; } = 0;
-        public int LifeTimeRepairs { get; set; } = 0;
+        public List<Stat> LifetimeStats { get; set; } = new List<Stat>();
 
         public int Durability { get; set; }
         public int MaxDurability { get; set; }
         public ChipsHopper Hopper { get; set; }
         public MineSite MineSite { get; set; }
         public List<DiggerUpgrade> Upgrades { get; set; }
-        public int LifeTimeBoltsCost { get; set; }
-        public int LifeTimeTokensCost { get; set; }
 
         public DigResult Dig(TimeSpan gameTime)
         {
-            LifeTimeDigs++;
+            UpdateLifetimeStat(DiggerStats.LifetimeDigs,1);
             var durabilityHit = RollDurabilityHit();
             Durability -= durabilityHit;
             Durability = Durability < 0 ? 0 : Durability;
-
             var chips = RollChips();
             Hopper.AddChips(chips);
-            LifeTimeChips += chips;
+            UpdateLifetimeStat(DiggerStats.LifetimeChips,chips);
             lastDig = gameTime;
             return new DigResult(chips, durabilityHit);
         }
@@ -105,5 +101,24 @@ namespace PotatoChipMine.Core
             };
         }
 
+        public void UpdateLifetimeStat(string name, long changeBy)
+        {
+            var stat = LifetimeStats.FirstOrDefault(x => x.Name == name);
+            if (stat == null)
+            {
+                LifetimeStats.Add(new Stat { Name = name, Count = changeBy });
+                return;
+            }
+
+            stat.Count += changeBy;
+        }
+        internal long GetLifeTimeStat(string name)
+        {
+            var stat = LifetimeStats.FirstOrDefault(x => x.Name == name);
+            if (stat == null)
+                return 0;
+
+            return stat.Count;
+        }
     }
 }

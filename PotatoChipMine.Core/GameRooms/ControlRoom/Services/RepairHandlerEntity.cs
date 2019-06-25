@@ -36,9 +36,9 @@ namespace PotatoChipMine.Core.GameRooms.ControlRoom.Services
             GameState.Miner.TaterTokens -= TokenCost;
             GameState.Miner.Inventory("bolts").Count -= (int)BoltsCost;
             Digger.Durability = Digger.MaxDurability;
-            Digger.LifeTimeRepairs++;
-            Digger.LifeTimeBoltsCost += BoltsCost;
-            Digger.LifeTimeTokensCost += TokenCost;
+            Digger.UpdateLifetimeStat(DiggerStats.LifetimeRepairs,1);
+            Digger.UpdateLifetimeStat(DiggerStats.LifeTimeBoltsCost,BoltsCost);
+            Digger.UpdateLifetimeStat(DiggerStats.LifeTimeTokensCost, TokenCost);
             EndScene();
         }
 
