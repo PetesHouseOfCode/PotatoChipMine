@@ -102,7 +102,7 @@ namespace PotatoChipMine.Core.GameRooms.ControlRoom.Services
             {
                 if (!userCommand.Parameters.Any())
                 {
-                    Game.WriteLine("You will need to provide a digger name!", PcmColor.Red);
+                    Game.WriteLine("You will need to provide a digger name!", PcmColor.Red,null,GameConsoles.Input);
                     return;
                 }
 
@@ -112,7 +112,7 @@ namespace PotatoChipMine.Core.GameRooms.ControlRoom.Services
                     string.Equals(x.Name, userCommand.Parameters[0], StringComparison.CurrentCultureIgnoreCase));
                 if (digger == null)
                 {
-                    Game.WriteLine($"No digger named {userCommand.Parameters[0]} could be found.", PcmColor.Red);
+                    Game.WriteLine($"No digger named {userCommand.Parameters[0]} could be found.", PcmColor.Red,null,GameConsoles.Input);
                     return;
                 }
 
@@ -133,7 +133,7 @@ namespace PotatoChipMine.Core.GameRooms.ControlRoom.Services
                 if (responseList.Any())
                 {
                     responseList.Insert(0, $"Repairs will cost {tokensCost} tater tokens and {boltsCost} bolts.");
-                    Game.WriteLine(string.Join(Environment.NewLine, responseList.ToArray()), PcmColor.Red);
+                    Game.WriteLine(string.Join(Environment.NewLine, responseList.ToArray()), PcmColor.Red,null,GameConsoles.Input);
                 }
                 else
                 {
@@ -234,7 +234,7 @@ namespace PotatoChipMine.Core.GameRooms.ControlRoom.Services
                     return;
                 }
 
-                Game.WriteLine("You don't have any diggers in your inventory!", PcmColor.Red);
+                Game.WriteLine("You don't have any diggers in your inventory!", PcmColor.Red,null,GameConsoles.Input);
             };
         }
 

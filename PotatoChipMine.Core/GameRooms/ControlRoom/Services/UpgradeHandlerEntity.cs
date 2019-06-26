@@ -4,7 +4,7 @@ using PotatoChipMine.Core.GameEngine;
 using PotatoChipMine.Core.Models;
 using PotatoChipMine.Core.Services;
 
-namespace PotatoChipMine.Core.Entities
+namespace PotatoChipMine.Core.GameRooms.ControlRoom.Services
 {
     public class UpgradeHandlerEntity : GameEntity
     {

@@ -29,7 +29,7 @@ namespace PotatoChipMine.Core.GameRooms.ControlRoom.Services
 
             if (command.CommandText.ToLower() != "yes")
             {
-                Game.WriteLine($"\'{command.CommandText}\' isn't a valid response.");
+                Game.WriteLine($"\'{command.CommandText}\' isn't a valid response.",PcmColor.Red,null,GameConsoles.Input);
                 return;
             }
 
@@ -55,7 +55,7 @@ namespace PotatoChipMine.Core.GameRooms.ControlRoom.Services
 
             prompted = true;
             GameState.PromptText = "Do you want to perform repairs? ";
-            Game.WriteLine($"Repairs will cost {TokenCost} tater tokens and {BoltsCost} bolts.", PcmColor.Green);
+            Game.WriteLine($"Repairs will cost {TokenCost} tater tokens and {BoltsCost} bolts.", PcmColor.Green,null,GameConsoles.Input);
         }
     }
 }

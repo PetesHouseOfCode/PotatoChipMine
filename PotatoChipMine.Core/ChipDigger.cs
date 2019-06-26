@@ -1,20 +1,17 @@
 using PotatoChipMine.Core.Models;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace PotatoChipMine.Core
 {
-    public class ChipDigger
+    public class ChipDigger:PersistentGameElement
     {
         private readonly Random _random = new Random();
         private TimeSpan lastDig = TimeSpan.Zero;
         private readonly int secondsBetweenDigs = 15;
 
         public DiggerClass Class { get; set; }
-        public string Name { get; set; }
         public DateTime FirstEquipped { get; set; }
-        public List<Stat> LifetimeStats { get; set; } = new List<Stat>();
 
         public int Durability { get; set; }
         public int MaxDurability { get; set; }
@@ -99,26 +96,6 @@ namespace PotatoChipMine.Core
                     }
                 }
             };
-        }
-
-        public void UpdateLifetimeStat(string name, long changeBy)
-        {
-            var stat = LifetimeStats.FirstOrDefault(x => x.Name == name);
-            if (stat == null)
-            {
-                LifetimeStats.Add(new Stat { Name = name, Count = changeBy });
-                return;
-            }
-
-            stat.Count += changeBy;
-        }
-        internal long GetLifeTimeStat(string name)
-        {
-            var stat = LifetimeStats.FirstOrDefault(x => x.Name == name);
-            if (stat == null)
-                return 0;
-
-            return stat.Count;
         }
     }
 }
