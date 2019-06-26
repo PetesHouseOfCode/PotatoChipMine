@@ -33,17 +33,16 @@ namespace PotatoChipMine.Core.GameRooms.Store.Services
                         Description = "Sell all of the indicated items in your inventory.",
                         Command = (userCommand, gameState) => {
                             
-                            // TODO: Check if no parameters
                             if(userCommand.Parameters.Count() == 0 || userCommand.Parameters.Count() > 2)
                             {
-                                // return FailedMessageCommand{Message = $"Invalid Quantity {userCommand.Parameters[0]}"};
+                                return new FailedMessageCommand($"Invalid Quantity {userCommand.Parameters[0]}");
                             }
 
                             if(userCommand.Parameters.Count() == 2)
                             {
                                 if(!int.TryParse(userCommand.Parameters[0], out var quantity))
                                 {
-                                    // return FailedMessageCommand{Message = $"Invalid Quantity {userCommand.Parameters[0]}"};
+                                    return new FailedMessageCommand($"Invalid Quantity {userCommand.Parameters[0]}");
                                 }                                
                                 
                                 return new SellCommand{GameState = gameState, StoreState = _storeState, ItemName = userCommand.Parameters[1].Trim(), Quantity = quantity};
