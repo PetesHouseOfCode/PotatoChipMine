@@ -1,8 +1,6 @@
 using PotatoChipMine.Core.Commands;
-using PotatoChipMine.Core.GameEngine;
 using PotatoChipMine.Core.GameRooms.Store.Models;
 using PotatoChipMine.Core.Models;
-using PotatoChipMine.Core.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -35,7 +33,7 @@ namespace PotatoChipMine.Core.GameRooms.Store.Services
                             
                             if(userCommand.Parameters.Count() == 0 || userCommand.Parameters.Count() > 2)
                             {
-                                return new FailedMessageCommand($"Invalid Quantity {userCommand.Parameters[0]}");
+                                return new FailedMessageCommand($"Invalid Quantity");
                             }
 
                             if(userCommand.Parameters.Count() == 2)

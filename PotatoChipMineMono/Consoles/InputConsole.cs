@@ -1,12 +1,6 @@
 using Microsoft.Xna.Framework;
 using PotatoChipMine.Core;
-using PotatoChipMine.Core.Entities;
-using PotatoChipMine.Core.GameEngine;
-using PotatoChipMine.Core.GameRooms;
-using PotatoChipMine.Core.GameRooms.ControlRoom.Services;
-using PotatoChipMine.Core.GameRooms.Store.Services;
 using PotatoChipMine.Core.Models;
-using PotatoChipMine.Core.Services;
 using PotatoChipMineMono.Components;
 using SadConsole;
 using SadConsole.Input;
@@ -16,8 +10,6 @@ using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using EventLog = PotatoChipMine.Core.EventLog;
-using MineGame = PotatoChipMine.Core.GameEngine.Game;
 
 namespace PotatoChipMineMono.Consoles
 {

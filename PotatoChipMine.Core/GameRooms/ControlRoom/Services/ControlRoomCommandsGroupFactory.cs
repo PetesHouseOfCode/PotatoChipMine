@@ -1,12 +1,10 @@
 using PotatoChipMine.Core.GameEngine;
 using PotatoChipMine.Core.Models;
-using PotatoChipMine.Core.Services;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Xml.Serialization;
-using PotatoChipMine.Core.Entities;
 
 namespace PotatoChipMine.Core.GameRooms.ControlRoom.Services
 {
@@ -192,25 +190,26 @@ namespace PotatoChipMine.Core.GameRooms.ControlRoom.Services
                     Game.WriteLine("You will need to provide a digger name!", PcmColor.Red);
                     return;
                 }
-                
+
                 var diggerName = userCommand.Parameters[0];
                 var digger = gameState.Miner.Diggers.FirstOrDefault(x =>
                     string.Equals(x.Name, userCommand.Parameters[0], StringComparison.CurrentCultureIgnoreCase));
                 var chips = gameState.Miner.InventoryItems.FirstOrDefault(x => x.Name == "chips");
+                if (chips == null)
+                {
+                    Game.WriteLine($"Could not find Chips in the inventory", PcmColor.Red);
+                    return;
+                }
+
                 if (digger == null)
                 {
                     Game.WriteLine($"Could not find digger named {userCommand.Parameters[0]}", PcmColor.Red);
                     return;
                 }
 
-                var hopperCount = digger.Hopper.Count;
-                if (chips != null)
-                {
-                    chips.Count += digger.Hopper.Count;
-                    gameState.Miner.UpdateLifetimeStat(Stats.LifetimeChips, digger.Hopper.Count);
-                }
-
-                digger.Hopper.Empty();
+                var hopperCount = digger.Hopper.Empty();
+                chips.Count += hopperCount;
+                gameState.Miner.UpdateLifetimeStat(Stats.LifetimeChips, hopperCount);
 
                 Game.WriteLine($"{hopperCount} was removed from {diggerName}'s hopper and moved into the chip vault.",
                     PcmColor.Yellow);
@@ -301,6 +300,7 @@ namespace PotatoChipMine.Core.GameRooms.ControlRoom.Services
             vitalsTable.AddRow("Site Hardness", digger.MineSite.Hardness.ToString());
             vitalsTable.AddRow("Site Chip Density", digger.MineSite.ChipDensity.ToString());
             vitalsTable.AddRow("Durablity (Left) / (Max)", $"{digger.Durability} / {digger.MaxDurability}");
+            vitalsTable.AddRow("Hopper", digger.Hopper.Name);
             vitalsTable.AddRow("Hopper Space (Left) / (Max)",
                 $"{digger.Hopper.Max - digger.Hopper.Count} / {digger.Hopper.Max}");
             Game.Write(vitalsTable);

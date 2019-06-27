@@ -1,8 +1,7 @@
-using PotatoChipMine.Core.Models;
 using System;
 using System.Collections.Generic;
 
-namespace PotatoChipMine.Core
+namespace PotatoChipMine.Core.Models
 {
     public class ChipDigger:PersistentGameElement
     {
@@ -16,6 +15,7 @@ namespace PotatoChipMine.Core
         public int Durability { get; set; }
         public int MaxDurability { get; set; }
         public ChipsHopper Hopper { get; set; }
+        //public List<UpgradeSlot> UpgradeSlots { get; set; } = new List<UpgradeSlot>();
         public MineSite MineSite { get; set; }
         public List<DiggerUpgrade> Upgrades { get; set; }
 
@@ -91,7 +91,6 @@ namespace PotatoChipMine.Core
                         Name = "Hopper +2",
                         Description = "The hopper can be upgraded to level 2 (210 chips)",
                         MaxLevel = 2,
-                        CurrentLevel = 0,
                         Slot = DiggerUpgradeSlot.Hopper
                     }
                 }

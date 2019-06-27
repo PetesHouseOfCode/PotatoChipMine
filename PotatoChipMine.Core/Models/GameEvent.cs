@@ -1,4 +1,3 @@
-using PotatoChipMine.Core.Services;
 using System;
 
 namespace PotatoChipMine.Core.Models
