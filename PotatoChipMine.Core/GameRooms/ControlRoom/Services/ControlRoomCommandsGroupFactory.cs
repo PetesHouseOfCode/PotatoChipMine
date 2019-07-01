@@ -1,3 +1,4 @@
+using PotatoChipMine.Core.Commands;
 using PotatoChipMine.Core.GameEngine;
 using PotatoChipMine.Core.Models;
 using System;
@@ -16,34 +17,55 @@ namespace PotatoChipMine.Core.GameRooms.ControlRoom.Services
             {
                 LocalCommands = new List<CommandsDefinition>()
                 {
-                    //new CommandsDefinition()
-                    //{
-                    //    Command = "dig",
-                    //    EntryDescription = "dig || dig [number of digs]",
-                    //    Description = "Runs all equipment for 5 cycles or the number of digs indicated.",
-                    //    Execute = DigHandler()
-                    //},
                     new CommandsDefinition()
                     {
                         CommandText = "equip",
                         Description = "Begins the process to equip a digger from your inventory to dig.",
-                        Execute = EquipHandler()
-                        
+                        Command =  (userCommand, gameState) => new EquipCommand{GameState = gameState}
+
                     },
                     new CommandsDefinition()
                     {
                         CommandText = "empty",
                         EntryDescription = "empty [digger name]",
                         Description = "Empties the indicated diggers hopper into the chip vault.",
-                        Execute = EmptyHandler()
-                        
+                        Command = (userCommand, gameState) =>
+                        {
+                            if (!userCommand.Parameters.Any())
+                            {
+                                return new FailedMessageCommand("You will need to provide a digger name!");
+                            }
+
+                            var diggerName = userCommand.Parameters[0];
+
+                            return new EmptyCommand
+                            {
+                                GameState = gameState,
+                                DiggerName = diggerName
+                            };
+                        }
+
                     },
                     new CommandsDefinition()
                     {
                         CommandText = "scrap",
                         EntryDescription = "scrap [digger name]",
                         Description = "Destroys the digger indicated for bolts.",
-                        Execute = ScrapHandler()
+                        Command = (userCommand, gameState) =>
+                        {
+                            if (!userCommand.Parameters.Any())
+                            {
+                                return new FailedMessageCommand("You will need to provide a digger name!");
+                            }
+
+                            var diggerName = userCommand.Parameters[0];
+
+                            return new ScrapCommand
+                            {
+                                GameState = gameState,
+                                DiggerName = diggerName
+                            };
+                        }
                     },
                     new CommandsDefinition()
                     {
@@ -69,14 +91,6 @@ namespace PotatoChipMine.Core.GameRooms.ControlRoom.Services
                 }
 
             };
-            //commandsGroup.LocalCommands.Add(new CommandsDefinition()
-            //{
-            //    Command = "help",
-            //    Description = "Shows a description of all the currently available commands.",
-            //    Execute = (userCommand, gameState) => {
-            //        _gameUi.ReportAvailableCommands(gameState);
-            //    }
-            //});
             return commandsGroup;
         }
 
@@ -147,93 +161,6 @@ namespace PotatoChipMine.Core.GameRooms.ControlRoom.Services
                     gameState.PromptText = "Enter Digger Name: ";
                     Game.PushScene(scene);
                 }
-            };
-        }
-
-        private Action<UserCommand, GameState> ScrapHandler()
-        {
-            return (userCommand, gameState) =>
-            {
-                if (!userCommand.Parameters.Any())
-                {
-                    Game.WriteLine("You will need to provide a digger name!", PcmColor.Red);
-                    return;
-                }
-                
-                var digger = gameState.Miner.Diggers.FirstOrDefault(x =>
-                    string.Equals(x.Name, userCommand.Parameters[0], StringComparison.CurrentCultureIgnoreCase));
-                if (digger == null)
-                {
-                    Game.WriteLine($"There are no diggers named {userCommand.Parameters[0]}.", PcmColor.Red);
-                    return;
-                }
-                gameState.Miner.Diggers.Remove(digger);
-                var bolts = gameState.Miner.Inventory("bolts");
-                if (bolts == null)
-                {
-                    bolts = new InventoryItem(){Name="bolts",Count = 0};
-                    gameState.Miner.InventoryItems.Add(bolts);
-                }
-
-                var boltsReceived = new Random().Next(3,10);
-                bolts.Count += boltsReceived;
-                Game.WriteLine($"{digger.Name} was scrapped for {boltsReceived} bolts.", PcmColor.Yellow);
-            };
-        }
-
-        private Action<UserCommand, GameState> EmptyHandler()
-        {
-            return (userCommand, gameState) =>
-            {
-                if (!userCommand.Parameters.Any())
-                {
-                    Game.WriteLine("You will need to provide a digger name!", PcmColor.Red);
-                    return;
-                }
-
-                var diggerName = userCommand.Parameters[0];
-                var digger = gameState.Miner.Diggers.FirstOrDefault(x =>
-                    string.Equals(x.Name, userCommand.Parameters[0], StringComparison.CurrentCultureIgnoreCase));
-                var chips = gameState.Miner.InventoryItems.FirstOrDefault(x => x.Name == "chips");
-                if (chips == null)
-                {
-                    Game.WriteLine($"Could not find Chips in the inventory", PcmColor.Red);
-                    return;
-                }
-
-                if (digger == null)
-                {
-                    Game.WriteLine($"Could not find digger named {userCommand.Parameters[0]}", PcmColor.Red);
-                    return;
-                }
-
-                var hopperCount = digger.Hopper.Empty();
-                chips.Count += hopperCount;
-                gameState.Miner.UpdateLifetimeStat(Stats.LifetimeChips, hopperCount);
-
-                Game.WriteLine($"{hopperCount} was removed from {diggerName}'s hopper and moved into the chip vault.",
-                    PcmColor.Yellow);
-                Game.WriteLine($"Vault Chips:{gameState.Miner.Inventory("chips").Count}", PcmColor.Yellow);
-            };
-        }
-
-        private Action<UserCommand, GameState> EquipHandler()
-        {
-            return (userCommand, gameState) =>
-            {
-                var scene = Scene.Create(new List<IGameEntity>{
-                    new EquipHandlerEntity(gameState)
-                });
-
-                var digger = gameState.Miner.InventoryItems.FirstOrDefault(x => x.Name.ToLower() == "digger");
-                if (digger != null && digger.Count > 0)
-                {
-                    gameState.PromptText = "Enter Digger Name: ";
-                    Game.PushScene(scene);
-                    return;
-                }
-
-                Game.WriteLine("You don't have any diggers in your inventory!", PcmColor.Red,null,GameConsoles.Input);
             };
         }
 
@@ -337,21 +264,5 @@ namespace PotatoChipMine.Core.GameRooms.ControlRoom.Services
 
             Game.Write(upgradesTable);
         }
-
-
-        //    private Action<UserCommand, GameState> DigHandler()
-        //    {
-        //        return (userCommand, gameState) =>
-        //        {
-        //            if (userCommand.Parameters.Count == 0)
-        //            {
-        //                DiggerRunnerService.RunDiggers(_gameUi, gameState);
-        //                return;
-        //            }
-
-        //            var turns = Convert.ToInt32(userCommand.Parameters[0]);
-        //            DiggerRunnerService.RunDiggers(_gameUi,gameState, turns);
-        //        };
-        //    }
     }
 }
