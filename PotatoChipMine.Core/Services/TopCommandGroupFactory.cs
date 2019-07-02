@@ -159,7 +159,7 @@ namespace PotatoChipMine.Core.Services
         {
             return (userCommand, gameState) =>
             {
-                Game.PushScene(Scene.Create(new[] { new LoadGameEntity(gameState, _gamePersistenceService) }));
+                Game.PushScene(Scene.Create(new LoadGameEntity(gameState, _gamePersistenceService)));
             };
         }
 
@@ -167,7 +167,7 @@ namespace PotatoChipMine.Core.Services
         {
             return (userCommand, gameState) =>
             {
-                Game.PushScene(Scene.Create(new[] {new SaveGameEntity(gameState, _gamePersistenceService)}));
+                Game.PushScene(Scene.Create(new SaveGameEntity(gameState, _gamePersistenceService)));
             };
         }
 
