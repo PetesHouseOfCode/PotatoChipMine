@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using PotatoChipMine.Core.Entities;
 using PotatoChipMine.Core.GameAchievements;
 using PotatoChipMine.Core.Models;
 
@@ -9,28 +8,29 @@ namespace PotatoChipMine.Core.GameEngine
 {
     public static class Game
     {
-        private static IPotatoChipGame mainProcess;
+        private static IPotatoChipGame potatoChipGame;
+
         public static List<GameAchievement> Achievements { get; set; }
 
         public static void SetMainProcess(IPotatoChipGame mainProcess)
         {
-            Game.mainProcess = mainProcess;
+            Game.potatoChipGame = mainProcess;
         }
 
         public static void SwitchScene(Scene scene)
         {
-            mainProcess.CurrentScene = scene;
+            potatoChipGame.CurrentScene = scene;
         }
 
         public static void PushScene(Scene scene)
         {
-            mainProcess.SceneStack.Push(mainProcess.CurrentScene);
-            mainProcess.CurrentScene = scene;
+            potatoChipGame.SceneStack.Push(potatoChipGame.CurrentScene);
+            potatoChipGame.CurrentScene = scene;
         }
 
         public static void PopScene()
         {
-            mainProcess.CurrentScene = mainProcess.SceneStack.Pop();
+            potatoChipGame.CurrentScene = potatoChipGame.SceneStack.Pop();
         }
 
         public static void Write(ConsoleChar character, GameConsoles targetConsole = GameConsoles.Output)
@@ -39,10 +39,10 @@ namespace PotatoChipMine.Core.GameEngine
             switch (targetConsole)
             {
                 case GameConsoles.Events:
-                    consoleBuffer = mainProcess.Events;
+                    consoleBuffer = potatoChipGame.Events;
                     break;
                 default:
-                    consoleBuffer = mainProcess.Output;
+                    consoleBuffer = potatoChipGame.Output;
                     break;
             }
 
@@ -56,10 +56,10 @@ namespace PotatoChipMine.Core.GameEngine
             {
 
                 case GameConsoles.Events:
-                    consoleBuffer = mainProcess.Events;
+                    consoleBuffer = potatoChipGame.Events;
                     break;
                 default:
-                    consoleBuffer = mainProcess.Output;
+                    consoleBuffer = potatoChipGame.Output;
                     break;
             }
             if (!text.EndsWith(Environment.NewLine))
@@ -78,10 +78,10 @@ namespace PotatoChipMine.Core.GameEngine
             {
 
                 case GameConsoles.Events:
-                    consoleBuffer = mainProcess.Events;
+                    consoleBuffer = potatoChipGame.Events;
                     break;
                 default:
-                    consoleBuffer = mainProcess.Output;
+                    consoleBuffer = potatoChipGame.Output;
                     break;
             }
             foreach (var c in text)
@@ -107,7 +107,7 @@ namespace PotatoChipMine.Core.GameEngine
 
         public static void ClearConsole(GameConsoles targetConsole = GameConsoles.Output)
         {
-            mainProcess.ClearConsole(targetConsole);
+            potatoChipGame.ClearConsole(targetConsole);
         }
 
         private static void PrintLine(int width, PcmColor color, PcmColor backgroundColor, GameConsoles targetConsole = GameConsoles.Output)
