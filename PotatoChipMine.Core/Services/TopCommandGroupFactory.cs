@@ -1,3 +1,4 @@
+using PotatoChipMine.Core.Commands;
 using PotatoChipMine.Core.Entities;
 using PotatoChipMine.Core.GameEngine;
 using PotatoChipMine.Core.Models;
@@ -25,18 +26,7 @@ namespace PotatoChipMine.Core.Services
                 {
                     CommandText = "help",
                     Description = "Display all of the commands available.",
-                    Execute = (command, gameState) =>
-                    {
-                        Game.WriteLine($"-----------   {gameState.Mode.ToString().ToUpper()} Commands  ---------------");
-
-                        foreach (var commandsDefinition in gameState.CurrentRoom.CommandsGroup.LocalCommands.OrderBy(x => x.CommandText))
-                        {
-                            var commandName = commandsDefinition.EntryDescription ?? commandsDefinition.CommandText;
-                            Game.WriteLine($"Command: [{commandName}]");
-                            Game.WriteLine($"Description: {commandsDefinition.Description}");
-                            Game.WriteLine("--------");
-                        }
-                    }
+                    Command = (userCommand, GameState) => new HelpCommand {GameState = GameState}
                 },
                 new CommandsDefinition
                 {

@@ -1,3 +1,6 @@
+using PotatoChipMine.Core.Services.PersistenceService;
+using System;
+
 namespace PotatoChipMine.Core.Models
 {
     public class ChipsHopper
@@ -42,6 +45,26 @@ namespace PotatoChipMine.Core.Models
             var count = Count;
             Count = 0;
             return count;
+        }
+
+        public ChipsHopperState GetState()
+        {
+            return new ChipsHopperState
+            {
+                Name = Name,
+                Level = Level,
+                Max = Max,
+                Count = Count
+            };
+        }
+
+        public static ChipsHopper FromState(ChipsHopperState chipsHopper)
+        {
+            return new ChipsHopper(
+                       chipsHopper.Max,
+                       string.IsNullOrEmpty(chipsHopper.Name) ? "None" : chipsHopper.Name, 
+                       chipsHopper.Level, 
+                       chipsHopper.Count);
         }
     }
 }

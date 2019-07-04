@@ -14,30 +14,32 @@ using System.Linq;
 namespace PotatoChipMineTests.Entities
 {
     [Collection("Game Tests")]
-    public class CollectMineNameEntityTests
+    public class CollectMinerNameEntityTests
     {
         const string MINER_NAME = "MinerName";
         readonly MockMainProcess proc;
         readonly GameState gameState;
-        CollectMineNameEntity entity;
+        CollectMinerNameEntity entity;
 
-        public CollectMineNameEntityTests()
+        public CollectMinerNameEntityTests()
         {
             proc = new MockMainProcess();
             gameState = new GameState();
             Game.SetMainProcess(proc);
-            entity = new CollectMineNameEntity(gameState);
+            entity = new CollectMinerNameEntity(gameState);
         }
 
         [Fact]
         public void WhenEntityStartsDisplayHowdyMessageAndSetPromptToEnterName()
         {
             entity.Update(Frame.NewFrame(TimeSpan.Zero, TimeSpan.Zero));
-            string data = ConsoleBufferHelper.GetText(proc.Output);
+            var data = ConsoleBufferHelper.GetLines(proc.Output);
 
-            data.ShouldBe(@"Howdy pilgrim!  Welcome to glamorous world of 'tater chip mining!" + Environment.NewLine +
-                "I'm Earl, your mine bot. I'll be you're right hand man ... 'er bot, around this here mining operation." + Environment.NewLine +
-                "Whats your name pilgrim?" + Environment.NewLine);
+            data[0].ShouldBe(@"Howdy pilgrim!  Welcome to glamorous world of 'tater chip mining!");
+            data[1].ShouldBe("I'm Earl, your mine bot. I'll be you're right hand man ... 'er bot, around this here mining operation.");
+            data[2].ShouldBe("Whats your name pilgrim?");
+
+            data.Count.ShouldBe(3);
             gameState.PromptText.ShouldBe("Enter your name:");
         }
 
@@ -57,8 +59,8 @@ namespace PotatoChipMineTests.Entities
         public void WhenInputIsEmptyWriteErrorMessage()
         {
             entity.HandleInput(new UserCommand());
-            string data = ConsoleBufferHelper.GetText(proc.Output);
-            data.ShouldBe("Please enter a name." + Environment.NewLine);
+            var data = ConsoleBufferHelper.GetText(proc.Output);
+            data.ShouldBe("Please enter a name.");
         }
 
         [Fact]
