@@ -66,7 +66,7 @@ namespace PotatoChipMine.Core.Entities
 
         private void SaveGame()
         {
-            persistenceService.SaveGame(persistenceService.BuildFromGameState(GameState));
+            persistenceService.SaveGame(GameState);
             GameState.PromptText = null;
             Game.PopScene();
         }

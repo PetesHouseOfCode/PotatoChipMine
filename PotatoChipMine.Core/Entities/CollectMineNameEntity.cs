@@ -6,11 +6,11 @@ using System.Collections.Generic;
 
 namespace PotatoChipMine.Core.Entities
 {
-    public class CollectMineNameEntity : GameEntity
+    public class CollectMinerNameEntity : GameEntity
     {
         private bool sentMessage;
 
-        public CollectMineNameEntity(GameState gameState)
+        public CollectMinerNameEntity(GameState gameState)
             : base(gameState)
         {
         }

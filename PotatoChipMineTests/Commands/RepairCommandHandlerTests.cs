@@ -28,17 +28,15 @@ namespace PotatoChipMineTests.Commands
             gameState = new GameState();
             Game.SetMainProcess(proc);
             gameState.Miner = Miner.Default();
-            gameState.Miner.InventoryItems.Add(new InventoryItem { Name = "bolts", Count = 10000 });
 
             var digger = ChipDigger.StandardDigger(new MineSite
-            {
-                ChipDensity = PotatoChipMine.Core.ChipDensity.Normal,
-                Hardness = SiteHardness.Firm
-            });
+                {
+                    ChipDensity = PotatoChipMine.Core.ChipDensity.Normal,
+                    Hardness = SiteHardness.Firm
+                });
             digger.Name = EXISTING_DIGGER_NAME;
 
             gameState.Miner.Diggers.Add(digger);
-
         }
 
         [Fact]
@@ -53,12 +51,13 @@ namespace PotatoChipMineTests.Commands
             repairCommandHandler.Handle(command);
 
             var output = ConsoleBufferHelper.GetText(proc.Output);
-            output.ShouldBe($"No digger named {MISSING_DIGGER_NAME} could be found." + Environment.NewLine);
+            output.ShouldBe($"No digger named {MISSING_DIGGER_NAME} could be found.");
         }
 
         [Fact]
         public void WithoutTokensThenReportShortOnTokens()
         {
+            gameState.Miner.InventoryItems.Add(new InventoryItem { Name = "bolts", Count = 10000 });
             gameState.Miner.TaterTokens = 0;
             var command = new RepairCommand
             {
@@ -68,12 +67,29 @@ namespace PotatoChipMineTests.Commands
 
             repairCommandHandler.Handle(command);
 
-            var output = ConsoleBufferHelper.GetText(proc.Output);
-            var outputLines = output.Split(Environment.NewLine);
+            var output = ConsoleBufferHelper.GetLines(proc.Output);
 
-            outputLines[0].ShouldStartWith("Repairs will cost");
-            outputLines[1].ShouldBe("You don't have enough tokens.");
-            outputLines.Length.ShouldBe(3);
+            output[0].ShouldStartWith("Repairs will cost");
+            output[1].ShouldBe("You don't have enough tokens.");
+            output.Count().ShouldBe(2);
+        }
+
+        [Fact]
+        public void WithoutBoltsThenReportShortOnBolts()
+        {
+            var command = new RepairCommand
+            {
+                GameState = gameState,
+                DiggerName = EXISTING_DIGGER_NAME,
+            };
+
+            repairCommandHandler.Handle(command);
+
+            var output = ConsoleBufferHelper.GetLines(proc.Output);
+
+            output[0].ShouldStartWith("Repairs will cost");
+            output[1].ShouldBe("You don't have enough bolts.");
+            output.Count().ShouldBe(2);
         }
     }
 }

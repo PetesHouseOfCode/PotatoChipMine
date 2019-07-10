@@ -21,7 +21,7 @@ namespace PotatoChipMine.Core.Entities
             {
                 Game.SwitchScene(Scene.Create(new List<IGameEntity>
                 {
-                    new CollectMineNameEntity(GameState)
+                    new CollectMinerNameEntity(GameState)
                 }));
                 GameState.PromptText = null;
             }
