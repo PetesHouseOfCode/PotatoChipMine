@@ -66,7 +66,7 @@ namespace PotatoChipMine.Core.Services
             switch (slot.Slot)
             {
                 case DiggerUpgradeSlot.Hopper:
-                    digger.Hopper = ((ChipsHopperUpgradeItem)item).GetUpgrade();
+                    digger.UpgradeHopper(((ChipsHopperUpgradeItem)item).GetUpgrade());
                     return (true, "Hopper upgraded to Large_Hopper");
             }
 

@@ -23,36 +23,30 @@ namespace PotatoChipMine.Core.Entities
 
         public override void Update(Frame frame)
         {
-            foreach (var digger in diggers.Where(x => x.CanDig(frame.TimeSinceStart)))
+            foreach (var digger in diggers.Where(x => x.ReadyToDig(frame.TimeSinceStart)))
             {
                 var digResult = digger.Dig(frame.TimeSinceStart);
-                var table = new TableOutput(80, PcmColor.DarkYellow);
-                table.AddHeaders("Name", "Dug", "Damage", "Durability", "Hopper");
-                table.AddRow(
-                    digger.Name,
-                    digResult.ChipsDug.ToString(),
-                    digResult.DurabilityLost.ToString(),
-                    $"{digger.Durability}/{digger.MaxDurability}",
-                    $"{digger.Hopper.Count}/{digger.Hopper.Max}");
-
-                Game.Write(table,GameConsoles.Events);
-                
-                if (digger.Hopper.IsFull)
+                if (!digResult.Failed)
                 {
-                    Game.WriteLine(
-                        $"{digger.Name}--The digger hopper is full.",
-                        PcmColor.Cyan,
-                        PcmColor.Black,
-                        GameConsoles.Events);
+                    var table = new TableOutput(80, PcmColor.DarkYellow);
+                    table.AddHeaders("Name", "Dug", "Damage", "Durability", "Hopper");
+                    table.AddRow(
+                        digger.Name,
+                        digResult.ChipsDug.ToString(),
+                        digResult.DurabilityLost.ToString(),
+                        $"{digger.Durability}/{digger.MaxDurability}",
+                        $"{digger.Hopper.Count}/{digger.Hopper.Max}");
+
+                    Game.Write(table, GameConsoles.Events);
                 }
-
-                if (digger.Durability < 1)
+                else
                 {
-                    Game.WriteLine(
-                        $"****** {digger.Name} needs repair! ******",
-                        PcmColor.Red,
-                        PcmColor.Black,
-                        GameConsoles.Events);
+                    foreach(var message in digResult.FaultMessages)
+                        Game.WriteLine(
+                            message,
+                            PcmColor.Cyan,
+                            PcmColor.Black,
+                            GameConsoles.Events);
                 }
             }
         }
