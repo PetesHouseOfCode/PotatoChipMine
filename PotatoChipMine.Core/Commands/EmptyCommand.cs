@@ -34,7 +34,7 @@ namespace PotatoChipMine.Core.Commands
                 return;
             }
 
-            var hopperCount = digger.Hopper.Empty();
+            var hopperCount = digger.Empty();
             chips.Count += hopperCount;
             gameState.Miner.UpdateLifetimeStat(Stats.LifetimeChips, hopperCount);
             Game.WriteLine($"{hopperCount} was removed from {command.DiggerName}'s hopper and moved into the chip vault.",

@@ -1,6 +1,8 @@
 using System;
+using System.Collections.Generic;
 using PotatoChipMine.Core;
 using PotatoChipMine.Core.Models;
+using PotatoChipMine.Core.Services.PersistenceService;
 using Shouldly;
 using Xunit;
 
@@ -8,23 +10,54 @@ namespace PotatoChipMineTests
 {
     public class ChipDiggerTests
     {
-       
+        private ChipDiggerState diggerState;
+
+        public ChipDiggerTests()
+        {
+            diggerState = new ChipDiggerState
+            {
+                FirstEquipped = DateTime.Now,
+                MineSite = new MineSiteState
+                {
+                    Hardness = SiteHardness.Firm,
+                    ChipDensity = ChipDensity.Normal
+                },
+                Hopper = new ChipsHopperState
+                {
+                    Max = 30,
+                    Name = "Standard"
+                },
+                Durability = 25,
+                MaxDurability = 25,
+                Upgrades = new List<DiggerUpgrade>
+                    {
+                        new DiggerUpgrade()
+                        {
+                            Name = "Hopper +2",
+                            Description = "The hopper can be upgraded to level 2 (210 chips)",
+                            MaxLevel = 2,
+                            Slot = DiggerUpgradeSlot.Hopper
+                        }
+                    }
+            };
+        }  
 
         [Fact]
         public void ChipDigger_Dig_HavingDurabilityEqualsZero_ReturnsEmptyScoop()
         {
-            var chipDigger = ChipDigger.StandardDigger(new MineSite());
-            chipDigger.Durability = 0;
+            diggerState.Durability = 0;
+            var chipDigger = ChipDigger.FromState(diggerState);
             var scoop = chipDigger.Dig(TimeSpan.FromSeconds(20));
-            scoop.ChipsDug.ShouldBe(0);
+            scoop.Failed.ShouldBeTrue();
         }
 
         [Fact]
         public void ChipDigger_HavingSiteChipDensityIsRich_ChipsYieldIsBetween7and25()
         {
-            var mineSite = new MineSite {ChipDensity = ChipDensity.Rich};
-            var chipDigger = ChipDigger.StandardDigger(mineSite);
-            chipDigger.Durability = 1;
+            var mineSite = new MineSiteState {ChipDensity = ChipDensity.Rich};
+            diggerState.MineSite = mineSite;
+            diggerState.Durability = 1;
+            var chipDigger = ChipDigger.FromState(diggerState);
             var scoop = chipDigger.Dig(TimeSpan.FromSeconds(20));
             scoop.ChipsDug.ShouldBeGreaterThanOrEqualTo(7);
             scoop.ChipsDug.ShouldBeLessThanOrEqualTo(25);
@@ -33,9 +66,10 @@ namespace PotatoChipMineTests
         [Fact]
         public void ChipDigger_HavingSiteChipDensityIsNormal_ChipsYieldIsBetween3and7()
         {
-            var mineSite = new MineSite { ChipDensity = ChipDensity.Normal };
-            var chipDigger = ChipDigger.StandardDigger(mineSite);
-            chipDigger.Durability = 1;
+            var mineSite = new MineSiteState { ChipDensity = ChipDensity.Normal };
+            diggerState.MineSite = mineSite;
+            diggerState.Durability = 1;
+            var chipDigger = ChipDigger.FromState(diggerState);
             var scoop = chipDigger.Dig(TimeSpan.FromSeconds(20));
             scoop.ChipsDug.ShouldBeGreaterThanOrEqualTo(3);
             scoop.ChipsDug.ShouldBeLessThanOrEqualTo(7);
@@ -44,9 +78,10 @@ namespace PotatoChipMineTests
         [Fact]
         public void ChipDigger_HavingSiteChipDensityIsScarce_ChipsYieldIsBetween0and3()
         {
-            var mineSite = new MineSite { ChipDensity = ChipDensity.Normal };
-            var chipDigger = ChipDigger.StandardDigger(mineSite);
-            chipDigger.Durability = 1;
+            var mineSite = new MineSiteState { ChipDensity = ChipDensity.Normal };
+            diggerState.MineSite = mineSite;
+            diggerState.Durability = 1;
+            var chipDigger = ChipDigger.FromState(diggerState);
 
             var scoop = chipDigger.Dig(TimeSpan.FromSeconds(20));
             scoop.ChipsDug.ShouldBeGreaterThanOrEqualTo(3);

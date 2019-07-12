@@ -1,6 +1,7 @@
 using PotatoChipMine.Core.Services.PersistenceService;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace PotatoChipMine.Core.Models
 {
@@ -9,16 +10,17 @@ namespace PotatoChipMine.Core.Models
         private readonly Random _random = new Random();
         private TimeSpan lastDig = TimeSpan.Zero;
         private readonly int secondsBetweenDigs = 15;
+        private bool digFailed = false;
 
-        public DiggerClass Class { get; set; } = DiggerClass.Standard;
-        public DateTime FirstEquipped { get; set; }
+        public DiggerClass Class { get; private set; } = DiggerClass.Standard;
+        public DateTime FirstEquipped { get; private set; }
 
-        public int Durability { get; set; }
-        public int MaxDurability { get; set; }
-        public ChipsHopper Hopper { get; set; }
+        public int Durability { get; private set; }
+        public int MaxDurability { get; private set; }
+        public ChipsHopper Hopper { get; private set; }
         //public List<UpgradeSlot> UpgradeSlots { get; set; } = new List<UpgradeSlot>();
-        public MineSite MineSite { get; set; }
-        public List<DiggerUpgrade> Upgrades { get; set; }
+        public MineSite MineSite { get; private set; }
+        public List<DiggerUpgrade> Upgrades { get; private set; }
 
         private ChipDigger(ChipDiggerState state)
         {
@@ -32,21 +34,33 @@ namespace PotatoChipMine.Core.Models
                     Hardness = state.MineSite.Hardness
                 };
             Upgrades = state.Upgrades;
-            LifetimeStats = state.LifeTimeStats;
+            LifetimeStats = state.LifeTimeStats ?? new List<Stat>();
             Hopper = ChipsHopper.FromState(state.Hopper);
         }
 
         public DigResult Dig(TimeSpan gameTime)
         {
+            lastDig = gameTime;
+            
+            var faultMessages = GetFaultMessages();
+            if (faultMessages.Any())
+            {
+                digFailed = true;
+                return DigResult.Fault(faultMessages);
+            }
+
+            digFailed = false;
             UpdateLifetimeStat(DiggerStats.LifetimeDigs, 1);
+            
             var durabilityHit = RollDurabilityHit();
             Durability -= durabilityHit;
             Durability = Durability < 0 ? 0 : Durability;
+            
             var chips = RollChips();
             Hopper.AddChips(chips);
             UpdateLifetimeStat(DiggerStats.LifetimeChips, chips);
-            lastDig = gameTime;
-            return new DigResult(chips, durabilityHit);
+
+            return DigResult.Success(chips, durabilityHit);
         }
 
         private int RollChips()
@@ -81,14 +95,53 @@ namespace PotatoChipMine.Core.Models
             }
         }
 
-        public bool CanDig(TimeSpan gameTime)
+        public bool ReadyToDig(TimeSpan gameTime)
         {
             if (lastDig != TimeSpan.Zero && gameTime.Subtract(lastDig).TotalSeconds < secondsBetweenDigs)
             {
                 return false;
             }
 
-            return !Hopper.IsFull && Durability > 0;
+            return true;
+        }
+
+        private List<string> GetFaultMessages()
+        {
+            var message = new List<string>();
+
+            if (Hopper.IsFull)
+                message.Add($"{Name} --The digger hopper is full.");
+
+            if (IsBroken())
+                message.Add($"****** {Name} needs repair! ******");
+
+            return message;
+        }
+
+        public bool IsBroken()
+        {
+            return Durability <= 0;
+        }
+
+        public void Repair()
+        {
+            if(IsBroken() && digFailed)
+                lastDig = TimeSpan.Zero;
+
+            Durability = MaxDurability;
+        }
+
+        public void UpgradeHopper(ChipsHopper hopper)
+        {
+            Hopper = hopper;
+        }
+
+        public int Empty()
+        {
+            if(Hopper.IsFull && digFailed)
+                lastDig = TimeSpan.Zero;
+
+            return Hopper.Empty();
         }
 
         public static ChipDigger StandardDigger(MineSite mineSite)
