@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 
 namespace PotatoChipMine
 {
@@ -6,8 +6,8 @@ namespace PotatoChipMine
     {
         public static void Main(string[] args)
         {
-          var main = new MainProcess();
-            main.StartGame();
+          //var main = new MainProcess();
+          //  main.StartGame();
         }
     }
 }

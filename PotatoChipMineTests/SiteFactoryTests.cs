@@ -1,4 +1,4 @@
-﻿using PotatoChipMine.Services;
+using PotatoChipMine.Core.Services;
 using Shouldly;
 using Xunit;
 

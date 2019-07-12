@@ -1,11 +1,8 @@
-﻿using System;
+using PotatoChipMine.Core.GameRooms.Store;
+using PotatoChipMine.Core.Models;
+using System;
 using System.Collections.Generic;
 using System.Text;
-using PotatoChipMine;
-using PotatoChipMine.GameRooms.Store;
-using PotatoChipMine.GameRooms.Store.Models;
-using PotatoChipMine.Models;
-using PotatoChipMine.Services;
 using Xunit;
 
 namespace PotatoChipMineTests
