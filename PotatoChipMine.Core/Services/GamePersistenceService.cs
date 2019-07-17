@@ -1,13 +1,13 @@
+using Newtonsoft.Json;
+using PotatoChipMine.Core.Models;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using Newtonsoft.Json;
-using PotatoChipMine.Core.Models;
 
 namespace PotatoChipMine.Core.Services
 {
-    public class GamePersistenceService 
+    public class GamePersistenceService
     {
         public GameSave BuildFromGameState(GameState gameState)
         {
@@ -22,11 +22,16 @@ namespace PotatoChipMine.Core.Services
         {
             var path = gameState.SaveDirectory;
             var saveName = gameState.SaveName;
-            
+
             var gameSave = BuildFromGameState(gameState);
+            foreach (var digger in gameSave.Miner.Diggers)
+            {
+                digger.LastDig = digger.LastDig - gameState.GameTime.Elapsed;
+            }
+
             if (!Directory.Exists(path))
                 Directory.CreateDirectory(path);
-            
+
             var stream = new StreamWriter(Path.Combine(path, saveName + ".json"),
                 false);
             stream.Write(JsonConvert.SerializeObject(gameSave));
@@ -47,6 +52,7 @@ namespace PotatoChipMine.Core.Services
                 gameState.Mode = loadedGame.Mode;
                 gameState.SaveDirectory = path;
                 gameState.SaveName = gameName;
+                gameState.GameTime.Restart();
             }
         }
 

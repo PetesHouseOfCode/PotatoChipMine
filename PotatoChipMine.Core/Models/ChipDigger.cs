@@ -25,6 +25,7 @@ namespace PotatoChipMine.Core.Models
         private ChipDigger(ChipDiggerState state)
         {
             Name = state.Name;
+            lastDig = state.LastDig;
             FirstEquipped = state.FirstEquipped;
             Durability = state.Durability;
             MaxDurability = state.MaxDurability;
@@ -180,6 +181,7 @@ namespace PotatoChipMine.Core.Models
             return new ChipDiggerState
             {
                 Name = Name,
+                LastDig = lastDig,
                 FirstEquipped = FirstEquipped,
                 Durability = Durability,
                 MaxDurability = MaxDurability,

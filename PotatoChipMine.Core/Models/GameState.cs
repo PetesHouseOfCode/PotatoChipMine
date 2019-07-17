@@ -3,11 +3,13 @@ using PotatoChipMine.Core.GameRooms.ControlRoom;
 using PotatoChipMine.Core.GameRooms.Store;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 
 namespace PotatoChipMine.Core.Models
 {
     public class GameState
     {
+        public Stopwatch GameTime { get; set; } = new Stopwatch();
         public Miner Miner { get; set; }
         public GameMode Mode { get; set; }
         public List<GameEvent> NewEvents { get; set; } = new List<GameEvent>();

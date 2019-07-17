@@ -25,7 +25,6 @@ namespace PotatoChipMineMono.Consoles
         private readonly GameEventsConsole events;
 
         //private readonly GamePersistenceService gamePersistenceService = new GamePersistenceService();
-        private readonly Stopwatch gameTime = Stopwatch.StartNew();
         private readonly HudConsole hud;
         private readonly InputConsole input;
         private readonly OutputConsole output;
@@ -42,6 +41,7 @@ namespace PotatoChipMineMono.Consoles
             gameState.Store = gameState.Store?? new MinerStoreFactory(gameState, commandsGroup).BuildMineStore();
             gameState.ControlRoom = new ControlRoomFactory(gameState, commandsGroup).BuildControlRoom();
             gameState.SaveDirectory = @"c:\chipMiner\saves";
+            gameState.GameTime.Start();
 
             IsVisible = true;
             IsFocused = true;
@@ -102,7 +102,7 @@ namespace PotatoChipMineMono.Consoles
 
         public override void Update(TimeSpan timeElapsed)
         {
-            var frame = Frame.NewFrame(gameTime.Elapsed, timeElapsed);
+            var frame = Frame.NewFrame(gameState.GameTime.Elapsed, timeElapsed);
             foreach (var entity in CurrentScene.Entities)
                 entity.Update(frame);
 
