@@ -119,7 +119,7 @@ namespace PotatoChipMine.Core.Services
                         foreach (var digger in gameState.Miner.Diggers)
                         {
                             table.AddRow(digger.Name,
-                                digger.Durability.ToString(),
+                                digger.DiggerBit.Durability.ToString(),
                                 digger.MineSite.ChipDensity.ToString(),
                                 digger.MineSite.Hardness.ToString(),
                                 $"{digger.Hopper.Max - digger.Hopper.Count}/{digger.Hopper.Max}");

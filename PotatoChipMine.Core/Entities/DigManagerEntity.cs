@@ -34,7 +34,7 @@ namespace PotatoChipMine.Core.Entities
                         digger.Name,
                         digResult.ChipsDug.ToString(),
                         digResult.DurabilityLost.ToString(),
-                        $"{digger.Durability}/{digger.MaxDurability}",
+                        $"{digger.DiggerBit.Durability}/{digger.DiggerBit.MaxDurability}",
                         $"{digger.Hopper.Count}/{digger.Hopper.Max}");
 
                     Game.Write(table, GameConsoles.Events);

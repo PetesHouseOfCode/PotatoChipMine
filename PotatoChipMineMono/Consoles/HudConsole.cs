@@ -34,8 +34,8 @@ namespace PotatoChipMineMono.Consoles
             if (_gameState != null && _gameState.Miner != null)
             {
                 hudString = $"Miner:{_gameState.Miner.Name}        Tokens:{_gameState.Miner.TaterTokens}          Chips:{_gameState.Miner.InventoryItems.First(x => x.Name == "chips").Count}" +
-                    $"                                                     Running Diggers:{_gameState.Miner.Diggers.Count(x => !x.Hopper.IsFull && x.Durability > 0).ToString()}" +
-                    $"     Broken Diggers:{_gameState.Miner.Diggers.Count(x => x.Durability == 0)}          Full Diggers:{_gameState.Miner.Diggers.Count(x => x.Hopper.IsFull)}";
+                    $"                                                     Running Diggers:{_gameState.Miner.Diggers.Count(x => !x.Hopper.IsFull && x.DiggerBit.Durability > 0).ToString()}" +
+                    $"     Broken Diggers:{_gameState.Miner.Diggers.Count(x => x.DiggerBit.Durability == 0)}          Full Diggers:{_gameState.Miner.Diggers.Count(x => x.Hopper.IsFull)}";
             }
 
             base.Update(timeElapsed);

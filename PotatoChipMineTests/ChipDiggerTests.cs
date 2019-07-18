@@ -27,8 +27,12 @@ namespace PotatoChipMineTests
                     Max = 30,
                     Name = "Standard"
                 },
-                Durability = 25,
-                MaxDurability = 25,
+                DiggerBit = new ChipDiggerBitState
+                {
+                    Name = "Basic",
+                    Durability = 25, 
+                    MaxDurability = 25
+                },
                 Upgrades = new List<DiggerUpgrade>
                     {
                         new DiggerUpgrade()
@@ -45,7 +49,7 @@ namespace PotatoChipMineTests
         [Fact]
         public void ChipDigger_Dig_HavingDurabilityEqualsZero_ReturnsEmptyScoop()
         {
-            diggerState.Durability = 0;
+            diggerState.DiggerBit.Durability = 0;
             var chipDigger = ChipDigger.FromState(diggerState);
             var scoop = chipDigger.Dig(TimeSpan.FromSeconds(20));
             scoop.Failed.ShouldBeTrue();
@@ -56,7 +60,7 @@ namespace PotatoChipMineTests
         {
             var mineSite = new MineSiteState {ChipDensity = ChipDensity.Rich};
             diggerState.MineSite = mineSite;
-            diggerState.Durability = 1;
+            diggerState.DiggerBit.Durability = 1;
             var chipDigger = ChipDigger.FromState(diggerState);
             var scoop = chipDigger.Dig(TimeSpan.FromSeconds(20));
             scoop.ChipsDug.ShouldBeGreaterThanOrEqualTo(7);
@@ -68,7 +72,7 @@ namespace PotatoChipMineTests
         {
             var mineSite = new MineSiteState { ChipDensity = ChipDensity.Normal };
             diggerState.MineSite = mineSite;
-            diggerState.Durability = 1;
+            diggerState.DiggerBit.Durability = 1;
             var chipDigger = ChipDigger.FromState(diggerState);
             var scoop = chipDigger.Dig(TimeSpan.FromSeconds(20));
             scoop.ChipsDug.ShouldBeGreaterThanOrEqualTo(3);
@@ -80,7 +84,7 @@ namespace PotatoChipMineTests
         {
             var mineSite = new MineSiteState { ChipDensity = ChipDensity.Normal };
             diggerState.MineSite = mineSite;
-            diggerState.Durability = 1;
+            diggerState.DiggerBit.Durability = 1;
             var chipDigger = ChipDigger.FromState(diggerState);
 
             var scoop = chipDigger.Dig(TimeSpan.FromSeconds(20));
@@ -94,8 +98,8 @@ namespace PotatoChipMineTests
             var mineSite = new MineSite {ChipDensity = ChipDensity.Scarce, Hardness = SiteHardness.Soft};
             var chipDigger = ChipDigger.StandardDigger(mineSite);
             var scoop = chipDigger.Dig(TimeSpan.FromSeconds(20));
-            chipDigger.Durability.ShouldBeGreaterThanOrEqualTo(0);
-            chipDigger.Durability.ShouldBeLessThanOrEqualTo(25);
+            chipDigger.DiggerBit.Durability.ShouldBeGreaterThanOrEqualTo(0);
+            chipDigger.DiggerBit.Durability.ShouldBeLessThanOrEqualTo(25);
         }
     }
 }

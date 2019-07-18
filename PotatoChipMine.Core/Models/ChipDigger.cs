@@ -5,6 +5,51 @@ using System.Linq;
 
 namespace PotatoChipMine.Core.Models
 {
+    public class ChipDiggerBit
+    {
+        public string Name { get; private set; }
+        public int Durability { get; private set; }
+        public int MaxDurability { get; private set; }
+
+        public ChipDiggerBit(string name, int durability, int maxDurability)
+        {
+            Name = name;
+            Durability = durability;
+            MaxDurability = maxDurability;
+        }
+
+        public ChipDiggerBitState GetState()
+        {
+            return new ChipDiggerBitState
+            {
+                Name = Name,
+                Durability = Durability,
+                MaxDurability = MaxDurability
+            };
+        }
+
+        public bool IsBroken()
+        {
+            return Durability <= 0;
+        }
+
+        public void Repair()
+        {
+            Durability = MaxDurability;
+        }
+
+        public void Damage(int damage)
+        {
+            Durability -= damage;
+            Durability = Durability < 0 ? 0 : Durability;
+        }
+
+        public static ChipDiggerBit From(ChipDiggerBitState diggerBit)
+        {
+            return new ChipDiggerBit(diggerBit.Name, diggerBit.Durability, diggerBit.MaxDurability);
+        }
+    }
+
     public class ChipDigger : PersistentGameElement
     {
         private readonly Random _random = new Random();
@@ -15,8 +60,7 @@ namespace PotatoChipMine.Core.Models
         public DiggerClass Class { get; private set; } = DiggerClass.Standard;
         public DateTime FirstEquipped { get; private set; }
 
-        public int Durability { get; private set; }
-        public int MaxDurability { get; private set; }
+        public ChipDiggerBit DiggerBit { get; private set; }
         public ChipsHopper Hopper { get; private set; }
         //public List<UpgradeSlot> UpgradeSlots { get; set; } = new List<UpgradeSlot>();
         public MineSite MineSite { get; private set; }
@@ -27,8 +71,7 @@ namespace PotatoChipMine.Core.Models
             Name = state.Name;
             lastDig = state.LastDig;
             FirstEquipped = state.FirstEquipped;
-            Durability = state.Durability;
-            MaxDurability = state.MaxDurability;
+            DiggerBit = ChipDiggerBit.From(state.DiggerBit);
             MineSite = new MineSite
                 {
                     ChipDensity = state.MineSite.ChipDensity,
@@ -54,8 +97,7 @@ namespace PotatoChipMine.Core.Models
             UpdateLifetimeStat(DiggerStats.LifetimeDigs, 1);
             
             var durabilityHit = RollDurabilityHit();
-            Durability -= durabilityHit;
-            Durability = Durability < 0 ? 0 : Durability;
+            DiggerBit.Damage(durabilityHit);
             
             var chips = RollChips();
             Hopper.AddChips(chips);
@@ -113,23 +155,18 @@ namespace PotatoChipMine.Core.Models
             if (Hopper.IsFull)
                 message.Add($"{Name} --The digger hopper is full.");
 
-            if (IsBroken())
+            if (DiggerBit.IsBroken())
                 message.Add($"****** {Name} needs repair! ******");
 
             return message;
         }
-
-        public bool IsBroken()
-        {
-            return Durability <= 0;
-        }
-
+        
         public void Repair()
         {
-            if(IsBroken() && digFailed)
+            if(DiggerBit.IsBroken() && digFailed)
                 lastDig = TimeSpan.Zero;
 
-            Durability = MaxDurability;
+            DiggerBit.Repair();
         }
 
         public void UpgradeHopper(ChipsHopper hopper)
@@ -152,17 +189,21 @@ namespace PotatoChipMine.Core.Models
                 {
                     FirstEquipped = DateTime.Now,
                     MineSite = new MineSiteState
-                        {
-                            Hardness = mineSite.Hardness,
-                            ChipDensity = mineSite.ChipDensity
-                        },
+                    {
+                        Hardness = mineSite.Hardness,
+                        ChipDensity = mineSite.ChipDensity
+                    },
                     Hopper = new ChipsHopperState
                     {
                         Max = 30,
                         Name = "Standard"
                     },
-                    Durability = 25,
-                    MaxDurability = 25,
+                    DiggerBit = new ChipDiggerBitState
+                    {
+                        Name = "Basic",
+                        Durability = 25,
+                        MaxDurability = 25
+                    },
                     Upgrades = new List<DiggerUpgrade>
                     {
                         new DiggerUpgrade()
@@ -183,8 +224,7 @@ namespace PotatoChipMine.Core.Models
                 Name = Name,
                 LastDig = lastDig,
                 FirstEquipped = FirstEquipped,
-                Durability = Durability,
-                MaxDurability = MaxDurability,
+                DiggerBit = DiggerBit.GetState(),
                 Upgrades = Upgrades,
                 Hopper = Hopper.GetState(),
                 MineSite = new MineSiteState
