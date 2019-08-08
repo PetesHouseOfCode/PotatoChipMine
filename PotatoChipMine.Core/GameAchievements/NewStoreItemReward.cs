@@ -10,7 +10,7 @@ namespace PotatoChipMine.Core.GameAchievements
         {
             gameState.Store.StoreState.ItemsForSale.Add(this);
             Game.WriteLine($"*** A new item is for sale at the store [{Name}]",PcmColor.Green,null,GameConsoles.Events);
-            Game.WriteLine(this.Description,PcmColor.Green,null,GameConsoles.Events);
+            Game.WriteLine(this.Description, PcmColor.Green, null, GameConsoles.Events);
         }
     }
 }

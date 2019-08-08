@@ -29,7 +29,9 @@ namespace PotatoChipMineTests
                 },
                 DiggerBit = new ChipDiggerBitState
                 {
-                    Name = "Basic"
+                    Name = "Basic",
+                    Min = 8,
+                    Max = 25
                 },
                 Durability = new DiggerDurabilityState
                 {
@@ -86,14 +88,14 @@ namespace PotatoChipMineTests
         [Fact]
         public void ChipDigger_HavingSiteChipDensityIsScarce_ChipsYieldIsBetween0and3()
         {
-            var mineSite = new MineSiteState { ChipDensity = ChipDensity.Normal };
+            var mineSite = new MineSiteState { ChipDensity = ChipDensity.Scarce };
             diggerState.MineSite = mineSite;
             diggerState.Durability.Current = 1;
             var chipDigger = ChipDigger.FromState(diggerState);
 
             var scoop = chipDigger.Dig(TimeSpan.FromSeconds(20));
-            scoop.ChipsDug.ShouldBeGreaterThanOrEqualTo(3);
-            scoop.ChipsDug.ShouldBeLessThanOrEqualTo(7);
+            scoop.ChipsDug.ShouldBeGreaterThanOrEqualTo(0);
+            scoop.ChipsDug.ShouldBeLessThanOrEqualTo(5);
         }
 
         [Fact]

@@ -64,20 +64,20 @@ namespace PotatoChipMine.Core.Models
         }
 
         private int RollChips()
-        {
+        {            
             switch (MineSite.ChipDensity)
             {
                 case ChipDensity.Scarce:
-                    return _random.Next(0, 4);
+                    return DiggerBit.Dig(0.2m);
                 case ChipDensity.Normal:
-                    return _random.Next(3, 8);
+                    return DiggerBit.Dig(0.4m);
                 case ChipDensity.Rich:
-                    return _random.Next(8, 25);
+                    return DiggerBit.Dig(1m);
                 default:
                     return 0;
             }
         }
-
+        
         private int RollDurabilityHit()
         {
             switch (MineSite.Hardness)
@@ -157,7 +157,9 @@ namespace PotatoChipMine.Core.Models
                     },
                     DiggerBit = new ChipDiggerBitState
                     {
-                        Name = "Basic"
+                        Name = "Basic",
+                        Min = 8,
+                        Max = 25
                     },
                     Durability = new DiggerDurabilityState
                     {
