@@ -18,7 +18,16 @@ namespace PotatoChipMine.Core.Models
         {
             Name = name;
             TaterTokens = taterTokens;
-            InventoryItems.Add(new InventoryItem { Name = "chips", Count = 0, InventoryId = 0 });
+            InventoryItems.Add(new InventoryItem
+            {
+                Count = 0,
+                Item = new GameItem
+                {
+                    ItemId = 4,
+                    Name = "chips"
+                }
+            });
+            
             PotentialAchievements.AddRange(AchievementsBuilder.GetPotentialAchievements());
         }
 

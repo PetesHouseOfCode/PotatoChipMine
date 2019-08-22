@@ -20,7 +20,7 @@ namespace PotatoChipMine.Core.Commands
 
             var digger = gameState.Miner.Diggers.FirstOrDefault(x =>
                 string.Equals(x.Name, command.DiggerName, StringComparison.CurrentCultureIgnoreCase));
-            var chips = gameState.Miner.InventoryItems.FirstOrDefault(x => x.Name == "chips");
+            var chips = gameState.Miner.InventoryItems.FirstOrDefault(x => x.Item.Name == "chips");
 
             if (chips == null)
             {

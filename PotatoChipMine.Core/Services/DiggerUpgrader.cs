@@ -1,4 +1,5 @@
 using PotatoChipMine.Core.GameEngine;
+using PotatoChipMine.Core.GameRooms.Store.Models;
 using PotatoChipMine.Core.Models;
 using System;
 using System.Collections.Generic;
@@ -8,35 +9,9 @@ namespace PotatoChipMine.Core.Services
 {
     public class DiggerUpgrader
     {
-        private static readonly List<UpgradeItem> Upgrades = new List<UpgradeItem>
-        {
-            new ChipsHopperUpgradeItem
-            {
-                Name = "Large_Hopper",
-                Slot = DiggerUpgradeSlot.Hopper,
-                RequiredSlotLevel = 0,
-                Level = 1,
-                Size = 100
-            }
-        };
-
-        public static (bool passed, string message) TestUpgradeItem(ChipDigger digger, string upgradeItemName)
-        {
-            var item = Upgrades.FirstOrDefault(x => x.Name == upgradeItemName);
-            if (item == null) return (false, "Item could not be found");
-
-            switch (item.Slot)
-            {
-                case DiggerUpgradeSlot.Hopper:
-                    return TestHopperUpgrade(digger, (ChipsHopperUpgradeItem)item);
-            }
-
-            return (false, "Unknown Upgrade.");
-        }
-
         static (bool passed, string message) TestHopperUpgrade(ChipDigger digger, ChipsHopperUpgradeItem item)
         {
-            var slot = digger.Upgrades.FirstOrDefault(x => x.Slot == item.Slot);
+            var slot = digger.Upgrades.FirstOrDefault(x => x.Slot == DiggerUpgradeSlot.Hopper);
             if (slot == null) return (false, "This digger doesn't have that upgrade slot available.");
 
             if (item.RequiredSlotLevel > digger.Hopper.Level)
@@ -54,34 +29,30 @@ namespace PotatoChipMine.Core.Services
             return (true, "Upgrade is available");
         }
 
-        public static (bool completed, string message) ApplyUpgrade(ChipDigger digger, string upgradeItemName)
+        public static (bool completed, string message) ApplyUpgrade(ChipDigger digger, DiggerUpgradeItem item)
         {
-            var test = TestUpgradeItem(digger, upgradeItemName);
-            if (!test.passed)
-                return (test.passed, test.message);
-
-            var item = Upgrades.FirstOrDefault(x => x.Name == upgradeItemName);
-            var slot = digger.Upgrades.FirstOrDefault(x => x.Slot == item?.Slot);
-
-            switch (slot.Slot)
+            if(item is ChipsHopperUpgradeItem)
             {
-                case DiggerUpgradeSlot.Hopper:
-                    digger.UpgradeHopper(((ChipsHopperUpgradeItem)item).GetUpgrade());
-                    return (true, "Hopper upgraded to Large_Hopper");
+                digger.UpgradeHopper(((ChipsHopperUpgradeItem)item).GetUpgrade());
+                return (true, "Hopper upgraded to Large_Hopper");
             }
+            
+            //if(item is BitUpgradeItem)
+            //{
+                
+            //}
 
             return (true, "Upgrade Applied");
         }
     }
-
-    public class UpgradeItem
+    
+    public class DiggerUpgradeItem : GameItem
     {
         public DiggerUpgradeSlot Slot;
-        public string Name { get; set; }
         public int RequiredSlotLevel { get; set; }
     }
 
-    public class ChipsHopperUpgradeItem : UpgradeItem
+    public class ChipsHopperUpgradeItem : DiggerUpgradeItem
     {
         public int Size { get; set; }
         public int Level { get; set; }

@@ -49,28 +49,32 @@ namespace PotatoChipMine.Core.GameRooms.ControlRoom.Services
                     }
 
                     item = GameState.Miner.InventoryItems.FirstOrDefault(x =>
-                        string.Equals(x.Name, command.FullCommand, StringComparison.CurrentCultureIgnoreCase));
+                        string.Equals(x.Item.Name, command.FullCommand, StringComparison.CurrentCultureIgnoreCase));
                     if (item == null || item.Count < 1)
                     {
                         Game.WriteLine($"You don't have any {command.FullCommand}!");
                         return;
                     }
-
-                    var result = DiggerUpgrader.ApplyUpgrade(digger, item.Name);
+                    
+                    if(!(item.Item is DiggerUpgradeItem))
+                    {
+                        Game.WriteLine($"The item is not a digger upgrade!");
+                        return;
+                    }
+                    
+                    var result = DiggerUpgrader.ApplyUpgrade(digger, item.Item as DiggerUpgradeItem);
                     if (!result.completed)
                     {
                         Game.WriteLine(result.message,PcmColor.Red,null,GameConsoles.Input);
                     }
 
                     GameState.Miner.InventoryItems.FirstOrDefault(x =>
-                        string.Equals(x.Name, item.Name, StringComparison.InvariantCultureIgnoreCase)).Count--;
+                        string.Equals(x.Item.Name, item.Item.Name, StringComparison.InvariantCultureIgnoreCase)).Count--;
                     GameState.PromptText = null;
-                    Game.WriteLine($"{digger.Name} has been upgraded. {item.Name}");
-                    Game.WriteLine(item.Description);
+                    Game.WriteLine($"{digger.Name} has been upgraded. {item.Item.Name}");
+                    Game.WriteLine(item.Item.Description);
                     Game.PopScene();
-                    break;
-
-                    
+                    break;                    
             }
         }
     }

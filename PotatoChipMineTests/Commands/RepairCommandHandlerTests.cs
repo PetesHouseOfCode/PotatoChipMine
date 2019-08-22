@@ -57,7 +57,14 @@ namespace PotatoChipMineTests.Commands
         [Fact]
         public void WithoutTokensThenReportShortOnTokens()
         {
-            gameState.Miner.InventoryItems.Add(new InventoryItem { Name = "bolts", Count = 10000 });
+            gameState.Miner.InventoryItems.Add(new InventoryItem
+            {
+                Count = 10000,
+                Item = new GameItem
+                {
+                    Name = "bolts"
+                }
+            });
             gameState.Miner.TaterTokens = 0;
             var command = new RepairCommand
             {

@@ -22,9 +22,35 @@ namespace PotatoChipMine.Core.GameRooms.Store.Services
                 "To leave the store type exit."
             };
             var storeState = new StoreState();
-            storeState.ItemsForSale.Add(new StoreItem {Name = "Digger", Price = 20, Count = 5, InventoryId = 1});
-            storeState.ItemsForSale.Add(new StoreItem {Name = "bolts", Count = 500, Price = 5, InventoryId = 2});
-            storeState.ItemsBuying.Add(new StoreItem {Name = "RawChips", Price = 10});
+            storeState.ItemsForSale.Add(new StoreItem
+            {
+                Price = 20,
+                Count = 5,
+                Item = new GameItem
+                {
+                    ItemId = 1,
+                    Name = "Digger"
+                }
+            });
+            storeState.ItemsForSale.Add(new StoreItem
+            {
+                Count = 500,
+                Price = 5,
+                Item = new GameItem
+                {
+                    ItemId = 2,
+                    Name = "bolts"
+                }
+            });
+            storeState.ItemsBuying.Add(new StoreItem
+            {
+                Price = 10,
+                Item = new GameItem
+                {
+                    ItemId = 3,
+                    Name = "RawChips"
+                }
+            });
             var store = new MinerStore(
                 _gameState,
                 greeting,

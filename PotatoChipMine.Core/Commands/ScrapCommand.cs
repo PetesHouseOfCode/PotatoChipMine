@@ -29,7 +29,15 @@ namespace PotatoChipMine.Core.Commands
             var bolts = gameState.Miner.Inventory("bolts");
             if (bolts == null)
             {
-                bolts = new InventoryItem() { Name = "bolts", Count = 0 };
+                bolts = new InventoryItem()
+                {
+                    Count = 0,
+                    Item = new GameItem
+                    {
+                        ItemId = 2,
+                        Name = "bolts"
+                    }
+                };
                 gameState.Miner.InventoryItems.Add(bolts);
             }
 

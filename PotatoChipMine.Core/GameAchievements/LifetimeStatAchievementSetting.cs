@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using PotatoChipMine.Core.Models;
+using PotatoChipMine.Core.Services;
 
 namespace PotatoChipMine.Core.GameAchievements
 {
@@ -20,15 +21,19 @@ namespace PotatoChipMine.Core.GameAchievements
                 MinCount = 500,
                 Rewards = new List<IAchievementReward>
                 {
-                    new NewStoreItemReward
-                    {
-                        ItemId = 0,
-                        InventoryId = 3,
-                        Name = "Large_Hopper",
-                        Description = "Allows digger to hold 100 chips before requiring emptying.",
-                        Count = 10,
-                        Price = 1200
-                    }
+                    new NewStoreItemReward(
+                            count: 10,
+                            price: 1200,
+                            item: new ChipsHopperUpgradeItem
+                            {
+                                ItemId = 0,
+                                Name = "Large_Hopper",
+                                Description = "Allows digger to hold 100 chips before requiring emptying.",
+                                Slot = DiggerUpgradeSlot.Hopper,
+                                RequiredSlotLevel = 0,
+                                Level = 1,
+                                Size = 100
+                            })
                 }
             };
         }
