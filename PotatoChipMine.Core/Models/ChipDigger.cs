@@ -130,6 +130,10 @@ namespace PotatoChipMine.Core.Models
         {
             Hopper = hopper;
         }
+        public void UpgradeBit(ChipDiggerBit bit)
+        {
+            DiggerBit = bit;
+        }
 
         public int Empty()
         {

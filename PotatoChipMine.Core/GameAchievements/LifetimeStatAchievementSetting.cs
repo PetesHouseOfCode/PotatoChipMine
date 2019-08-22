@@ -29,7 +29,6 @@ namespace PotatoChipMine.Core.GameAchievements
                                 ItemId = 0,
                                 Name = "Large_Hopper",
                                 Description = "Allows digger to hold 100 chips before requiring emptying.",
-                                Slot = DiggerUpgradeSlot.Hopper,
                                 RequiredSlotLevel = 0,
                                 Level = 1,
                                 Size = 100

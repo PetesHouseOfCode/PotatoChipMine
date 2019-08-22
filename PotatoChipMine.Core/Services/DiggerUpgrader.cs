@@ -33,14 +33,17 @@ namespace PotatoChipMine.Core.Services
         {
             if(item is ChipsHopperUpgradeItem)
             {
+                var testresult = TestHopperUpgrade(digger, item as ChipsHopperUpgradeItem);
+                if (!testresult.passed)
+                    return testresult;
                 digger.UpgradeHopper(((ChipsHopperUpgradeItem)item).GetUpgrade());
                 return (true, "Hopper upgraded to Large_Hopper");
             }
             
-            //if(item is BitUpgradeItem)
-            //{
-                
-            //}
+            if(item is BitUpgradeItem)
+            {
+                digger.UpgradeBit(((BitUpgradeItem)item).GetUpgrade());
+            }
 
             return (true, "Upgrade Applied");
         }
@@ -48,18 +51,28 @@ namespace PotatoChipMine.Core.Services
     
     public class DiggerUpgradeItem : GameItem
     {
-        public DiggerUpgradeSlot Slot;
         public int RequiredSlotLevel { get; set; }
+        public int Level { get; set; }
     }
 
     public class ChipsHopperUpgradeItem : DiggerUpgradeItem
     {
         public int Size { get; set; }
-        public int Level { get; set; }
 
         public ChipsHopper GetUpgrade()
         {
             return new ChipsHopper(Size, Name, Level);
+        }
+    }
+    
+    public class BitUpgradeItem : DiggerUpgradeItem
+    {
+        public int Min { get; set; }
+        public int Max { get; set; }
+        
+        public ChipDiggerBit GetUpgrade()
+        {
+            return new ChipDiggerBit(Name, new Range<int>(Min, Max));
         }
     }
 }
