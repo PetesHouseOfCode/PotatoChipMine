@@ -14,6 +14,6 @@ namespace PotatoChipMine.Core.Services.PersistenceService
         public ChipDiggerBitState DiggerBit { get; set; }
         public DiggerDurabilityState Durability { get; set; }
         public MineSiteState MineSite { get; set; }
-        public List<Stat> LifeTimeStats { get; set; }        
+        public List<Stat> LifeTimeStats { get; set; }
     }
 }

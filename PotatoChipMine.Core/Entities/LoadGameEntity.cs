@@ -1,9 +1,9 @@
-using System.Collections.Generic;
-using System.IO;
 using PotatoChipMine.Core.Events;
 using PotatoChipMine.Core.GameEngine;
 using PotatoChipMine.Core.Models;
-using PotatoChipMine.Core.Services;
+using PotatoChipMine.Core.Services.PersistenceService;
+using System.Collections.Generic;
+using System.IO;
 
 namespace PotatoChipMine.Core.Entities
 {

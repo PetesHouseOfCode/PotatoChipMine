@@ -1,7 +1,7 @@
 using PotatoChipMine.Core.Services.PersistenceService;
 using System;
 
-namespace PotatoChipMine.Core.Models
+namespace PotatoChipMine.Core.Models.DiggerUpgrades
 {
     public class ChipsHopper
     {
@@ -28,7 +28,7 @@ namespace PotatoChipMine.Core.Models
         {
             return new ChipsHopper(max, name, level, count);
         }
-        
+
         public void AddChips(int amount)
         {
             if (Count + amount > Max)
@@ -62,8 +62,8 @@ namespace PotatoChipMine.Core.Models
         {
             return new ChipsHopper(
                        chipsHopper.Max,
-                       string.IsNullOrEmpty(chipsHopper.Name) ? "None" : chipsHopper.Name, 
-                       chipsHopper.Level, 
+                       string.IsNullOrEmpty(chipsHopper.Name) ? "None" : chipsHopper.Name,
+                       chipsHopper.Level,
                        chipsHopper.Count);
         }
     }

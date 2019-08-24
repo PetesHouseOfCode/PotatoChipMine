@@ -1,6 +1,6 @@
-using System.Collections.Generic;
 using PotatoChipMine.Core.Models;
 using PotatoChipMine.Core.Services;
+using System.Collections.Generic;
 
 namespace PotatoChipMine.Core.GameAchievements
 {

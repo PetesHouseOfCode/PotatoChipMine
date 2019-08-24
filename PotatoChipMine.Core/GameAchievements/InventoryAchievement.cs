@@ -8,7 +8,7 @@ namespace PotatoChipMine.Core.GameAchievements
     {
         protected override bool AchievementReached()
         {
-            var setting = (InventoryAchievementSetting) Setting;
+            var setting = (InventoryAchievementSetting)Setting;
             if (base.AchievementReached())
                 return true;
 

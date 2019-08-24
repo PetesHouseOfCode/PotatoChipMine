@@ -3,9 +3,10 @@ using System.Collections.Generic;
 
 namespace PotatoChipMine.Core.GameEngine
 {
-    public class ConsoleBuffer 
-    {        private Queue<ConsoleChar> Buffer = new Queue<ConsoleChar>();
-        
+    public class ConsoleBuffer
+    {
+        private Queue<ConsoleChar> Buffer = new Queue<ConsoleChar>();
+
         public void Write(ConsoleChar character)
         {
             Buffer.Enqueue(character);
@@ -20,7 +21,7 @@ namespace PotatoChipMine.Core.GameEngine
 
         public IEnumerable<ConsoleChar> Read(int numChars)
         {
-            for(int x = 0; x < numChars; x++)
+            for (int x = 0; x < numChars; x++)
             {
                 Buffer.TryDequeue(out ConsoleChar character);
                 if (character == null)

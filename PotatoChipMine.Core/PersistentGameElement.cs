@@ -1,6 +1,6 @@
+using PotatoChipMine.Core.Models;
 using System.Collections.Generic;
 using System.Linq;
-using PotatoChipMine.Core.Models;
 
 namespace PotatoChipMine.Core
 {

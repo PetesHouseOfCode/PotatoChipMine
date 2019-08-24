@@ -2,7 +2,7 @@ using PotatoChipMine.Core.Services.PersistenceService;
 using System;
 using System.Linq;
 
-namespace PotatoChipMine.Core.Models
+namespace PotatoChipMine.Core.Models.DiggerUpgrades
 {
     public class Range<T>
     {
@@ -15,11 +15,11 @@ namespace PotatoChipMine.Core.Models
             Max = max;
         }
     }
-    
+
     public class ChipDiggerBit
     {
         private static Random random = new Random();
-        
+
         public string Name { get; private set; }
         public Range<int> Range { get; private set; }
 
@@ -28,7 +28,7 @@ namespace PotatoChipMine.Core.Models
             Name = name;
             Range = range;
         }
-        
+
         public int Dig(decimal density)
         {
             return random.Next((int)Math.Round(Range.Min * density), (int)Math.Round(Range.Max * density));

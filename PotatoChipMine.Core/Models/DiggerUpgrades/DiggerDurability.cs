@@ -2,7 +2,7 @@ using PotatoChipMine.Core.Services.PersistenceService;
 using System;
 using System.Linq;
 
-namespace PotatoChipMine.Core.Models
+namespace PotatoChipMine.Core.Models.DiggerUpgrades
 {
     public class DiggerDurability
     {

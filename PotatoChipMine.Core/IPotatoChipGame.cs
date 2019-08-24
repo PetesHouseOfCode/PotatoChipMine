@@ -1,7 +1,7 @@
 using PotatoChipMine.Core.GameEngine;
+using PotatoChipMine.Core.Models;
 using System;
 using System.Collections.Generic;
-using PotatoChipMine.Core.Models;
 
 namespace PotatoChipMine.Core
 {
