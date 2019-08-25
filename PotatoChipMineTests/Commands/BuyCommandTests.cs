@@ -35,7 +35,7 @@ namespace PotatoChipMineTests.Commands
         }
 
         [Fact]
-        public void Need_to_carry_the_item_to_complete_the_purchase()
+        public void Shop_has_to_carry_the_item_to_complete_the_purchase()
         {
             var command = new BuyCommand
             {
@@ -51,7 +51,7 @@ namespace PotatoChipMineTests.Commands
         }
 
         [Fact]
-        public void Need_to_have_item_available_in_the_shop_to_complete_the_purchase()
+        public void Item_is_available_in_the_shop_to_complete_the_purchase()
         {
             AddItemToStore();
 
@@ -69,7 +69,7 @@ namespace PotatoChipMineTests.Commands
         }
         
         [Fact]
-        public void Need_to_have_enough_tater_tokens()
+        public void Miner_needs_enough_tater_tokens_to_complete_purchase()
         {
             AddItemToStore();
             AddCountToItemInStore(1);

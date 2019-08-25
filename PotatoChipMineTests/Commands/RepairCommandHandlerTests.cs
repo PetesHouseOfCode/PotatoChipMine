@@ -52,7 +52,7 @@ namespace PotatoChipMineTests.Commands
         }
 
         [Fact]
-        public void Need_to_have_enough_tokens_to_repair()
+        public void Need_enough_tokens_to_repair()
         {
             gameState.Miner.InventoryItems.Add(new InventoryItem
             {
