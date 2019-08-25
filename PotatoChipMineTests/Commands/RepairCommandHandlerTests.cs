@@ -3,9 +3,6 @@ using PotatoChipMine.Core.GameEngine;
 using PotatoChipMine.Core.Models;
 using PotatoChipMineTests.Helpers;
 using PotatoChipMineTests.Mocks;
-using System;
-using System.Collections.Generic;
-using System.Text;
 using Xunit;
 using Shouldly;
 using System.Linq;
@@ -40,7 +37,7 @@ namespace PotatoChipMineTests.Commands
         }
 
         [Fact]
-        public void WithMissingDiggerThenReportDiggerMissing()
+        public void Digger_with_name_has_to_exist()
         {
             var command = new RepairCommand
             {
@@ -55,7 +52,7 @@ namespace PotatoChipMineTests.Commands
         }
 
         [Fact]
-        public void WithoutTokensThenReportShortOnTokens()
+        public void Need_to_have_enough_tokens_to_repair()
         {
             gameState.Miner.InventoryItems.Add(new InventoryItem
             {
@@ -82,7 +79,7 @@ namespace PotatoChipMineTests.Commands
         }
 
         [Fact]
-        public void WithoutBoltsThenReportShortOnBolts()
+        public void Need_enough_bolts_to_repair()
         {
             var command = new RepairCommand
             {
