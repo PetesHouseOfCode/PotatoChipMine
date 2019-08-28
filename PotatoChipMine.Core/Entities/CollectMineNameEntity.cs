@@ -1,6 +1,5 @@
 using PotatoChipMine.Core.GameEngine;
 using PotatoChipMine.Core.Models;
-using PotatoChipMine.Core.Services;
 using System;
 using System.Collections.Generic;
 
@@ -23,7 +22,7 @@ namespace PotatoChipMine.Core.Entities
 
                 return;
             }
-         
+
             GameState.Miner = Miner.Default();
             GameState.Miner.Name = command.FullCommand;
             GameState.PromptText = null;
@@ -38,7 +37,7 @@ namespace PotatoChipMine.Core.Entities
             {
                 Game.WriteLine("Howdy pilgrim!  Welcome to glamorous world of 'tater chip mining!" + Environment.NewLine +
                     "I'm Earl, your mine bot. I'll be you're right hand man ... 'er bot, around this here mining operation.");
-                Game.WriteLine( "Whats your name pilgrim?");
+                Game.WriteLine("Whats your name pilgrim?");
                 GameState.PromptText = "Enter your name:";
                 sentMessage = true;
             }

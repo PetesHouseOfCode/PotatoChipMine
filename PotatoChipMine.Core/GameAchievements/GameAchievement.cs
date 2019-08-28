@@ -1,7 +1,7 @@
-using System;
-using System.Linq;
 using PotatoChipMine.Core.GameEngine;
 using PotatoChipMine.Core.Models;
+using System;
+using System.Linq;
 
 namespace PotatoChipMine.Core.GameAchievements
 {
@@ -34,7 +34,7 @@ namespace PotatoChipMine.Core.GameAchievements
             {
                 reward.ApplyReward(GameState);
             }
-           
+
         }
 
         private void RegisterAchievement()

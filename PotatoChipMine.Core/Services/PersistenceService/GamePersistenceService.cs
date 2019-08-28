@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 
-namespace PotatoChipMine.Core.Services
+namespace PotatoChipMine.Core.Services.PersistenceService
 {
     public class GamePersistenceService
     {

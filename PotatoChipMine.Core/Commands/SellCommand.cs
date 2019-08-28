@@ -2,13 +2,11 @@ using PotatoChipMine.Core.GameEngine;
 using PotatoChipMine.Core.GameRooms.Store.Models;
 using PotatoChipMine.Core.Models;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 
 namespace PotatoChipMine.Core.Commands
 {
-    public class SellCommand: CommandWithGameState
+    public class SellCommand : CommandWithGameState
     {
         public StoreState StoreState { get; set; }
         public int? Quantity { get; set; }
@@ -24,7 +22,7 @@ namespace PotatoChipMine.Core.Commands
         {
             gameState = command.GameState;
             storeState = command.StoreState;
-            
+
             var result = Sell(command.ItemName, command.Quantity);
 
             if (!result.sold)
@@ -41,7 +39,7 @@ namespace PotatoChipMine.Core.Commands
             try
             {
                 InventoryItem item;
-                if(quantity.HasValue)
+                if (quantity.HasValue)
                 {
                     item = gameState.Miner.Inventory(itemName);
                     if (item == null)

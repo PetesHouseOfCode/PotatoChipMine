@@ -1,10 +1,10 @@
-using System;
-using System.Linq;
 using PotatoChipMine.Core.GameEngine;
 using PotatoChipMine.Core.Models;
 using PotatoChipMine.Core.Services;
+using System;
+using System.Linq;
 
-namespace PotatoChipMine.Core.GameRooms.ControlRoom.Services
+namespace PotatoChipMine.Core.Entities
 {
     public class UpgradeHandlerEntity : GameEntity
     {
@@ -14,7 +14,7 @@ namespace PotatoChipMine.Core.GameRooms.ControlRoom.Services
 
         public UpgradeHandlerEntity(GameState gameState) : base(gameState)
         {
-            
+
         }
 
         public override void HandleInput(UserCommand command)
@@ -24,7 +24,7 @@ namespace PotatoChipMine.Core.GameRooms.ControlRoom.Services
                 case 1:
                     if (string.IsNullOrEmpty(command.FullCommand))
                     {
-                        Game.WriteLine("A name is required!", PcmColor.Red,null,GameConsoles.Input);
+                        Game.WriteLine("A name is required!", PcmColor.Red, null, GameConsoles.Input);
                         return;
                     }
 
@@ -55,17 +55,17 @@ namespace PotatoChipMine.Core.GameRooms.ControlRoom.Services
                         Game.WriteLine($"You don't have any {command.FullCommand}!");
                         return;
                     }
-                    
-                    if(!(item.Item is DiggerUpgradeItem))
+
+                    if (!(item.Item is DiggerUpgradeItem))
                     {
                         Game.WriteLine($"The item is not a digger upgrade!");
                         return;
                     }
-                    
+
                     var result = DiggerUpgrader.ApplyUpgrade(digger, item.Item as DiggerUpgradeItem);
                     if (!result.completed)
                     {
-                        Game.WriteLine(result.message,PcmColor.Red,null,GameConsoles.Input);
+                        Game.WriteLine(result.message, PcmColor.Red, null, GameConsoles.Input);
                     }
 
                     GameState.Miner.InventoryItems.FirstOrDefault(x =>
@@ -74,7 +74,7 @@ namespace PotatoChipMine.Core.GameRooms.ControlRoom.Services
                     Game.WriteLine($"{digger.Name} has been upgraded. {item.Item.Name}");
                     Game.WriteLine(item.Item.Description);
                     Game.PopScene();
-                    break;                    
+                    break;
             }
         }
     }

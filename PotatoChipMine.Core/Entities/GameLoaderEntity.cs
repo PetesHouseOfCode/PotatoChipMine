@@ -1,6 +1,6 @@
 using PotatoChipMine.Core.GameEngine;
 using PotatoChipMine.Core.Models;
-using PotatoChipMine.Core.Services;
+using PotatoChipMine.Core.Services.PersistenceService;
 using System.Collections.Generic;
 
 namespace PotatoChipMine.Core.Entities
@@ -12,7 +12,7 @@ namespace PotatoChipMine.Core.Entities
         public GameLoaderEntity(GameState gameState)
             : base(gameState)
         {
-            
+
         }
 
         public override void HandleInput(UserCommand command)

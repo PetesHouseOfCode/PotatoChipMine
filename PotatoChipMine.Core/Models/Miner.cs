@@ -1,12 +1,12 @@
+using PotatoChipMine.Core.Services;
+using PotatoChipMine.Core.Services.PersistenceService;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using PotatoChipMine.Core.Services;
-using PotatoChipMine.Core.Services.PersistenceService;
 
 namespace PotatoChipMine.Core.Models
 {
-    public class Miner:PersistentGameElement
+    public class Miner : PersistentGameElement
     {
         public List<ChipDigger> Diggers { get; set; } = new List<ChipDigger>();
         public int TaterTokens { get; set; }
@@ -27,7 +27,7 @@ namespace PotatoChipMine.Core.Models
                     Name = "chips"
                 }
             });
-            
+
             PotentialAchievements.AddRange(AchievementsBuilder.GetPotentialAchievements());
         }
 

@@ -53,7 +53,7 @@ namespace PotatoChipMine.Core.GameRooms.Store.Services
                     Min = 12,
                     Max = 40,
                     RequiredSlotLevel = 1,
-                    Level = 2,                    
+                    Level = 2,
                 }
             });
 

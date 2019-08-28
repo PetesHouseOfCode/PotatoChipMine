@@ -1,12 +1,11 @@
 using PotatoChipMine.Core.GameEngine;
 using PotatoChipMine.Core.Models;
-using PotatoChipMine.Core.Services;
+using PotatoChipMine.Core.Services.PersistenceService;
 using System;
-using System.IO;
 
 namespace PotatoChipMine.Core.Entities
 {
-    public class SaveGameEntity: GameEntity
+    public class SaveGameEntity : GameEntity
     {
         private readonly GamePersistenceService persistenceService;
 
@@ -30,13 +29,13 @@ namespace PotatoChipMine.Core.Entities
         {
             if (!IsNewSaveFile && sentOverwritePrompt)
             {
-                if(command.CommandText.ToLower() == "yes")
+                if (command.CommandText.ToLower() == "yes")
                 {
                     SaveGame();
                     return;
                 }
 
-                if(command.CommandText.ToLower() == "no")
+                if (command.CommandText.ToLower() == "no")
                 {
                     doNotOverwrite = true;
                     return;
@@ -73,7 +72,7 @@ namespace PotatoChipMine.Core.Entities
 
         public override void Update(Frame frame)
         {
-            if((IsNewSaveFile || doNotOverwrite) && !requestedFilename)
+            if ((IsNewSaveFile || doNotOverwrite) && !requestedFilename)
             {
                 requestedFilename = true;
 

@@ -1,7 +1,7 @@
-using System.Collections.Generic;
-using System.Linq;
 using PotatoChipMine.Core.GameAchievements;
 using PotatoChipMine.Core.Models;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace PotatoChipMine.Core.Services
 {

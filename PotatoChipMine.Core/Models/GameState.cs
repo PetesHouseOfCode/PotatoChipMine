@@ -14,7 +14,7 @@ namespace PotatoChipMine.Core.Models
         public GameMode Mode { get; set; }
         public List<GameEvent> NewEvents { get; set; } = new List<GameEvent>();
         public bool Running { get; set; }
-        public GameRoom CurrentRoom {get; set;}
+        public GameRoom CurrentRoom { get; set; }
         public MinerStore Store { get; set; }
         public DiggerControlRoom ControlRoom { get; set; }
         public string SaveDirectory { get; set; }

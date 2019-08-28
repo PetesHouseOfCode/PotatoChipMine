@@ -1,3 +1,4 @@
+using PotatoChipMine.Core.Models.DiggerUpgrades;
 using PotatoChipMine.Core.Services.PersistenceService;
 using System;
 using System.Collections.Generic;
@@ -30,10 +31,10 @@ namespace PotatoChipMine.Core.Models
             DiggerBit = ChipDiggerBit.From(state.DiggerBit);
             Durability = DiggerDurability.From(state.Durability);
             MineSite = new MineSite
-                {
-                    ChipDensity = state.MineSite.ChipDensity,
-                    Hardness = state.MineSite.Hardness
-                };
+            {
+                ChipDensity = state.MineSite.ChipDensity,
+                Hardness = state.MineSite.Hardness
+            };
             Upgrades = state.Upgrades;
             LifetimeStats = state.LifeTimeStats ?? new List<Stat>();
             Hopper = ChipsHopper.FromState(state.Hopper);
@@ -42,7 +43,7 @@ namespace PotatoChipMine.Core.Models
         public DigResult Dig(TimeSpan gameTime)
         {
             lastDig = gameTime;
-            
+
             var faultMessages = GetFaultMessages();
             if (faultMessages.Any())
             {
@@ -52,10 +53,10 @@ namespace PotatoChipMine.Core.Models
 
             digFailed = false;
             UpdateLifetimeStat(DiggerStats.LifetimeDigs, 1);
-            
+
             var durabilityHit = RollDurabilityHit();
             Durability.Damage(durabilityHit);
-            
+
             var chips = RollChips();
             Hopper.AddChips(chips);
             UpdateLifetimeStat(DiggerStats.LifetimeChips, chips);
@@ -64,7 +65,7 @@ namespace PotatoChipMine.Core.Models
         }
 
         private int RollChips()
-        {            
+        {
             switch (MineSite.ChipDensity)
             {
                 case ChipDensity.Scarce:
@@ -77,7 +78,7 @@ namespace PotatoChipMine.Core.Models
                     return 0;
             }
         }
-        
+
         private int RollDurabilityHit()
         {
             switch (MineSite.Hardness)
@@ -117,10 +118,10 @@ namespace PotatoChipMine.Core.Models
 
             return message;
         }
-        
+
         public void Repair()
         {
-            if(Durability.NeedsService() && digFailed)
+            if (Durability.NeedsService() && digFailed)
                 lastDig = TimeSpan.Zero;
 
             Durability.Service();
@@ -137,7 +138,7 @@ namespace PotatoChipMine.Core.Models
 
         public int Empty()
         {
-            if(Hopper.IsFull && digFailed)
+            if (Hopper.IsFull && digFailed)
                 lastDig = TimeSpan.Zero;
 
             return Hopper.Empty();

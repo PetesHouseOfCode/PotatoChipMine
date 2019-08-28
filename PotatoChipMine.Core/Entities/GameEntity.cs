@@ -2,7 +2,7 @@ using PotatoChipMine.Core.GameEngine;
 using PotatoChipMine.Core.Models;
 using System;
 
-namespace PotatoChipMine.Core.Services
+namespace PotatoChipMine.Core.Entities
 {
     public abstract class GameEntity : IGameEntity
     {

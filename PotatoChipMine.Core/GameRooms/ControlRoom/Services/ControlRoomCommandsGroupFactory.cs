@@ -1,14 +1,11 @@
 using PotatoChipMine.Core.Commands;
-using PotatoChipMine.Core.GameEngine;
 using PotatoChipMine.Core.Models;
 using System;
 using System.Collections.Generic;
-using System.Globalization;
 using System.Linq;
-using System.Xml.Serialization;
 
 namespace PotatoChipMine.Core.GameRooms.ControlRoom.Services
-{    
+{
     public class ControlRoomCommandsGroupFactory
     {
         public CommandsGroup Build()
@@ -115,7 +112,7 @@ namespace PotatoChipMine.Core.GameRooms.ControlRoom.Services
                                     inspectType = InspectCommandTypes.LifeTime;
                                 }
                             }
-                            
+
                             return new InspectCommand
                             {
                                 GameState = gameState,

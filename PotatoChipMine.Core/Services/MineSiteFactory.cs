@@ -11,8 +11,8 @@ namespace PotatoChipMine.Core.Services
         {
             return new MineSite
             {
-                ChipDensity = (ChipDensity) _random.Next(1, 4),
-                Hardness = (SiteHardness) _random.Next(1,5)
+                ChipDensity = (ChipDensity)_random.Next(1, 4),
+                Hardness = (SiteHardness)_random.Next(1, 5)
             };
         }
     }
