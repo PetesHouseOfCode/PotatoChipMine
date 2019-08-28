@@ -37,5 +37,10 @@ namespace PotatoChipMine.Core.Models
             commandsGroup.LocalCommands.AddRange(joinedCommandsGroup.LocalCommands);
             return commandsGroup;
         }
+        
+        public static CommandsGroup Empty()
+        {
+            return new CommandsGroup();
+        }
     }
 }
