@@ -11,7 +11,6 @@ namespace PotatoChipMine.Core.Models
         public List<ChipDigger> Diggers { get; set; } = new List<ChipDigger>();
         public int TaterTokens { get; set; }
         public List<PlayerAchievement> AttainedAchievements { get; set; } = new List<PlayerAchievement>();
-        public List<PlayerAchievement> PotentialAchievements { get; set; } = new List<PlayerAchievement>();
         public List<InventoryItem> InventoryItems { get; set; } = new List<InventoryItem>();
 
         private Miner(string name, int taterTokens)
@@ -27,8 +26,6 @@ namespace PotatoChipMine.Core.Models
                     Name = "chips"
                 }
             });
-
-            PotentialAchievements.AddRange(AchievementsBuilder.GetPotentialAchievements());
         }
 
         private Miner(MinerState state)
@@ -36,7 +33,6 @@ namespace PotatoChipMine.Core.Models
             Name = state.Name;
             TaterTokens = state.TaterTokens;
             InventoryItems = state.InventoryItems;
-            PotentialAchievements = state.PotentialAchievements;
             AttainedAchievements = state.AttainedAchievements;
             LifetimeStats = state.LifeTimeStats;
             Diggers.AddRange(state.Diggers.Select(x => ChipDigger.FromState(x)));
@@ -60,7 +56,6 @@ namespace PotatoChipMine.Core.Models
                 Diggers = Diggers.Select(x => x.GetState()).ToList(),
                 TaterTokens = TaterTokens,
                 AttainedAchievements = AttainedAchievements,
-                PotentialAchievements = PotentialAchievements,
                 InventoryItems = InventoryItems,
                 LifeTimeStats = LifetimeStats
             };

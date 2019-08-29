@@ -21,7 +21,7 @@ namespace PotatoChipMine.Core.Models
         public ChipsHopper Hopper { get; private set; }
         //public List<UpgradeSlot> UpgradeSlots { get; set; } = new List<UpgradeSlot>();
         public MineSite MineSite { get; private set; }
-        public List<DiggerUpgrade> Upgrades { get; private set; }
+        public List<DiggerUpgrade> AvailableUpgrades { get; private set; }
 
         private ChipDigger(ChipDiggerState state)
         {
@@ -35,7 +35,7 @@ namespace PotatoChipMine.Core.Models
                 ChipDensity = state.MineSite.ChipDensity,
                 Hardness = state.MineSite.Hardness
             };
-            Upgrades = state.Upgrades;
+            AvailableUpgrades = state.Upgrades;
             LifetimeStats = state.LifeTimeStats ?? new List<Stat>();
             Hopper = ChipsHopper.FromState(state.Hopper);
         }
@@ -180,6 +180,13 @@ namespace PotatoChipMine.Core.Models
                             Description = "The hopper can be upgraded to level 2 (210 chips)",
                             MaxLevel = 2,
                             Slot = DiggerUpgradeSlot.Hopper
+                        },
+                        new DiggerUpgrade()
+                        {
+                            Name = "Bit upgrade",
+                            Description = "The bit can be upgraded to level 2",
+                            MaxLevel = 2, 
+                            Slot = DiggerUpgradeSlot.Bit
                         }
                     }
                 });
@@ -194,7 +201,7 @@ namespace PotatoChipMine.Core.Models
                 FirstEquipped = FirstEquipped,
                 DiggerBit = DiggerBit.GetState(),
                 Durability = Durability.GetState(),
-                Upgrades = Upgrades,
+                Upgrades = AvailableUpgrades,
                 Hopper = Hopper.GetState(),
                 MineSite = new MineSiteState
                 {

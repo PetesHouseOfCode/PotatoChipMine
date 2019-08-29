@@ -18,21 +18,49 @@ namespace PotatoChipMine.Core.GameAchievements
                 Name = "ChipsTo500",
                 Description = "YOU REACHED 500 CHIPS!!!",
                 LifetimeStatName = Stats.LifetimeChips,
-                MinCount = 500,
+                MinCount = 50,
                 Rewards = new List<IAchievementReward>
                 {
                     new NewStoreItemReward(
-                            count: 10,
-                            price: 1200,
-                            item: new ChipsHopperUpgradeItem
-                            {
-                                ItemId = 0,
-                                Name = "Large_Hopper",
-                                Description = "Allows digger to hold 100 chips before requiring emptying.",
-                                RequiredSlotLevel = 0,
-                                Level = 1,
-                                Size = 100
-                            })
+                        count: 10,
+                        price: 120,
+                        item: new ChipsHopperUpgradeItem
+                        {
+                            ItemId = 0,
+                            Name = "Large_Hopper",
+                            Description = "Allows digger to hold 100 chips before requiring emptying.",
+                            RequiredSlotLevel = 0,
+                            Level = 1,
+                            Size = 100
+                        })
+                }
+            };
+        }
+
+        public static LifetimeStatAchievementSetting LifetimeChipsTo1000()
+        {
+            return new LifetimeStatAchievementSetting
+            {
+                Id = 3,
+                Name = "ChipsTo1000",
+                Description = "YOU REACHED 1000 CHIPS!!!!",
+                LifetimeStatName = Stats.LifetimeChips,
+                MinCount = 100,
+                Rewards = new List<IAchievementReward>
+                {
+                    new NewStoreItemReward
+                    (
+                        count: 10,
+                        price: 120,
+                        item: new BitUpgradeItem
+                        {
+                            Name = "Standard_Bit",
+                            Min = 12,
+                            Max = 40,
+                            RequiredSlotLevel = 0,
+                            Level = 1,
+                        }
+                    )
                 }
             };
         }

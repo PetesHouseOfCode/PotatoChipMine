@@ -28,7 +28,8 @@ namespace PotatoChipMine.Core.GameAchievements
             if (!AchievementReached())
                 return;
 
-            Game.WriteLine($"--Achievement: {Description} has been attained.", PcmColor.Black, PcmColor.Magenta, GameConsoles.Events);
+            Game.WriteLine($"--Achievement: {Description} has been attained.", PcmColor.Black, PcmColor.Magenta,
+                GameConsoles.Events);
             RegisterAchievement();
             foreach (var reward in Setting.Rewards)
             {
@@ -39,11 +40,14 @@ namespace PotatoChipMine.Core.GameAchievements
 
         private void RegisterAchievement()
         {
-            var achievement = GameState.Miner.PotentialAchievements.First(x => x.Name == Name);
-            achievement.Achieved = DateTime.Now;
+            var achievement = Game.Achievements.First(x => x.Name == Name);
 
-            GameState.Miner.AttainedAchievements.Add(achievement);
-            GameState.Miner.PotentialAchievements.Remove(achievement);
+            GameState.Miner.AttainedAchievements.Add(new PlayerAchievement
+            {
+                Name = achievement.Name,
+                Description = achievement.Description,
+                Achieved = DateTime.Now
+            });
         }
     }
 }

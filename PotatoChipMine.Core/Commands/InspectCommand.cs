@@ -95,7 +95,7 @@ namespace PotatoChipMine.Core.Commands
             Game.WriteLine("Available Upgrades", PcmColor.Black, PcmColor.Yellow);
             var upgradesTable = new TableOutput(80, PcmColor.Yellow);
             upgradesTable.AddHeaders("Name", "Max Level", "Current Level", "Slot");
-            foreach (var diggerUpgrade in digger.Upgrades)
+            foreach (var diggerUpgrade in digger.AvailableUpgrades)
             {
                 upgradesTable.AddRow(diggerUpgrade.Name,
                     diggerUpgrade.MaxLevel.ToString(),

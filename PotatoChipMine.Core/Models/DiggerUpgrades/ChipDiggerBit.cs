@@ -19,14 +19,16 @@ namespace PotatoChipMine.Core.Models.DiggerUpgrades
     public class ChipDiggerBit
     {
         private static Random random = new Random();
+        
+        public string Name { get; }
+        public int Level { get; }
+        public Range<int> Range { get; }
 
-        public string Name { get; private set; }
-        public Range<int> Range { get; private set; }
-
-        public ChipDiggerBit(string name, Range<int> range)
+        public ChipDiggerBit(string name, Range<int> range, int level)
         {
             Name = name;
             Range = range;
+            Level = level;
         }
 
         public int Dig(decimal density)
@@ -39,6 +41,7 @@ namespace PotatoChipMine.Core.Models.DiggerUpgrades
             return new ChipDiggerBitState
             {
                 Name = Name,
+                Level = Level,
                 Min = Range.Min,
                 Max = Range.Max
             };
@@ -46,7 +49,7 @@ namespace PotatoChipMine.Core.Models.DiggerUpgrades
 
         public static ChipDiggerBit From(ChipDiggerBitState diggerBit)
         {
-            return new ChipDiggerBit(diggerBit.Name, new Range<int>(diggerBit.Min, diggerBit.Max));
+            return new ChipDiggerBit(diggerBit.Name, new Range<int>(diggerBit.Min, diggerBit.Max), diggerBit.Level);
         }
     }
 }
