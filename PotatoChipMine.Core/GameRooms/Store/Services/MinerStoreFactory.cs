@@ -43,20 +43,6 @@ namespace PotatoChipMine.Core.GameRooms.Store.Services
                     Name = "bolts"
                 }
             });
-            storeState.ItemsForSale.Add(new StoreItem
-            {
-                Price = 10,
-                Count = 2,
-                Item = new BitUpgradeItem
-                {
-                    Name = "Standard-Bit",
-                    Min = 12,
-                    Max = 40,
-                    RequiredSlotLevel = 1,
-                    Level = 2,
-                }
-            });
-
 
             storeState.ItemsBuying.Add(new StoreItem
             {
