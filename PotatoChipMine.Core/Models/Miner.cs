@@ -32,7 +32,12 @@ namespace PotatoChipMine.Core.Models
         {
             Name = state.Name;
             TaterTokens = state.TaterTokens;
-            InventoryItems = state.InventoryItems;
+            InventoryItems = state.InventoryItems.Select(x =>
+                new InventoryItem
+                {
+                    Count = x.Count,
+                    Item = GameItemBuilder.Build(x.GameItemState)
+                }).ToList();
             AttainedAchievements = state.AttainedAchievements;
             LifetimeStats = state.LifeTimeStats;
             Diggers.AddRange(state.Diggers.Select(x => ChipDigger.FromState(x)));
@@ -56,7 +61,12 @@ namespace PotatoChipMine.Core.Models
                 Diggers = Diggers.Select(x => x.GetState()).ToList(),
                 TaterTokens = TaterTokens,
                 AttainedAchievements = AttainedAchievements,
-                InventoryItems = InventoryItems,
+                InventoryItems = InventoryItems.Select(x =>
+                    new InventoryItemState
+                    {
+                        Count = x.Count,
+                        GameItemState = x.Item.GetState()
+                    }).ToList(),
                 LifeTimeStats = LifetimeStats
             };
         }

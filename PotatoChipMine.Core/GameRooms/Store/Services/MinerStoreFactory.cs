@@ -22,7 +22,7 @@ namespace PotatoChipMine.Core.GameRooms.Store.Services
                 "Welcome to the miners store.", "You can type [help] for a list of the store commands.",
                 "To leave the store type exit."
             };
-            var storeState = new StoreState();
+            var storeState = new StoreInventory();
             storeState.ItemsForSale.Add(new StoreItem
             {
                 Price = 20,
