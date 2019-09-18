@@ -7,7 +7,7 @@ namespace PotatoChipMine.Core.Commands
 {
     public class StockCommand : ICommand
     {
-        public StoreState State { get; set; }
+        public StoreInventory State { get; set; }
     }
 
     public class StockCommandHandler : ICommandHandler<StockCommand>

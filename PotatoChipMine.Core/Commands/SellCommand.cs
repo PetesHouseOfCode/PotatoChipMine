@@ -8,7 +8,7 @@ namespace PotatoChipMine.Core.Commands
 {
     public class SellCommand : CommandWithGameState
     {
-        public StoreState StoreState { get; set; }
+        public StoreInventory StoreState { get; set; }
         public int? Quantity { get; set; }
         public string ItemName { get; set; }
     }
@@ -16,7 +16,7 @@ namespace PotatoChipMine.Core.Commands
     public class SellCommandHandler : ICommandHandler<SellCommand>
     {
         GameState gameState;
-        StoreState storeState;
+        StoreInventory storeState;
 
         public void Handle(SellCommand command)
         {

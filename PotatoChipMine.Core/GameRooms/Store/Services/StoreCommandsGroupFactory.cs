@@ -9,10 +9,10 @@ namespace PotatoChipMine.Core.GameRooms.Store.Services
 {
     public class StoreCommandsGroupFactory
     {
-        private readonly StoreState _storeState;
+        private readonly StoreInventory _storeState;
         private readonly GameState _gameState;
 
-        public StoreCommandsGroupFactory(GameState gameState, StoreState storeState)
+        public StoreCommandsGroupFactory(GameState gameState, StoreInventory storeState)
         {
             _gameState = gameState;
             _storeState = storeState;

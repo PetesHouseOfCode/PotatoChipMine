@@ -10,7 +10,7 @@ namespace PotatoChipMine.Core.Services.PersistenceService
         public List<ChipDiggerState> Diggers { get; set; }
         public int TaterTokens { get; set; }
         public List<PlayerAchievement> AttainedAchievements { get; set; }
-        public List<InventoryItem> InventoryItems { get; set; }
+        public List<InventoryItemState> InventoryItems { get; set; }
         public List<Stat> LifeTimeStats { get; set; }
     }
 }

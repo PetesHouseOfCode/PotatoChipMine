@@ -1,4 +1,5 @@
 using Newtonsoft.Json;
+using PotatoChipMine.Core.GameRooms.Store.Models;
 using PotatoChipMine.Core.Models;
 using System;
 using System.Collections.Generic;
@@ -14,10 +15,11 @@ namespace PotatoChipMine.Core.Services.PersistenceService
             return new GameSave
             {
                 Miner = gameState.Miner.GetState(),
-                MinerStore = gameState.Store.StoreState,
+                MinerStore = gameState.Store.StoreState.GetState(),
                 Mode = gameState.Mode
             };
         }
+
         public void SaveGame(GameState gameState)
         {
             var path = gameState.SaveDirectory;
@@ -48,7 +50,7 @@ namespace PotatoChipMine.Core.Services.PersistenceService
                 var str = File.ReadAllText(Path.Combine(path, $"{gameName}.json"));
                 var loadedGame = JsonConvert.DeserializeObject<GameSave>(str);
                 gameState.Miner = Miner.FromState(loadedGame.Miner);
-                gameState.Store.StoreState = loadedGame.MinerStore;
+                gameState.Store.StoreState = StoreInventory.From(loadedGame.MinerStore);
                 gameState.Mode = loadedGame.Mode;
                 gameState.SaveDirectory = path;
                 gameState.SaveName = gameName;
