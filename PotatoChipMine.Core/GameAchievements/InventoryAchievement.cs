@@ -17,7 +17,7 @@ namespace PotatoChipMine.Core.GameAchievements
             if (inventoryItem == null)
                 return false;
 
-            if (inventoryItem.Count >= setting.MinAmount && inventoryItem.Count <= setting.MaxAmount)
+            if (inventoryItem.Count >= setting.MinAmount)
                 return true;
 
             return false;
