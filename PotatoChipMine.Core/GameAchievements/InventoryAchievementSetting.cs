@@ -7,7 +7,6 @@ namespace PotatoChipMine.Core.GameAchievements
     {
         public string InventoryItemName { get; set; }
         public int MinAmount { get; set; }
-        public int MaxAmount { get; set; }
 
         public static InventoryAchievementSetting DiggerAchievement()
         {
@@ -17,8 +16,7 @@ namespace PotatoChipMine.Core.GameAchievements
                 Name = "DiggerAchievement",
                 Description = "[Can You Dig It?] --first digger purchase--",
                 InventoryItemName = "Digger",
-                MinAmount = 1,
-                MaxAmount = int.MaxValue
+                MinAmount = 1
             };
         }
     }

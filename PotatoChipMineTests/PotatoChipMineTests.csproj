@@ -8,6 +8,17 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="RepositoryTests\Resources\achievements.csv" />
+    <None Remove="RepositoryTests\Resources\game-item.csv" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="RepositoryTests\Resources\game-item.csv">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Shouldly" Version="3.0.2" />
     <PackageReference Include="xunit" Version="2.4.1" />
     <PackageReference Include="xunit.runner.visualstudio" Version="2.4.1">
@@ -18,6 +29,13 @@
 
   <ItemGroup>
     <ProjectReference Include="..\PotatoChipMine.Core\PotatoChipMine.Core.csproj" />
+    <ProjectReference Include="..\PotatoChipMine.Resources\PotatoChipMine.Resources.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="RepositoryTests\Resources\achievements.csv">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
 
 </Project>
