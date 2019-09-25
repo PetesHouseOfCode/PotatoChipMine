@@ -9,6 +9,7 @@ namespace PotatoChipMine.Core.GameAchievements
     {
         protected readonly GameState GameState;
 
+        public int Id { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
         public AchievementSetting Setting { get; set; }
@@ -21,6 +22,16 @@ namespace PotatoChipMine.Core.GameAchievements
         protected virtual bool AchievementReached()
         {
             return GameState.Miner.AttainedAchievements.Any(x => x.Name == Name);
+        }
+
+        public virtual AchievementSetting GetSetting()
+        {
+            return new AchievementSetting
+            {
+                Id = Id,
+                Name = Name,
+                Description = Description
+            };
         }
 
         public void CheckAchievement()
@@ -40,12 +51,10 @@ namespace PotatoChipMine.Core.GameAchievements
 
         private void RegisterAchievement()
         {
-            var achievement = Game.Achievements.First(x => x.Name == Name);
-
             GameState.Miner.AttainedAchievements.Add(new PlayerAchievement
             {
-                Name = achievement.Name,
-                Description = achievement.Description,
+                Name = Name,
+                Description = Description,
                 Achieved = DateTime.Now
             });
         }

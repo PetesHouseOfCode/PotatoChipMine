@@ -8,7 +8,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Remove="RepositoryTests\Resources\achievements.csv" />
+    <None Remove="RepositoryTests\Resources\basic-achievements.csv" />
     <None Remove="RepositoryTests\Resources\game-item.csv" />
   </ItemGroup>
 
@@ -33,7 +33,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Content Include="RepositoryTests\Resources\achievements.csv">
+    <Content Include="RepositoryTests\Resources\basic-achievements.csv">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
