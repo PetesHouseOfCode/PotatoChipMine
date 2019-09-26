@@ -36,7 +36,7 @@ namespace PotatoChipMineTests.RepositoryTests
         public void Load_inventory_achievement_data_when_that_type()
         {
             var achievements = achievementRepo.GetAll();
-            var achievement = achievements.First(x=>x.Id == INVENTORY_ACHIEVEMENT_ID);
+            var achievement = achievements.First(x => x.Id == INVENTORY_ACHIEVEMENT_ID);
 
             achievement.ShouldBeOfType<InventoryAchievement>();
             var achievementSetting = (InventoryAchievementSetting)achievement.GetSetting();
