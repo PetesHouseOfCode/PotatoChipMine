@@ -1,6 +1,7 @@
 using PotatoChipMine.Core.GameEngine;
 using PotatoChipMine.Core.Models;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace PotatoChipMine.Core.GameAchievements
@@ -12,7 +13,7 @@ namespace PotatoChipMine.Core.GameAchievements
         public int Id { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
-        public AchievementSetting Setting { get; set; }
+        public List<IAchievementReward> Rewards { get; set; } = new List<IAchievementReward>();
 
         public GameAchievement(GameState gameState)
         {
@@ -42,11 +43,10 @@ namespace PotatoChipMine.Core.GameAchievements
             Game.WriteLine($"--Achievement: {Description} has been attained.", PcmColor.Black, PcmColor.Magenta,
                 GameConsoles.Events);
             RegisterAchievement();
-            foreach (var reward in Setting.Rewards)
+            foreach (var reward in Rewards)
             {
                 reward.ApplyReward(GameState);
             }
-
         }
 
         private void RegisterAchievement()
