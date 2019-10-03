@@ -10,7 +10,7 @@ namespace PotatoChipMine.Core.GameEngine
     public static class Game
     {
         private static IPotatoChipGame potatoChipGame;
-
+        
         public static List<GameAchievement> Achievements { get; set; }
 
         public static void SetMainProcess(IPotatoChipGame mainProcess)
