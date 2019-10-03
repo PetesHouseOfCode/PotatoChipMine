@@ -74,7 +74,7 @@ namespace PotatoChipMineTests
         }
 
         [Fact]
-        public void ChipDigger_HavingSiteChipDensityIsNormal_ChipsYieldIsBetween3and7()
+        public void ChipDigger_HavingSiteChipDensityIsNormal_ChipsYieldIsBetween3and9()
         {
             var mineSite = new MineSiteState { ChipDensity = ChipDensity.Normal };
             diggerState.MineSite = mineSite;
@@ -82,7 +82,7 @@ namespace PotatoChipMineTests
             var chipDigger = ChipDigger.FromState(diggerState);
             var scoop = chipDigger.Dig(TimeSpan.FromSeconds(20));
             scoop.ChipsDug.ShouldBeGreaterThanOrEqualTo(3);
-            scoop.ChipsDug.ShouldBeLessThanOrEqualTo(7);
+            scoop.ChipsDug.ShouldBeLessThanOrEqualTo(9);
         }
 
         [Fact]
