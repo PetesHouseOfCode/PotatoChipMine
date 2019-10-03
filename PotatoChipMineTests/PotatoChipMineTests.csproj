@@ -38,4 +38,13 @@
     </Content>
   </ItemGroup>
 
+  <ItemGroup>
+    <None Update="RepositoryTests\Resources\basic-rewards-bad-type.csv">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="RepositoryTests\Resources\basic-rewards.csv">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
 </Project>

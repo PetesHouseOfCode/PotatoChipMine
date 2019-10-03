@@ -22,6 +22,7 @@ namespace PotatoChipMine.Core.GameAchievements
                 Rewards = new List<IAchievementReward>
                 {
                     new NewStoreItemReward(
+                        id: 1,
                         count: 10,
                         price: 120,
                         item: new ChipsHopperUpgradeItem
@@ -50,6 +51,7 @@ namespace PotatoChipMine.Core.GameAchievements
                 {
                     new NewStoreItemReward
                     (
+                        id: 2,
                         count: 10,
                         price: 120,
                         item: new BitUpgradeItem

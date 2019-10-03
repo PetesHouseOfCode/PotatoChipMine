@@ -1,4 +1,5 @@
 using PotatoChipMine.Core.GameAchievements;
+using PotatoChipMine.Core.GameRooms.Store.Models;
 using PotatoChipMine.Core.Models;
 using System;
 using System.Collections.Generic;
@@ -9,7 +10,7 @@ namespace PotatoChipMine.Core.GameEngine
     public static class Game
     {
         private static IPotatoChipGame potatoChipGame;
-
+        
         public static List<GameAchievement> Achievements { get; set; }
 
         public static void SetMainProcess(IPotatoChipGame mainProcess)
@@ -108,6 +109,24 @@ namespace PotatoChipMine.Core.GameEngine
         public static void ClearConsole(GameConsoles targetConsole = GameConsoles.Output)
         {
             potatoChipGame.ClearConsole(targetConsole);
+        }
+
+        public static void ApplyReward(IAchievementReward reward)
+        {
+            if(reward is NewStoreItemReward)
+            {
+                var newStoreItemReward = reward as NewStoreItemReward;
+                var gameItem = newStoreItemReward.Item;
+                potatoChipGame.GameState.Store.StoreState.ItemsForSale.Add(
+                    new StoreItem
+                    {
+                        Price = newStoreItemReward.Price,
+                        Count = newStoreItemReward.Count,
+                        Item = newStoreItemReward.Item
+                    });
+                Game.WriteLine($"*** A new item is for sale at the store [{gameItem.Name}]", PcmColor.Green, null, GameConsoles.Events);
+                Game.WriteLine(gameItem.Description, PcmColor.Green, null, GameConsoles.Events);
+            }
         }
 
         private static void PrintLine(int width, PcmColor color, PcmColor backgroundColor, GameConsoles targetConsole = GameConsoles.Output)

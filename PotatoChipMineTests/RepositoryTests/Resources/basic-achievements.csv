@@ -1,3 +1,3 @@
-Id,AchievementType,Name,Description,InventoryItemName,Threshold,LifetimeStatName
-1,InventoryAchievement,Achievement1Name,Achievement1Description,Achievement1ItemName,1,
-2,LifetimeStatAchievement,Achievement2Name,Achievement2Description,,1,Achievement2StatName
+Id,AchievementType,Name,Description,InventoryItemName,Threshold,LifetimeStatName,RewardId1,RewardId2,RewardId3
+1,InventoryAchievement,Achievement1Name,Achievement1Description,Achievement1ItemName,1,,,,
+2,LifetimeStatAchievement,Achievement2Name,Achievement2Description,,1,Achievement2StatName,,,

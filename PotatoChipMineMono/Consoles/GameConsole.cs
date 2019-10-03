@@ -1,6 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Diagnostics;
 using Microsoft.Xna.Framework;
 using PotatoChipMine.Core;
 using PotatoChipMine.Core.Entities;
@@ -12,6 +9,8 @@ using PotatoChipMine.Core.Models;
 using PotatoChipMine.Core.Services;
 using SadConsole;
 using SadConsole.Input;
+using System;
+using System.Collections.Generic;
 using EventLog = PotatoChipMine.Core.EventLog;
 using MineGame = PotatoChipMine.Core.GameEngine.Game;
 
@@ -37,8 +36,8 @@ namespace PotatoChipMineMono.Consoles
                 Running = true
             };
             commandsGroup = new TopCommandGroupFactory().Build();
-            gameState.Lobby = new LobbyRoom(gameState, new[] {"Welcome to the Lobby"}, GameMode.Lobby, commandsGroup);
-            gameState.Store = gameState.Store?? new MinerStoreFactory(gameState, commandsGroup).BuildMineStore();
+            gameState.Lobby = new LobbyRoom(gameState, new[] { "Welcome to the Lobby" }, GameMode.Lobby, commandsGroup);
+            gameState.Store = gameState.Store ?? new MinerStoreFactory(gameState, commandsGroup).BuildMineStore();
             gameState.ControlRoom = new ControlRoomFactory(gameState, commandsGroup).BuildControlRoom();
             gameState.SaveDirectory = @"c:\chipMiner\saves";
             gameState.GameTime.Start();
@@ -47,10 +46,10 @@ namespace PotatoChipMineMono.Consoles
             IsFocused = true;
 
             StartGame();
-            hud = new HudConsole(gameState) {Position = new Point(0, 0)};
-            input = new InputConsole(this, gameState) {Position = new Point(1, 34)};
-            output = new OutputConsole(this, 83) {Position = new Point(1, 1)};
-            events = new GameEventsConsole(this, 83) {Position = new Point(85, 1)};
+            hud = new HudConsole(gameState) { Position = new Point(0, 0) };
+            input = new InputConsole(this, gameState) { Position = new Point(1, 34) };
+            output = new OutputConsole(this, 83) { Position = new Point(1, 1) };
+            events = new GameEventsConsole(this, 83) { Position = new Point(85, 1) };
             Children.Add(hud);
             Children.Add(input);
             Children.Add(output);
@@ -62,6 +61,7 @@ namespace PotatoChipMineMono.Consoles
         public Scene CurrentScene { get; set; }
         public ConsoleBuffer Output { get; set; } = new ConsoleBuffer();
         public ConsoleBuffer Events { get; set; } = new ConsoleBuffer();
+        public GameState GameState { get { return gameState; } }
 
         public void ClearConsole(GameConsoles targetConsole = GameConsoles.Output)
         {
