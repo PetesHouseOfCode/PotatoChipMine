@@ -45,7 +45,7 @@ namespace PotatoChipMine.Core.GameAchievements
             RegisterAchievement();
             foreach (var reward in Rewards)
             {
-                reward.ApplyReward(GameState);
+                Game.ApplyReward(reward);
             }
         }
 

@@ -62,6 +62,7 @@ namespace PotatoChipMineMono.Consoles
         public Scene CurrentScene { get; set; }
         public ConsoleBuffer Output { get; set; } = new ConsoleBuffer();
         public ConsoleBuffer Events { get; set; } = new ConsoleBuffer();
+        public GameState GameState { get { return gameState; } }
 
         public void ClearConsole(GameConsoles targetConsole = GameConsoles.Output)
         {

@@ -9,26 +9,6 @@ using System.Linq;
 
 namespace PotatoChipMine.Resources
 {
-    public class GameItemRepository : IRepository<GameItem>
-    {
-        readonly string tablePath;
-
-        public GameItemRepository(string tablePath)
-        {
-            this.tablePath = tablePath;
-        }
-
-        public IReadOnlyList<GameItem> GetAll()
-        {
-            using (var reader = new StreamReader(tablePath))
-            using (var csv = new CsvReader(reader))
-            {
-                var records = csv.GetRecords<GameItem>();
-                return records.ToList();
-            }
-        }
-    }
-
     public class AchievementRepository : IRepository<GameAchievement>
     {
         readonly string tablePath;
@@ -42,11 +22,8 @@ namespace PotatoChipMine.Resources
 
         public IReadOnlyList<GameAchievement> GetAll()
         {
-            using (var reader = new StreamReader(tablePath))
-            using (var csv = new CsvReader(reader))
-            {
-                var records = csv.GetRecords<AchievementRecord>();
-                var achievements = records.Select(x =>
+            var achievements = GetRecords()
+                .Select(x =>
                 {
                     switch (x.AchievementType)
                     {
@@ -59,8 +36,15 @@ namespace PotatoChipMine.Resources
                     return null;
                 });
 
+            return achievements.ToList();
+        }
 
-                return achievements.ToList();
+        private IReadOnlyList<AchievementRecord> GetRecords()
+        {
+            using (var reader = new StreamReader(tablePath))
+            using (var csv = new CsvReader(reader))
+            {
+                return csv.GetRecords<AchievementRecord>().ToList();
             }
         }
 
@@ -68,13 +52,13 @@ namespace PotatoChipMine.Resources
         {
             return new InventoryAchievement(
                 new InventoryAchievementSetting
-                    {
-                        Id = x.Id,
-                        Name = x.Name,
-                        Description = x.Description,
-                        InventoryItemName = x.InventoryItemName,
-                        MinAmount = x.Threshold
-                    },
+                {
+                    Id = x.Id,
+                    Name = x.Name,
+                    Description = x.Description,
+                    InventoryItemName = x.InventoryItemName,
+                    MinAmount = x.Threshold
+                },
                     gameState
                 );
         }
@@ -83,13 +67,13 @@ namespace PotatoChipMine.Resources
         {
             return new LifetimeStatAchievement(
                 new LifetimeStatAchievementSetting
-                    {
-                        Id = x.Id,
-                        Name = x.Name,
-                        Description = x.Description,
-                        LifetimeStatName = x.LifetimeStatName,
-                        MinCount= x.Threshold
-                    },
+                {
+                    Id = x.Id,
+                    Name = x.Name,
+                    Description = x.Description,
+                    LifetimeStatName = x.LifetimeStatName,
+                    MinCount = x.Threshold
+                },
                     gameState
                 );
         }

@@ -13,6 +13,7 @@ namespace PotatoChipMineTests.Mocks
         public ConsoleBuffer Output { get; set; } = new ConsoleBuffer();
         public ConsoleBuffer Events { get; set; } = new ConsoleBuffer();
         public Stack<Scene> SceneStack { get; } = new Stack<Scene>();
+        public GameState GameState { get; } = new GameState();
 
         public void ClearConsole(GameConsoles targetConsole = GameConsoles.Output)
         {

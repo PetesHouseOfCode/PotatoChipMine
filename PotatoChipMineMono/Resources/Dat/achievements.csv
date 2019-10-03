@@ -1,0 +1,4 @@
+Id,AchievementType,Name,Description,InventoryItemName,Threshold,LifetimeStatName,RewardId1,RewardId2,RewardId3
+1,InventoryAchievement,DiggerAchievement,[Can You Dig It?] --first digger purchase--,Digger,1,,,,
+2,LifetimeStatAchievement,ChipsTo500,YOU REACHED 500 CHIPS!!!,,50,LifetimeChips,,,
+3,LifetimeStatAchievement,ChipsTo1000,YOU REACHED 1000 CHIPS!!!!,,100,LifetimeChips,,,

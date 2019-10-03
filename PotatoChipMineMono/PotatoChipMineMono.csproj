@@ -80,6 +80,10 @@
     <Content Include="Resources\Dat\game-item.csv">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <None Include="Resources\Dat\achievements.csv" />
+    <None Include="Resources\Dat\rewards.csv">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\PotatoChipMine.Core\PotatoChipMine.Core.csproj">

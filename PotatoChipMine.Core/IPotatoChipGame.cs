@@ -13,6 +13,7 @@ namespace PotatoChipMine.Core
         ConsoleBuffer Output { get; set; }
         ConsoleBuffer Events { get; set; }
         Stack<Scene> SceneStack { get; }
+        GameState GameState { get; }
         void ClearConsole(GameConsoles targetConsole = GameConsoles.Output);
     }
 }
