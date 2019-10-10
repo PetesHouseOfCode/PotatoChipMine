@@ -9,6 +9,6 @@ namespace PotatoChipMine.Core.GameAchievements
         public int Id { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
-        public List<IAchievementReward> Rewards { get; set; } = new List<IAchievementReward>();
+        public List<int> RewardIds { get; set; } = new List<int>();
     }
 }

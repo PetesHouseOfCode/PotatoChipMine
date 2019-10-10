@@ -1,3 +1,4 @@
+using PotatoChipMine.Core.Data;
 using PotatoChipMine.Core.GameAchievements;
 using PotatoChipMine.Core.GameRooms.Store.Models;
 using PotatoChipMine.Core.Models;
@@ -12,6 +13,8 @@ namespace PotatoChipMine.Core.GameEngine
         private static IPotatoChipGame potatoChipGame;
         
         public static List<GameAchievement> Achievements { get; set; }
+
+        public static DataGateway Gateway { get { return potatoChipGame.Gateway; } }
 
         public static void SetMainProcess(IPotatoChipGame mainProcess)
         {
@@ -116,13 +119,13 @@ namespace PotatoChipMine.Core.GameEngine
             if(reward is NewStoreItemReward)
             {
                 var newStoreItemReward = reward as NewStoreItemReward;
-                var gameItem = newStoreItemReward.Item;
+                var gameItem = Game.Gateway.GameItems.GetAll().First(x => x.Id == reward.GameItemId);
                 potatoChipGame.GameState.Store.StoreState.ItemsForSale.Add(
                     new StoreItem
                     {
                         Price = newStoreItemReward.Price,
                         Count = newStoreItemReward.Count,
-                        Item = newStoreItemReward.Item
+                        Item = gameItem,
                     });
                 Game.WriteLine($"*** A new item is for sale at the store [{gameItem.Name}]", PcmColor.Green, null, GameConsoles.Events);
                 Game.WriteLine(gameItem.Description, PcmColor.Green, null, GameConsoles.Events);

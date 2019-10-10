@@ -5,7 +5,7 @@ namespace PotatoChipMine.Core.Models
 {
     public class GameItem
     {
-        public int ItemId { get; set; }
+        public int Id { get; set; }
         public string Name { get; set; }
         public string Description { get; set; } = string.Empty;
 
@@ -13,7 +13,7 @@ namespace PotatoChipMine.Core.Models
         {
             return new GameItemState
             {
-                ItemId = ItemId,
+                ItemId = Id,
                 Name = Name,
                 Description = Description,
                 Type = "Base"
@@ -23,7 +23,7 @@ namespace PotatoChipMine.Core.Models
         {
             return new GameItem
             {
-                ItemId = state.ItemId,
+                Id = state.ItemId,
                 Name = state.Name,
                 Description = state.Description
             };

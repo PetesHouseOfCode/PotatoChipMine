@@ -12,7 +12,7 @@ namespace PotatoChipMine.Core.GameAchievements
         {
             Id = setting.Id;
             Name = setting.Name;
-            Rewards = setting.Rewards;
+            RewardIds = setting.RewardIds;
             Description = setting.Description;
             MinCount = setting.MinCount;
             LifetimeStatName = setting.LifetimeStatName;
@@ -25,7 +25,7 @@ namespace PotatoChipMine.Core.GameAchievements
                 Id = Id,
                 Name = Name,
                 Description = Description,
-                Rewards = Rewards,
+                RewardIds = RewardIds,
                 MinCount = MinCount,
                 LifetimeStatName = LifetimeStatName
             };

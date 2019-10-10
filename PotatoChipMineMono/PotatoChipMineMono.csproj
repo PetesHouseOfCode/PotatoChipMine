@@ -43,6 +43,9 @@
     <Reference Include="CSharpFunctionalExtensions, Version=1.18.1.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\CSharpFunctionalExtensions.1.18.1\lib\net461\CSharpFunctionalExtensions.dll</HintPath>
     </Reference>
+    <Reference Include="CsvHelper, Version=12.0.0.0, Culture=neutral, PublicKeyToken=8c4959082be5c823, processorArchitecture=MSIL">
+      <HintPath>..\packages\CsvHelper.12.1.2\lib\net45\CsvHelper.dll</HintPath>
+    </Reference>
     <Reference Include="MonoGame.Framework, Version=3.7.1.189, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\MonoGame.Framework.DesktopGL.3.7.1.189\lib\net45\MonoGame.Framework.dll</HintPath>
     </Reference>
@@ -54,6 +57,9 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.ValueTuple, Version=4.0.2.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.ValueTuple.4.4.0\lib\net47\System.ValueTuple.dll</HintPath>
+    </Reference>
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -77,18 +83,24 @@
   <ItemGroup>
     <None Include="App.config" />
     <None Include="packages.config" />
-    <Content Include="Resources\Dat\game-item.csv">
+    <Content Include="Resources\Dat\gameItems.csv">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <None Include="Resources\Dat\achievements.csv" />
-    <None Include="Resources\Dat\rewards.csv">
+    <Content Include="Resources\Dat\achievements.csv">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
+    </Content>
+    <Content Include="Resources\Dat\rewards.csv">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\PotatoChipMine.Core\PotatoChipMine.Core.csproj">
       <Project>{8bffeb14-6025-4382-8578-6f49a36fe450}</Project>
       <Name>PotatoChipMine.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\PotatoChipMine.Resources\PotatoChipMine.Resources.csproj">
+      <Project>{2a301002-56fd-497d-b2ac-b97799d67681}</Project>
+      <Name>PotatoChipMine.Resources</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

@@ -22,7 +22,7 @@ namespace PotatoChipMine.Core.Models
                 Count = 0,
                 Item = new GameItem
                 {
-                    ItemId = 4,
+                    Id = 4,
                     Name = "chips"
                 }
             });

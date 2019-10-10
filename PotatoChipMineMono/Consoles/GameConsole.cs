@@ -1,5 +1,6 @@
 using Microsoft.Xna.Framework;
 using PotatoChipMine.Core;
+using PotatoChipMine.Core.Data;
 using PotatoChipMine.Core.Entities;
 using PotatoChipMine.Core.GameEngine;
 using PotatoChipMine.Core.GameRooms;
@@ -7,10 +8,12 @@ using PotatoChipMine.Core.GameRooms.ControlRoom.Services;
 using PotatoChipMine.Core.GameRooms.Store.Services;
 using PotatoChipMine.Core.Models;
 using PotatoChipMine.Core.Services;
+using PotatoChipMine.Resources;
 using SadConsole;
 using SadConsole.Input;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using EventLog = PotatoChipMine.Core.EventLog;
 using MineGame = PotatoChipMine.Core.GameEngine.Game;
 
@@ -28,6 +31,8 @@ namespace PotatoChipMineMono.Consoles
         private readonly InputConsole input;
         private readonly OutputConsole output;
 
+        private readonly DataGateway gateway;
+
 
         public GameConsole()
         {
@@ -35,6 +40,12 @@ namespace PotatoChipMineMono.Consoles
             {
                 Running = true
             };
+
+            var rewardsRepo = new RewardRepository(@".\Resources\Dat\rewards.csv");
+            var achievementsRepo = new AchievementRepository(@".\Resources\Dat\achievements.csv", gameState);
+            var gameItemsRepo = new GameItemRepository(@".\Resources\Dat\gameItems.csv");
+            gateway = new DataGateway(rewardsRepo, gameItemsRepo, achievementsRepo);
+
             commandsGroup = new TopCommandGroupFactory().Build();
             gameState.Lobby = new LobbyRoom(gameState, new[] { "Welcome to the Lobby" }, GameMode.Lobby, commandsGroup);
             gameState.Store = gameState.Store ?? new MinerStoreFactory(gameState, commandsGroup).BuildMineStore();
@@ -62,6 +73,7 @@ namespace PotatoChipMineMono.Consoles
         public ConsoleBuffer Output { get; set; } = new ConsoleBuffer();
         public ConsoleBuffer Events { get; set; } = new ConsoleBuffer();
         public GameState GameState { get { return gameState; } }
+        public DataGateway Gateway { get { return gateway; } }
 
         public void ClearConsole(GameConsoles targetConsole = GameConsoles.Output)
         {
@@ -87,7 +99,7 @@ namespace PotatoChipMineMono.Consoles
         public void StartGame()
         {
             MineGame.SetMainProcess(this);
-            MineGame.Achievements = AchievementsBuilder.BuildAchievementsList(gameState);
+            MineGame.Achievements = gateway.GameAchievements.GetAll().ToList();
             gameState.Lobby.EnterRoom();
             MineGame.SwitchScene(Scene.Create(new List<IGameEntity>
             {
