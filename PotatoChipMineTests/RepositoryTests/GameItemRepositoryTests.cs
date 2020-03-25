@@ -1,3 +1,4 @@
+using PotatoChipMine.Core.Services;
 using PotatoChipMine.Resources;
 using Shouldly;
 using System;
@@ -8,7 +9,7 @@ namespace PotatoChipMineTests.RepositoryTests
 {
     public class GameItemRepositoryTests
     {
-        const int TOTAL_NUMBER_OF_ITEMS = 2;
+        const int TOTAL_NUMBER_OF_ITEMS = 3;
         GameItemRepository gameItemRepo = new GameItemRepository(@"RepositoryTests\Resources\basic-gameItems.csv");
 
         [Fact]
@@ -21,9 +22,30 @@ namespace PotatoChipMineTests.RepositoryTests
         [Fact]
         public void Load_gameItem_with_complete_detail()
         {
-            var gameItem = gameItemRepo.GetAll().First(x => x.ItemId == 1);
+            var gameItem = gameItemRepo.GetAll().First(x => x.Id == 1);
             gameItem.Name.ShouldBe("Name1");
             gameItem.Description.ShouldBe("Description1");
+        }
+
+        [Fact]
+        public void Load_gameItem_of_ChipsHopperUpgradeItem()
+        {
+            var gameItem = gameItemRepo.GetAll().First(x => x.Id == 2) as ChipsHopperUpgradeItem;
+            gameItem.Name.ShouldBe("Name2");
+            gameItem.RequiredSlotLevel.ShouldBe(2);
+            gameItem.Level.ShouldBe(1);
+            gameItem.Size.ShouldBe(100);
+        }
+
+        [Fact]
+        public void Load_gameItem_of_BitUpgradeItem()
+        {
+            var gameItem = gameItemRepo.GetAll().First(x => x.Id == 3) as BitUpgradeItem;
+            gameItem.Name.ShouldBe("Name3");
+            gameItem.RequiredSlotLevel.ShouldBe(2);
+            gameItem.Level.ShouldBe(1);
+            gameItem.Min.ShouldBe(1);
+            gameItem.Max.ShouldBe(2);
         }
     }
 }

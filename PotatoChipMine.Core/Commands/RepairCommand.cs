@@ -36,8 +36,8 @@ namespace PotatoChipMine.Core.Commands
                 responseList.Add("You don't have enough tokens.");
             }
 
-            var bolts = gameState.Miner.Inventory("bolts");
-            if (bolts == null || boltsCost > gameState.Miner.Inventory("bolts").Count)
+            var bolts = gameState.Miner.Inventory("Bolts");
+            if (bolts == null || boltsCost > gameState.Miner.Inventory("Bolts").Count)
             {
                 responseList.Add("You don't have enough bolts.");
             }

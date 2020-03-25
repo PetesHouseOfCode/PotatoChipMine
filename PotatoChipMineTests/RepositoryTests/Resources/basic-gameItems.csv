@@ -1,3 +1,4 @@
-ItemId,Name,PluralizedName,Description
-1,Name1,PluralizedName1,Description1
-2,Name2,PluralizedName2,Description2
+Id,ItemType,Name,PluralizedName,Description,RequiredSlotLevel,Level,Size,Min,Max
+1,GameItem,Name1,PluralizedName1,Description1,,,,,
+2,ChipsHopperUpgradeItem,Name2,PluralizedName2,Description2,2,1,100,,
+3,BitUpgradeItem,Name3,PluralizedName3,Description3,2,1,,1,2

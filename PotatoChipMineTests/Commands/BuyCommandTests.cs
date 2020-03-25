@@ -128,7 +128,7 @@ namespace PotatoChipMineTests.Commands
                                 Price = 1,
                                 Item = new GameItem
                                 {
-                                    ItemId = GAME_ITEM_ID,
+                                    Id = GAME_ITEM_ID,
                                     Name = GAME_ITEM_NAME
                                 }
                             });

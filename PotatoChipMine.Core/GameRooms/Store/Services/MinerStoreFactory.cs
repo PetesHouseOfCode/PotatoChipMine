@@ -1,6 +1,5 @@
 using PotatoChipMine.Core.GameRooms.Store.Models;
 using PotatoChipMine.Core.Models;
-using PotatoChipMine.Core.Services;
 
 namespace PotatoChipMine.Core.GameRooms.Store.Services
 {
@@ -29,7 +28,7 @@ namespace PotatoChipMine.Core.GameRooms.Store.Services
                 Count = 5,
                 Item = new GameItem
                 {
-                    ItemId = 1,
+                    Id = 1,
                     Name = "Digger"
                 }
             });
@@ -39,8 +38,8 @@ namespace PotatoChipMine.Core.GameRooms.Store.Services
                 Price = 5,
                 Item = new GameItem
                 {
-                    ItemId = 2,
-                    Name = "bolts"
+                    Id = 2,
+                    Name = "Bolts"
                 }
             });
 
@@ -49,7 +48,7 @@ namespace PotatoChipMine.Core.GameRooms.Store.Services
                 Price = 10,
                 Item = new GameItem
                 {
-                    ItemId = 3,
+                    Id = 3,
                     Name = "RawChips"
                 }
             });

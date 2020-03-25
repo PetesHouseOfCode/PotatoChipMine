@@ -105,7 +105,7 @@ namespace PotatoChipMine.Core.Services
         {
             return new ChipsHopperUpgradeItem
             {
-                ItemId = state.ItemId,
+                Id = state.ItemId,
                 Name = state.Name,
                 Description = state.Description,
                 RequiredSlotLevel = int.Parse(state.MetaData["RequiredSlotLevel"]),
@@ -138,7 +138,7 @@ namespace PotatoChipMine.Core.Services
         {
             return new BitUpgradeItem
             {
-                ItemId = state.ItemId,
+                Id = state.ItemId,
                 Name = state.Name,
                 Description = state.Description,
                 RequiredSlotLevel = int.Parse(state.MetaData["RequiredSlotLevel"]),

@@ -15,7 +15,7 @@ namespace PotatoChipMine.Core.GameAchievements
             Id = setting.Id;
             Name = setting.Name;
             Description = setting.Description;
-            Rewards = setting.Rewards;
+            RewardIds = setting.RewardIds;
             InventoryItemName = setting.InventoryItemName;
             MinAmount = setting.MinAmount;
         }
@@ -27,7 +27,7 @@ namespace PotatoChipMine.Core.GameAchievements
                 Id = Id,
                 Name = Name,
                 Description = Description,
-                Rewards = Rewards,
+                RewardIds = RewardIds,
                 InventoryItemName = InventoryItemName,
                 MinAmount = MinAmount
             };

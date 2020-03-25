@@ -19,7 +19,7 @@ namespace PotatoChipMineTests.Services
             {
                 Name = "better bit",
                 Description = "",
-                ItemId = 10,
+                Id = 10,
                 Level = 1,
                 RequiredSlotLevel = 0,
             };
@@ -35,7 +35,7 @@ namespace PotatoChipMineTests.Services
             {
                 Name = "better bit",
                 Description = "",
-                ItemId = 10,
+                Id = 10,
                 Level = 2,
                 RequiredSlotLevel = 1,
             };
@@ -51,7 +51,7 @@ namespace PotatoChipMineTests.Services
             {
                 Name = "better bit",
                 Description = "",
-                ItemId = 10,
+                Id = 10,
                 Level = 3,
                 RequiredSlotLevel = 0,
             };

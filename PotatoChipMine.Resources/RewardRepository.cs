@@ -34,7 +34,7 @@ namespace PotatoChipMine.Resources
 
         private NewStoreItemReward BuildNewStoreItemReward(RewardRecord record)
         {
-            return new NewStoreItemReward(record.Id, record.Count, record.Price, new GameItem());
+            return new NewStoreItemReward(record.Id, record.Count, record.Price, record.GameItemId);
         }
 
         private IReadOnlyList<RewardRecord> GetRecords()

@@ -59,7 +59,7 @@ namespace PotatoChipMineTests.Commands
                 Count = 10000,
                 Item = new GameItem
                 {
-                    Name = "bolts"
+                    Name = "Bolts"
                 }
             });
             gameState.Miner.TaterTokens = 0;

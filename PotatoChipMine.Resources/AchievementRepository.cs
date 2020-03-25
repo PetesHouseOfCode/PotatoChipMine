@@ -57,7 +57,8 @@ namespace PotatoChipMine.Resources
                     Name = x.Name,
                     Description = x.Description,
                     InventoryItemName = x.InventoryItemName,
-                    MinAmount = x.Threshold
+                    MinAmount = x.Threshold,
+                    RewardIds = GetRewardIds(x).ToList()
                 },
                     gameState
                 );
@@ -72,10 +73,22 @@ namespace PotatoChipMine.Resources
                     Name = x.Name,
                     Description = x.Description,
                     LifetimeStatName = x.LifetimeStatName,
-                    MinCount = x.Threshold
+                    MinCount = x.Threshold,
+                    RewardIds = GetRewardIds(x).ToList()
                 },
                     gameState
                 );
+        }
+        IEnumerable<int> GetRewardIds(AchievementRecord x)
+        {
+            if (x.RewardId1.HasValue)
+                yield return x.RewardId1.Value;
+
+            if (x.RewardId2.HasValue)
+                yield return x.RewardId2.Value;
+
+            if (x.RewardId3.HasValue)
+                yield return x.RewardId3.Value;
         }
 
         class AchievementRecord
@@ -87,6 +100,9 @@ namespace PotatoChipMine.Resources
             public string InventoryItemName { get; set; }
             public int Threshold { get; set; }
             public string LifetimeStatName { get; set; }
+            public int? RewardId1 { get; set; }
+            public int? RewardId2 { get; set; }
+            public int? RewardId3 { get; set; }
         }
     }
 }

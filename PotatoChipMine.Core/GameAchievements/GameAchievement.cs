@@ -13,7 +13,7 @@ namespace PotatoChipMine.Core.GameAchievements
         public int Id { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
-        public List<IAchievementReward> Rewards { get; set; } = new List<IAchievementReward>();
+        public List<int> RewardIds { get; set; } = new List<int>();
 
         public GameAchievement(GameState gameState)
         {
@@ -31,7 +31,8 @@ namespace PotatoChipMine.Core.GameAchievements
             {
                 Id = Id,
                 Name = Name,
-                Description = Description
+                Description = Description,
+                RewardIds = RewardIds
             };
         }
 
@@ -43,8 +44,9 @@ namespace PotatoChipMine.Core.GameAchievements
             Game.WriteLine($"--Achievement: {Description} has been attained.", PcmColor.Black, PcmColor.Magenta,
                 GameConsoles.Events);
             RegisterAchievement();
-            foreach (var reward in Rewards)
+            foreach (var rewardId in RewardIds)
             {
+                var reward = Game.Gateway.Rewards.GetAll().First(x => x.Id == rewardId);
                 Game.ApplyReward(reward);
             }
         }
