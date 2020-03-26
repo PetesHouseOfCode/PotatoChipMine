@@ -18,7 +18,7 @@ namespace PotatoChipMine.Core.Commands
 
             var digger = gameState.Miner.Diggers.FirstOrDefault(x =>
                 string.Equals(x.Name, command.DiggerName, StringComparison.CurrentCultureIgnoreCase));
-            var chips = gameState.Miner.InventoryItems.FirstOrDefault(x => x.Item.Name == "chips");
+            var chips = gameState.Miner.Inventory("chip");
 
             if (chips == null)
             {
@@ -37,7 +37,7 @@ namespace PotatoChipMine.Core.Commands
             gameState.Miner.UpdateLifetimeStat(Stats.LifetimeChips, hopperCount);
             Game.WriteLine($"{hopperCount} was removed from {command.DiggerName}'s hopper and moved into the chip vault.",
                 PcmColor.Yellow);
-            Game.WriteLine($"Vault Chips:{gameState.Miner.Inventory("chips").Count}", PcmColor.Yellow);
+            Game.WriteLine($"Vault Chips:{gameState.Miner.Inventory("chip").Count}", PcmColor.Yellow);
         }
     }
 }

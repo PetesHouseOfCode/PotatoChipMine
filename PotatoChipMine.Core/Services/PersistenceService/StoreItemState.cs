@@ -6,6 +6,6 @@ namespace PotatoChipMine.Core.Services.PersistenceService
     {
         public int Price { get; set; }
         public int Count { get; set; }
-        public GameItemState GameItemState { get; set; }
+        public int ItemId { get; set; }
     }
 }

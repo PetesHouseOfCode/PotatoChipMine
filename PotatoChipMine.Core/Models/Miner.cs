@@ -1,3 +1,4 @@
+using PotatoChipMine.Core.GameEngine;
 using PotatoChipMine.Core.Services;
 using PotatoChipMine.Core.Services.PersistenceService;
 using System;
@@ -20,11 +21,7 @@ namespace PotatoChipMine.Core.Models
             InventoryItems.Add(new InventoryItem
             {
                 Count = 0,
-                Item = new GameItem
-                {
-                    Id = 4,
-                    Name = "chips"
-                }
+                Item = Game.Gateway.GameItems.GetAll().First(gi => gi.Id == 4)
             });
         }
 
@@ -36,7 +33,7 @@ namespace PotatoChipMine.Core.Models
                 new InventoryItem
                 {
                     Count = x.Count,
-                    Item = GameItemBuilder.Build(x.GameItemState)
+                    Item = Game.Gateway.GameItems.GetAll().First(gi => gi.Id == x.ItemId)
                 }).ToList();
             AttainedAchievements = state.AttainedAchievements;
             LifetimeStats = state.LifeTimeStats;
@@ -45,7 +42,8 @@ namespace PotatoChipMine.Core.Models
 
         public InventoryItem Inventory(string name)
         {
-            return InventoryItems.FirstOrDefault(x => x.Name == name);
+            return InventoryItems
+                .FirstOrDefault(x => string.Equals(x.Name, name, StringComparison.CurrentCultureIgnoreCase));
         }
 
         public static Miner Default()
@@ -65,7 +63,7 @@ namespace PotatoChipMine.Core.Models
                     new InventoryItemState
                     {
                         Count = x.Count,
-                        GameItemState = x.Item.GetState()
+                        ItemId = x.Item.Id
                     }).ToList(),
                 LifeTimeStats = LifetimeStats
             };
@@ -74,7 +72,6 @@ namespace PotatoChipMine.Core.Models
         public static Miner FromState(MinerState state)
         {
             return new Miner(state);
-
         }
     }
 }

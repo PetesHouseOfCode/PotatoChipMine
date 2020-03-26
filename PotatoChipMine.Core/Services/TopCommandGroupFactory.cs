@@ -43,7 +43,7 @@ namespace PotatoChipMine.Core.Services
                     {
                         var miner = gameState.Miner;
                         Game.WriteLine($"Name: {miner.Name}", PcmColor.Yellow);
-                        Game.WriteLine($"Chip Vault:{miner.Inventory("chips").Count}", PcmColor.Yellow);
+                        Game.WriteLine($"Chip Vault:{miner.Inventory("chip").Count}", PcmColor.Yellow);
                         Game.WriteLine($"Tater Tokens:{miner.TaterTokens}", PcmColor.Yellow);
                         Game.WriteLine($"Diggers Count:{miner.Diggers.Count}", PcmColor.Yellow);
                         Game.WriteLine($"Lifetime Chips Dug:{miner.GetLifeTimeStat(Stats.LifetimeChips)}");
@@ -55,7 +55,7 @@ namespace PotatoChipMine.Core.Services
                     Description = "Shows the number of chips currently in your vault.",
                     Execute = (userCommand, gameState) =>
                     {
-                        Game.WriteLine($"Chip Vault: {gameState.Miner.Inventory("chips").Count}");
+                        Game.WriteLine($"Chip Vault: {gameState.Miner.Inventory("chip").Count}");
                     }
                 },
                 new CommandsDefinition

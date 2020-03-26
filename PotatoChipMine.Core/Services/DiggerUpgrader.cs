@@ -73,14 +73,6 @@ namespace PotatoChipMine.Core.Services
     {
         public int RequiredSlotLevel { get; set; }
         public int Level { get; set; }
-
-        public override GameItemState GetState()
-        {
-            var baseState = base.GetState();
-            baseState.MetaData.Add("RequiredSlotLevel", RequiredSlotLevel.ToString());
-            baseState.MetaData.Add("Level", Level.ToString());
-            return baseState;
-        }
     }
 
     public class ChipsHopperUpgradeItem : DiggerUpgradeItem
@@ -90,28 +82,6 @@ namespace PotatoChipMine.Core.Services
         public ChipsHopper GetUpgrade()
         {
             return new ChipsHopper(Size, Name, Level);
-        }
-
-        public override GameItemState GetState()
-        {
-            var baseState = base.GetState();
-            baseState.Type = GameItemStateTypes.ChipsHopperUpgradeItem;
-            baseState.Type = "ChipsHopperUpgradeItem";
-            baseState.MetaData.Add("Size", Size.ToString());
-            return baseState;
-        }
-
-        public new static GameItem From(GameItemState state)
-        {
-            return new ChipsHopperUpgradeItem
-            {
-                Id = state.ItemId,
-                Name = state.Name,
-                Description = state.Description,
-                RequiredSlotLevel = int.Parse(state.MetaData["RequiredSlotLevel"]),
-                Level = int.Parse(state.MetaData["Level"]),
-                Size = int.Parse(state.MetaData["Size"])
-            };
         }
     }
 
@@ -123,29 +93,6 @@ namespace PotatoChipMine.Core.Services
         public ChipDiggerBit GetUpgrade()
         {
             return new ChipDiggerBit(Name, new Range<int>(Min, Max), Level);
-        }
-
-        public override GameItemState GetState()
-        {
-            var baseState = base.GetState();
-            baseState.Type = GameItemStateTypes.BitUpgradeItem;
-            baseState.MetaData.Add("Min", Min.ToString());
-            baseState.MetaData.Add("Max", Max.ToString());
-            return baseState;
-        }
-
-        public new static GameItem From(GameItemState state)
-        {
-            return new BitUpgradeItem
-            {
-                Id = state.ItemId,
-                Name = state.Name,
-                Description = state.Description,
-                RequiredSlotLevel = int.Parse(state.MetaData["RequiredSlotLevel"]),
-                Level = int.Parse(state.MetaData["Level"]),
-                Min = int.Parse(state.MetaData["Min"]),
-                Max= int.Parse(state.MetaData["Max"])
-            };
         }
     }
 }
