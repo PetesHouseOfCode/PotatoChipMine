@@ -15,7 +15,7 @@ namespace PotatoChipMineTests.Mocks
         public ConsoleBuffer Events { get; set; } = new ConsoleBuffer();
         public Stack<Scene> SceneStack { get; } = new Stack<Scene>();
         public GameState GameState { get; } = new GameState();
-        public DataGateway Gateway { get; } = new DataGateway(null, null, null);
+        public DataGateway Gateway { get; } = new DataGateway(null, new MockGameItemRepository(), null);
 
         public void ClearConsole(GameConsoles targetConsole = GameConsoles.Output)
         {
@@ -25,6 +25,20 @@ namespace PotatoChipMineTests.Mocks
         public void StartGame()
         {
             throw new NotImplementedException();
+        }
+    }
+
+    public class MockGameItemRepository : IRepository<GameItem>
+    {
+        public IReadOnlyList<GameItem> GetAll()
+        {
+            return new List<GameItem>
+            {
+                new GameItem() { Id = 1, Name = "Standard_Digger"},
+                new GameItem() { Id = 2, Name = "Bolts"},
+                new GameItem() { Id = 3, Name = "RawChips"},
+                new GameItem() { Id = 4, Name = "Chip"}
+            };
         }
     }
 }

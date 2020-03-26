@@ -23,7 +23,7 @@ namespace PotatoChipMine.Core.Commands
                     new EquipHandlerEntity(gameState)
                 });
 
-            var digger = gameState.Miner.InventoryItems.FirstOrDefault(x => x.Name.ToLower() == "digger");
+            var digger = gameState.Miner.Inventory("standard_digger");
             if (digger != null && digger.Count > 0)
             {
                 gameState.PromptText = "Enter Digger Name: ";

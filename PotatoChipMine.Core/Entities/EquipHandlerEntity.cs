@@ -28,7 +28,7 @@ namespace PotatoChipMine.Core.Entities
                 return;
             }
 
-            var digger = GameState.Miner.InventoryItems.FirstOrDefault(x => x.Name.ToLower() == "digger");
+            var digger = GameState.Miner.Inventory("standard_digger");
             var factory = new MineSiteFactory();
             var newDigger = ChipDigger.StandardDigger(factory.BuildSite());
             newDigger.Name = newDiggerName;

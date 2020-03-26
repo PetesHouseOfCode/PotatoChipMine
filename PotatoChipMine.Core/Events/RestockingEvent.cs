@@ -1,4 +1,4 @@
-﻿using PotatoChipMine.Core.Entities;
+using PotatoChipMine.Core.Entities;
 using PotatoChipMine.Core.GameEngine;
 using PotatoChipMine.Core.Models;
 using System;
@@ -34,7 +34,7 @@ namespace PotatoChipMine.Core.Events
                     .StoreState
                     .ItemsForSale
                     .FirstOrDefault(i =>
-                        i.Name.Equals("digger", StringComparison.CurrentCultureIgnoreCase)
+                        i.Name.Equals("standard_digger", StringComparison.CurrentCultureIgnoreCase)
                         ).Count = +5;
 
                 GameState.NewEvents.Add(new GameEvent

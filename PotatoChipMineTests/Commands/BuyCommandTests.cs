@@ -31,7 +31,7 @@ namespace PotatoChipMineTests.Commands
             gameState = new GameState();
             Game.SetMainProcess(proc);
             gameState.Miner = Miner.Default();
-            gameState.Store = gameState.Store ?? new MinerStoreFactory(gameState, CommandsGroup.Empty()).BuildMineStore();
+            gameState.Store = gameState.Store ?? new MinerStoreFactory(gameState, CommandsGroup.Empty(), proc.Gateway).BuildMineStore();
         }
 
         [Fact]
