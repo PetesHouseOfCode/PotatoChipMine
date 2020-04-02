@@ -58,8 +58,8 @@ namespace PotatoChipMine.Core.Commands
                     quantity = item.Count;
                 }
 
-                var price = storeState.ItemsBuying.Any(x => x.Name.ToLower() == item.Name)
-                    ? storeState.ItemsBuying.First(x => x.Name.ToLower() == item.Name).Price
+                var price = storeState.ItemsBuying.Any(x => x.Item.Id == item.Item.Id)
+                    ? storeState.ItemsBuying.First(x => x.Item.Id == item.Item.Id).Price
                     : 1;
                 item.Count -= quantity.Value;
                 var tokenChange = quantity.Value * price;

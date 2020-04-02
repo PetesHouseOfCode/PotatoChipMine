@@ -92,6 +92,9 @@
     <Content Include="Resources\Dat\rewards.csv">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <None Include="Resources\Dat\storeInventory.csv">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\PotatoChipMine.Core\PotatoChipMine.Core.csproj">

@@ -44,7 +44,8 @@ namespace PotatoChipMineMono.Consoles
             var rewardsRepo = new RewardRepository(@".\Resources\Dat\rewards.csv");
             var achievementsRepo = new AchievementRepository(@".\Resources\Dat\achievements.csv", gameState);
             var gameItemsRepo = new GameItemRepository(@".\Resources\Dat\gameItems.csv");
-            gateway = new DataGateway(rewardsRepo, gameItemsRepo, achievementsRepo);
+            var storeInventoryRepo = new StoryInventoryRepository(@".\Resources\Dat\storeInventory.csv");
+            gateway = new DataGateway(rewardsRepo, gameItemsRepo, achievementsRepo, storeInventoryRepo);
 
             commandsGroup = new TopCommandGroupFactory().Build();
             gameState.Lobby = new LobbyRoom(gameState, new[] { "Welcome to the Lobby" }, GameMode.Lobby, commandsGroup);

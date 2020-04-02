@@ -21,7 +21,7 @@ namespace PotatoChipMine.Core.Models
             InventoryItems.Add(new InventoryItem
             {
                 Count = 0,
-                Item = Game.Gateway.GameItems.GetAll().First(gi => gi.Id == 4)
+                Item = Game.Gateway.GameItems.GetAll().First(gi => gi.Id == 3)
             });
         }
 

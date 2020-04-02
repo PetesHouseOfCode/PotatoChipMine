@@ -45,6 +45,9 @@
     <None Update="RepositoryTests\Resources\basic-rewards.csv">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Update="RepositoryTests\Resources\basic-storeInventory.csv">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 
 </Project>
