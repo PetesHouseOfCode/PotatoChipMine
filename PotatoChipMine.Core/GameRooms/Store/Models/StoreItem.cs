@@ -1,4 +1,5 @@
 using PotatoChipMine.Core.Models;
+using System;
 
 namespace PotatoChipMine.Core.GameRooms.Store.Models
 {
@@ -21,5 +22,9 @@ namespace PotatoChipMine.Core.GameRooms.Store.Models
         public int GameItemId { get; set; }
         public GameItem Item { get; set; }
 
+        public bool InStock(int quantity)
+        {
+            return quantity <= Count;
+        }
     }
 }

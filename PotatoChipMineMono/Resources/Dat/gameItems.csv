@@ -1,7 +1,7 @@
 Id,ItemType,Name,PluralizedName,Description,RequiredSlotLevel,Level,Size,Min,Max
 1,GameItem,Standard_Digger,Standard_Diggers,,,,,,
-2,GameItem,Bolts,Bolts,,,,,,
-3,GameItem,RawChips,RawChips,,,,,,
+2,GameItem,Bolt,Bolts,,,,,,
+3,GameItem,RawChip,RawChips,,,,,,
 4,GameItem,Chip,Chips,"","","","","",""
 5,ChipsHopperUpgradeItem,Large_Hopper,Large_Hoppers,,0,1,100,,
 6,BitUpgradeItem,Standard_Bit,Standard_Bits,,0,1,,12,40

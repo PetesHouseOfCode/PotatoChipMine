@@ -9,10 +9,14 @@
 
   <ItemGroup>
     <None Remove="RepositoryTests\Resources\basic-achievements.csv" />
+    <None Remove="RepositoryTests\Resources\basic-gameItems-invalid-itemtype.csv" />
     <None Remove="RepositoryTests\Resources\basic-gameItems.csv" />
   </ItemGroup>
 
   <ItemGroup>
+    <Content Include="RepositoryTests\Resources\basic-gameItems-invalid-itemtype.csv">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="RepositoryTests\Resources\basic-gameItems.csv">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

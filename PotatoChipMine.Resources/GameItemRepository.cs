@@ -36,12 +36,24 @@ namespace PotatoChipMine.Resources
                 }).ToList();
         }
 
+        GameItem BuildGameItem(GameItemRecord record)
+        {
+            return new GameItem
+            {
+                Id = record.Id,
+                Name = record.Name,
+                PluralizedName = record.PluralizedName,
+                Description = record.Description
+            };
+        }
+
         ChipsHopperUpgradeItem BuildChipsHopperUpgradeItem(GameItemRecord record)
         {
             return new ChipsHopperUpgradeItem()
             {
                 Id = record.Id,
                 Name = record.Name,
+                PluralizedName = record.PluralizedName,
                 Description = record.Description,
                 RequiredSlotLevel = record.RequiredSlotLevel.Value,
                 Level = record.Level.Value,
@@ -54,21 +66,12 @@ namespace PotatoChipMine.Resources
             {
                 Id = record.Id,
                 Name = record.Name,
+                PluralizedName = record.PluralizedName,
                 Description = record.Description,
                 RequiredSlotLevel = record.RequiredSlotLevel.Value,
                 Level = record.Level.Value,
                 Min = record.Min.Value,
                 Max = record.Max.Value
-            };
-        }
-
-        GameItem BuildGameItem(GameItemRecord record)
-        {
-            return new GameItem
-            {
-                Id = record.Id,
-                Name = record.Name,
-                Description = record.Description
             };
         }
 
@@ -87,6 +90,7 @@ namespace PotatoChipMine.Resources
             public int Id { get; set; }
             public string ItemType { get; set; }
             public string Name { get; set; }
+            public string PluralizedName { get; set; }
             public string Description { get; set; }
             public int? RequiredSlotLevel { get; set; }
             public int? Level { get; set; }
