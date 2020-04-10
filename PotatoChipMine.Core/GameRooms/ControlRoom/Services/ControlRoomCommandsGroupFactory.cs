@@ -17,9 +17,21 @@ namespace PotatoChipMine.Core.GameRooms.ControlRoom.Services
                     new CommandsDefinition()
                     {
                         CommandText = "equip",
+                        Abbreviations = new List<string> {"eq", "e" },
                         Description = "Begins the process to equip a digger from your inventory to dig.",
-                        Command =  (userCommand, gameState) => new EquipCommand{GameState = gameState}
+                        Command =  (userCommand, gameState) =>{
+                            var command = new EquipCommand
+                            {
+                                GameState = gameState
+                            };
 
+                            if(userCommand.Parameters.Count > 0)
+                            {
+                                command.DiggerName = userCommand.Parameters[0].Trim();
+                            }
+
+                            return command;
+                        }
                     },
                     new CommandsDefinition()
                     {
