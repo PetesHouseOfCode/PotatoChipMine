@@ -23,7 +23,8 @@ namespace PotatoChipMineTests.Commands
         BuyCommandHandler commandHandler = new BuyCommandHandler();
 
         const int GAME_ITEM_ID = 1;
-        const string GAME_ITEM_NAME = "GameItems";
+        const string GAME_ITEM_NAME = "GameItem";
+        const string GAME_ITEM_NAME_PLURALIZED = "GameItems";
 
         public BuyCommandTests()
         {
@@ -32,6 +33,24 @@ namespace PotatoChipMineTests.Commands
             Game.SetMainProcess(proc);
             gameState.Miner = Miner.Default();
             gameState.Store = gameState.Store ?? new MinerStoreFactory(gameState, CommandsGroup.Empty(), proc.Gateway).BuildMineStore();
+        }
+
+        [Fact]
+        public void Buying_quantity_of_zero_or_less_should_fail()
+        {
+            AddItemToStore();
+
+            var command = new BuyCommand
+            {
+                GameState = gameState,
+                NumOfItems = 0,
+                ItemName = GAME_ITEM_NAME
+            };
+
+            commandHandler.Handle(command);
+
+            var output = ConsoleBufferHelper.GetText(proc.Output);
+            output.ShouldBe($"Invalid Quantity.");
         }
 
         [Fact]
@@ -109,6 +128,78 @@ namespace PotatoChipMineTests.Commands
             output.ShouldBe($"{buyCount} {GAME_ITEM_NAME} have been added to your inventory");
         }
 
+        [Fact]
+        public void With_enough_tokens_and_item_in_store_complete_purchase_of_more_than_one_with_pluralized_name()
+        {
+            AddItemToStore();
+            AddCountToItemInStore(2);
+
+            var buyCount = 2;
+            var command = new BuyCommand
+            {
+                GameState = gameState,
+                NumOfItems = buyCount,
+                ItemName = GAME_ITEM_NAME
+            };
+
+            commandHandler.Handle(command);
+
+            var output = ConsoleBufferHelper.GetText(proc.Output);
+            output.ShouldBe($"{buyCount} {GAME_ITEM_NAME_PLURALIZED} have been added to your inventory");
+        }
+
+        [Fact]
+        public void With_enough_tokens_and_item_in_store_complete_purchase_with_pluralized_name()
+        {
+            AddItemToStore();
+            AddCountToItemInStore(1);
+
+            var buyCount = 1;
+            var command = new BuyCommand
+            {
+                GameState = gameState,
+                NumOfItems = buyCount,
+                ItemName = GAME_ITEM_NAME_PLURALIZED
+            };
+
+            commandHandler.Handle(command);
+
+            var output = ConsoleBufferHelper.GetText(proc.Output);
+            gameState.Miner.InventoryItems.Count.ShouldBe(2);
+            output.ShouldBe($"{buyCount} {GAME_ITEM_NAME} have been added to your inventory");
+        }
+
+        [Fact]
+        public void With_enough_tokens_and_item_in_store_complete_purchase_with_pluralized_name_and_singular_name()
+        {
+            AddItemToStore();
+            AddCountToItemInStore(2);
+
+            var buyCount = 1;
+            var command = new BuyCommand
+            {
+                GameState = gameState,
+                NumOfItems = buyCount,
+                ItemName = GAME_ITEM_NAME_PLURALIZED
+            };
+            commandHandler.Handle(command);
+            ConsoleBufferHelper.GetText(proc.Output);
+
+            var commandSingle = new BuyCommand
+            {
+                GameState = gameState,
+                NumOfItems = buyCount,
+                ItemName = GAME_ITEM_NAME
+            };
+            commandHandler.Handle(commandSingle);
+
+            var output = ConsoleBufferHelper.GetText(proc.Output);
+            gameState.Miner.InventoryItems.Count.ShouldBe(2);
+            var inventoryItem = gameState.Miner.Inventory(GAME_ITEM_NAME);
+            inventoryItem.Count.ShouldBe(2);
+            output.ShouldBe($"{buyCount} {GAME_ITEM_NAME} have been added to your inventory");
+        }
+
         private void EmptyMinerTokens()
         {
             gameState.Miner.TaterTokens = 0;
@@ -129,7 +220,8 @@ namespace PotatoChipMineTests.Commands
                                 Item = new GameItem
                                 {
                                     Id = GAME_ITEM_ID,
-                                    Name = GAME_ITEM_NAME
+                                    Name = GAME_ITEM_NAME,
+                                    PluralizedName = GAME_ITEM_NAME_PLURALIZED
                                 }
                             });
         }

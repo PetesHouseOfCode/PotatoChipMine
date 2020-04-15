@@ -43,7 +43,9 @@ namespace PotatoChipMine.Core.Models
         public InventoryItem Inventory(string name)
         {
             return InventoryItems
-                .FirstOrDefault(x => string.Equals(x.Name, name, StringComparison.CurrentCultureIgnoreCase));
+                .FirstOrDefault(x =>
+                    string.Equals(x.Name, name, StringComparison.CurrentCultureIgnoreCase) ||
+                    string.Equals(x.Item.PluralizedName, name, StringComparison.CurrentCultureIgnoreCase));
         }
 
         public static Miner Default()

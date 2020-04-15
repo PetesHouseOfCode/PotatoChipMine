@@ -47,10 +47,10 @@ namespace PotatoChipMineTests.Mocks
         {
             return new List<GameItem>
             {
-                new GameItem() { Id = 1, Name = "Standard_Digger"},
-                new GameItem() { Id = 2, Name = "Bolts"},
-                new GameItem() { Id = 3, Name = "RawChips"},
-                new GameItem() { Id = 4, Name = "Chip"}
+                new GameItem() { Id = 1, Name = "Standard_Digger", PluralizedName = "Standard_Diggers"},
+                new GameItem() { Id = 2, Name = "Bolt", PluralizedName = "Bolts"},
+                new GameItem() { Id = 3, Name = "RawChip", PluralizedName = "RawChips"},
+                new GameItem() { Id = 4, Name = "Chip", PluralizedName = "Chip"}
             };
         }
     }
