@@ -11,6 +11,7 @@ namespace PotatoChipMine.Core.Entities
         private ChipDigger digger;
         private InventoryItem item;
         private int dialogStep = 1;
+        private int itemEntryAttempts = 0;
 
         public UpgradeHandlerEntity(GameState gameState) : base(gameState)
         {
@@ -42,6 +43,16 @@ namespace PotatoChipMine.Core.Entities
                     dialogStep++;
                     break;
                 case 2:
+                    itemEntryAttempts++;
+
+                    if(itemEntryAttempts > 3)
+                    {
+                        Game.WriteLine($"We aren't able to help you with that.");
+                        GameState.PromptText = null;
+                        Game.PopScene();
+                        return;
+                    }
+
                     if (string.IsNullOrEmpty(command.FullCommand))
                     {
                         Game.WriteLine("An upgrade item is required!", PcmColor.Red, null, GameConsoles.Input);
@@ -66,6 +77,10 @@ namespace PotatoChipMine.Core.Entities
                     if (!result.completed)
                     {
                         Game.WriteLine(result.message, PcmColor.Red, null, GameConsoles.Input);
+                        Game.WriteLine($"{digger.Name} has not been upgraded. {item.Item.Name} isn't available yet.");
+                        GameState.PromptText = null;
+                        Game.PopScene();
+                        return;
                     }
 
                     GameState.Miner.InventoryItems.FirstOrDefault(x =>
