@@ -9,6 +9,7 @@ namespace PotatoChipMine.Core.Commands
 {
     public class EquipCommand : CommandWithGameState, ICommand
     {
+        public string DiggerName { get; set; }
     }
 
     public class EquipCommandHandler : ICommandHandler<EquipCommand>

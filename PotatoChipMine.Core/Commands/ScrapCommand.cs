@@ -24,13 +24,13 @@ namespace PotatoChipMine.Core.Commands
                 return;
             }
             gameState.Miner.Diggers.Remove(digger);
-            var bolts = gameState.Miner.Inventory("Bolts");
+            var bolts = gameState.Miner.Inventory("Bolt");
             if (bolts == null)
             {
                 bolts = new InventoryItem()
                 {
                     Count = 0,
-                    Item = Game.Gateway.GameItems.GetAll().First(x=> x.Name == "Bolts")
+                    Item = Game.Gateway.GameItems.GetAll().First(x=> x.Name == "Bolt")
                 };
                 gameState.Miner.InventoryItems.Add(bolts);
             }
