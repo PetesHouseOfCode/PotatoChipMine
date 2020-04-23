@@ -28,14 +28,14 @@ namespace PotatoChipMineTests
         [Fact]
         public void New_miner_store_should_have_items_it_buys()
         {
-            var store = minerStore.BuildMineStore();
+            var store = minerStore.Build();
             store.StoreState.ItemsBuying.ShouldNotBeEmpty();
         }
 
         [Fact]
         public void New_miner_store_should_have_items_it_sells()
         {
-            var store = minerStore.BuildMineStore();
+            var store = minerStore.Build();
             store.StoreState.ItemsForSale.ShouldNotBeEmpty();
         }
     }

@@ -14,7 +14,7 @@ namespace PotatoChipMine.Core.GameRooms.ControlRoom.Services
             _gameState = gameState;
             _baseCommandsGroup = baseCommandsGroup;
         }
-        public DiggerControlRoom BuildControlRoom()
+        public DiggerControlRoom Build()
         {
             var greeting = new string[]
             {

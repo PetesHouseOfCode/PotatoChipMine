@@ -141,6 +141,12 @@ namespace PotatoChipMine.Core.Services
                     EntryDescription = "load || load [save name]",
                     Description = "Loads shows games available to load, or loads the indicated saved game.",
                     Execute = LoadHandler()
+                },
+                new CommandsDefinition
+                {
+                    CommandText = "claims-office",
+                    Description = "Enter the claims office. Claims will be available for purchase.",
+                    Execute = (userCommand, gameState) => { gameState.ClaimsOffice.EnterRoom(); }
                 }
             };
             return commandsGroup;

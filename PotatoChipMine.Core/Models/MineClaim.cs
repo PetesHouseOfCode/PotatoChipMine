@@ -2,7 +2,7 @@ using PotatoChipMine.Core.Services.PersistenceService;
 
 namespace PotatoChipMine.Core.Models
 {
-    public class MineSite
+    public class MineClaim
     {
         public ChipDensity ChipDensity { get; set; }
         public SiteHardness Hardness { get; set; }
