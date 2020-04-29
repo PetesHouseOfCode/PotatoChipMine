@@ -4,6 +4,7 @@ using PotatoChipMine.Core.Data;
 using PotatoChipMine.Core.Entities;
 using PotatoChipMine.Core.GameEngine;
 using PotatoChipMine.Core.GameRooms;
+using PotatoChipMine.Core.GameRooms.ClaimsOffice;
 using PotatoChipMine.Core.GameRooms.ControlRoom.Services;
 using PotatoChipMine.Core.GameRooms.Store.Services;
 using PotatoChipMine.Core.Models;
@@ -49,8 +50,9 @@ namespace PotatoChipMineMono.Consoles
 
             commandsGroup = new TopCommandGroupFactory().Build();
             gameState.Lobby = new LobbyRoom(gameState, new[] { "Welcome to the Lobby" }, GameMode.Lobby, commandsGroup);
-            gameState.Store = gameState.Store ?? new MinerStoreFactory(gameState, commandsGroup, gateway).BuildMineStore();
-            gameState.ControlRoom = new ControlRoomFactory(gameState, commandsGroup).BuildControlRoom();
+            gameState.Store = gameState.Store ?? new MinerStoreFactory(gameState, commandsGroup, gateway).Build();
+            gameState.ControlRoom = new ControlRoomFactory(gameState, commandsGroup).Build();
+            gameState.ClaimsOffice = new ClaimsOfficeRoomFactory(gameState, commandsGroup, gateway).Build();
             gameState.SaveDirectory = @"c:\chipMiner\saves";
             gameState.GameTime.Start();
 

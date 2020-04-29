@@ -7,9 +7,9 @@ namespace PotatoChipMine.Core.Services
     {
         private readonly Random _random = new Random();
 
-        public MineSite BuildSite()
+        public MineClaim BuildSite()
         {
-            return new MineSite
+            return new MineClaim
             {
                 ChipDensity = (ChipDensity)_random.Next(1, 4),
                 Hardness = (SiteHardness)_random.Next(1, 5)

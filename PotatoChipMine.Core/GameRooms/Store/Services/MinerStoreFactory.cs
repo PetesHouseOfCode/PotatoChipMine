@@ -19,7 +19,7 @@ namespace PotatoChipMine.Core.GameRooms.Store.Services
             _baseCommandsGroup = baseCommandsGroup;
         }
 
-        public MinerStore BuildMineStore()
+        public MinerStore Build()
         {
             var greeting = new[]
             {
