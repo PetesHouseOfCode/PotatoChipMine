@@ -1,5 +1,6 @@
 using PotatoChipMine.Core.Data;
 using PotatoChipMine.Core.Models;
+using PotatoChipMine.Core.Models.Claims;
 using System;
 using System.Collections.Generic;
 using System.Text;

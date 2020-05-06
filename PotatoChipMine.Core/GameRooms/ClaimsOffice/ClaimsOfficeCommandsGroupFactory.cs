@@ -1,6 +1,7 @@
 using PotatoChipMine.Core.Commands;
 using PotatoChipMine.Core.GameEngine;
 using PotatoChipMine.Core.Models;
+using PotatoChipMine.Core.Models.Claims;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -28,7 +29,7 @@ namespace PotatoChipMine.Core.GameRooms.ClaimsOffice
                         Description = "Purchases the quantity indicated of the item requested.",
                         Command = (userCommand, gameState) => {
 
-                            var command = new BuyClaimCommand { Listings = listings};
+                            var command = new BuyClaimCommand { GameState = gameState, Listings = listings};
                             if(userCommand.Parameters.Count == 0)
                             {
                                 return new FailedMessageCommand("Listing Id is required!");

@@ -1,5 +1,5 @@
 using PotatoChipMine.Core.GameEngine;
-using PotatoChipMine.Core.GameRooms.ClaimsOffice;
+using PotatoChipMine.Core.Models.Claims;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -34,7 +34,6 @@ namespace PotatoChipMine.Core.Commands
                     listing.Survey.Density,
                     listing.Survey.Hardness);
             }
-
 
             Game.Write(table);
         }
