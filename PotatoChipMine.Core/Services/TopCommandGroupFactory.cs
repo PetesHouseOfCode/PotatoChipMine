@@ -6,6 +6,7 @@ using PotatoChipMine.Core.Services.PersistenceService;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 
 namespace PotatoChipMine.Core.Services
 {
@@ -124,6 +125,26 @@ namespace PotatoChipMine.Core.Services
                                 digger.MineSite.ChipDensity.ToString(),
                                 digger.MineSite.Hardness.ToString(),
                                 $"{digger.Hopper.Max - digger.Hopper.Count}/{digger.Hopper.Max}");
+                        }
+
+                        Game.Write(table);
+                    }
+                },
+                new CommandsDefinition
+                {
+                    CommandText = "claims",
+                    Description = "Shows the miners claims",
+                    Execute = (userCommand, gameState) =>
+                    {
+                        var table = new TableOutput(80);
+                        table.AddHeaders("Id", "Price", "Density", "Hardness");
+                        foreach (var claimLease in gameState.Miner.ClaimLeases.GetAll())
+                        {
+                            table.AddRow(
+                                claimLease.Id.ToString(),
+                                claimLease.Price.ToString(),
+                                claimLease.Claim.ChipDensity.ToString(),
+                                claimLease.Claim.Hardness.ToString());
                         }
 
                         Game.Write(table);

@@ -11,6 +11,7 @@ namespace PotatoChipMine.Core.Commands
     public class EquipCommand : CommandWithGameState, ICommand
     {
         public string DiggerName { get; set; }
+        public int ClaimLeaseId { get; set; }
     }
 
     public class EquipCommandHandler : ICommandHandler<EquipCommand>
@@ -28,24 +29,8 @@ namespace PotatoChipMine.Core.Commands
                 return;
             }
 
-            if (string.IsNullOrEmpty(command.DiggerName))
-            {
-                gameState.PromptText = "Enter Digger Name: ";
-                Game.PushScene(Scene.Create(new List<IGameEntity>{
-                    new EquipHandlerEntity(gameState)
-                }));
-                return;
-            }
-
-            var newDiggerName = command.DiggerName.Trim().Replace(" ", "-");
-            if (gameState.Miner.Diggers.Exists(x => x.Name == newDiggerName))
-            {
-                Game.WriteLine($"Digger with the name {newDiggerName} already exists.", PcmColor.Red);
-                return;
-            }
-
-            Game.PushScene(Scene.Create(new List<IGameEntity>{
-                    new EquipHandlerEntity(gameState, newDiggerName)
+            Game.PushScene(Scene.Create(new List<IGameEntity> {
+                    new EquipHandlerEntity(gameState, command.DiggerName, command.ClaimLeaseId)
                 }));
         }
     }
