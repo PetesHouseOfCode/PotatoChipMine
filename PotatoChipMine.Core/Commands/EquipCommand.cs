@@ -1,6 +1,7 @@
 using PotatoChipMine.Core.Entities;
 using PotatoChipMine.Core.GameEngine;
 using PotatoChipMine.Core.Models;
+using PotatoChipMine.Core.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,19 +21,32 @@ namespace PotatoChipMine.Core.Commands
         {
             gameState = command.GameState;
 
-            var scene = Scene.Create(new List<IGameEntity>{
-                    new EquipHandlerEntity(gameState)
-                });
-
             var digger = gameState.Miner.Inventory("standard_digger");
-            if (digger != null && digger.Count > 0)
+            if (digger == null || digger.Count <= 0)
             {
-                gameState.PromptText = "Enter Digger Name: ";
-                Game.PushScene(scene);
+                Game.WriteLine("You don't have any diggers in your inventory!", PcmColor.Red, null, GameConsoles.Input);
                 return;
             }
 
-            Game.WriteLine("You don't have any diggers in your inventory!", PcmColor.Red, null, GameConsoles.Input);
+            if (string.IsNullOrEmpty(command.DiggerName))
+            {
+                gameState.PromptText = "Enter Digger Name: ";
+                Game.PushScene(Scene.Create(new List<IGameEntity>{
+                    new EquipHandlerEntity(gameState)
+                }));
+                return;
+            }
+
+            var newDiggerName = command.DiggerName.Trim().Replace(" ", "-");
+            if (gameState.Miner.Diggers.Exists(x => x.Name == newDiggerName))
+            {
+                Game.WriteLine($"Digger with the name {newDiggerName} already exists.", PcmColor.Red);
+                return;
+            }
+
+            Game.PushScene(Scene.Create(new List<IGameEntity>{
+                    new EquipHandlerEntity(gameState, newDiggerName)
+                }));
         }
     }
 }

@@ -2,6 +2,7 @@ using PotatoChipMine.Core.GameRooms;
 using PotatoChipMine.Core.GameRooms.ClaimsOffice;
 using PotatoChipMine.Core.GameRooms.ControlRoom;
 using PotatoChipMine.Core.GameRooms.Store;
+using PotatoChipMine.Core.Models.Claims;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
