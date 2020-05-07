@@ -46,15 +46,14 @@ namespace PotatoChipMine.Core.GameRooms.ClaimsOffice
                     },
                     new CommandsDefinition
                     {
-                        CommandText = "claims",
-                        EntryDescription = "list claims",
+                        CommandText = "listings",
+                        EntryDescription = "list out available claims",
                         Description = "",
                         Command = (userCommand, gameState) => {
 
                             var command = new ViewClaimListingsCommand { Listings = listings};
                             return command;
                         }
-
                     }
                 }
             };

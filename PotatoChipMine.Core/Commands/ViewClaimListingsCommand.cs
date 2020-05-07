@@ -17,7 +17,7 @@ namespace PotatoChipMine.Core.Commands
         public void Handle(ViewClaimListingsCommand command)
         {
             var table = new TableOutput(80, PcmColor.Green);
-            table.AddHeaders("Id", "Price", "Density", "Hardness");
+            table.AddHeaders("Id", "Price", "Density", "Hardness", "Rent");
 
             if (!command.Listings.GetAll().Any())
             {
@@ -32,7 +32,8 @@ namespace PotatoChipMine.Core.Commands
                     listing.Id.ToString(),
                     listing.Price.ToString(), 
                     listing.Survey.Density,
-                    listing.Survey.Hardness);
+                    listing.Survey.Hardness,
+                    listing.LeasePrice.ToString());
             }
 
             Game.Write(table);

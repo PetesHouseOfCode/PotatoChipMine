@@ -5,6 +5,7 @@ using PotatoChipMine.Core.Services.PersistenceService;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 
 namespace PotatoChipMine.Core.Models
 {
@@ -14,7 +15,7 @@ namespace PotatoChipMine.Core.Models
         public int TaterTokens { get; set; }
         public List<PlayerAchievement> AttainedAchievements { get; set; } = new List<PlayerAchievement>();
         public List<InventoryItem> InventoryItems { get; set; } = new List<InventoryItem>();
-        public List<ClaimLease> ClaimLeases { get; set; } = new List<ClaimLease>();
+        public ClaimLeases ClaimLeases { get; set; } = new ClaimLeases();
 
         private Miner(string name, int taterTokens)
         {

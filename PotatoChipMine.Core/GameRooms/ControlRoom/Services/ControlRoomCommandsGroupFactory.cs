@@ -25,9 +25,17 @@ namespace PotatoChipMine.Core.GameRooms.ControlRoom.Services
                                 GameState = gameState
                             };
 
-                            if(userCommand.Parameters.Count > 0)
+                            if(userCommand.Parameters.Count >= 1)
                             {
                                 command.DiggerName = userCommand.Parameters[0].Trim();
+                            }
+
+                            if(userCommand.Parameters.Count >= 2)
+                            {
+                                if(int.TryParse(userCommand.Parameters[1].Trim(), out int id))
+                                {
+                                    command.ClaimLeaseId = id;
+                                }
                             }
 
                             return command;
