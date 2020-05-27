@@ -67,8 +67,8 @@ namespace PotatoChipMine.Core.Commands
         {
             var vitalsTable = new TableOutput(80, PcmColor.Yellow);
             vitalsTable.AddHeaders("Stat", "Value");
-            vitalsTable.AddRow("Site Hardness", digger.MineSite.Hardness.ToString());
-            vitalsTable.AddRow("Site Chip Density", digger.MineSite.ChipDensity.ToString());
+            vitalsTable.AddRow("Site Hardness", digger.MineClaim.Hardness.ToString());
+            vitalsTable.AddRow("Site Chip Density", digger.MineClaim.ChipDensity.ToString());
             vitalsTable.AddRow("Durablity (Left) / (Max)", $"{digger.Durability.Current} / {digger.Durability.Max}");
             vitalsTable.AddRow("Hopper", digger.Hopper.Name);
             vitalsTable.AddRow("Hopper Space (Left) / (Max)",

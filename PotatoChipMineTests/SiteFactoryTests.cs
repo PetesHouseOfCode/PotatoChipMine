@@ -9,7 +9,7 @@ namespace PotatoChipMineTests
         [Fact]
         public void SiteFactory_BuildSite_ReturnsNewSite()
         {
-            var siteFactory = new MineSiteFactory();
+            var siteFactory = new MineClaimFactory();
             var site = siteFactory.BuildSite();
 
         }
@@ -17,7 +17,7 @@ namespace PotatoChipMineTests
         [Fact]
         public void SiteFactory_BuildSite_ReturnsNewSiteDenistyNotNull()
         {
-            var siteFactory = new MineSiteFactory();
+            var siteFactory = new MineClaimFactory();
             var site = siteFactory.BuildSite();
             var densityInt = (int) site.ChipDensity;
             var hardnessInt = (int) site.Hardness;

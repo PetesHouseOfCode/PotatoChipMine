@@ -1,9 +1,9 @@
-﻿using PotatoChipMine.Core.Models;
+using PotatoChipMine.Core.Models;
 using System;
 
 namespace PotatoChipMine.Core.Services
 {
-    public class MineSiteFactory
+    public class MineClaimFactory
     {
         private readonly Random _random = new Random();
 

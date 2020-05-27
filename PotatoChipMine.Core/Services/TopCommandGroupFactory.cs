@@ -122,8 +122,8 @@ namespace PotatoChipMine.Core.Services
                         {
                             table.AddRow(digger.Name,
                                 digger.Durability.Current.ToString(),
-                                digger.MineSite.ChipDensity.ToString(),
-                                digger.MineSite.Hardness.ToString(),
+                                digger.MineClaim.ChipDensity.ToString(),
+                                digger.MineClaim.Hardness.ToString(),
                                 $"{digger.Hopper.Max - digger.Hopper.Count}/{digger.Hopper.Max}");
                         }
 

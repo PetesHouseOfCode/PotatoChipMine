@@ -92,7 +92,7 @@ namespace PotatoChipMine.Core.Entities
                 return;
             }
 
-            EquipDigger(new MineSiteFactory().BuildSite());
+            EquipDigger(new MineClaimFactory().BuildSite());
 
             GameState.PromptText = null;
             Game.PopScene();
@@ -160,7 +160,7 @@ namespace PotatoChipMine.Core.Entities
                 }
 
                 diggerName = FormatDiggerName(diggerName);
-                EquipDigger(new MineSiteFactory().BuildSite());
+                EquipDigger(new MineClaimFactory().BuildSite());
                 GameState.PromptText = null;
                 Game.PopScene();
             }
@@ -201,9 +201,9 @@ namespace PotatoChipMine.Core.Entities
             GameState.Miner.Diggers.Add(newDigger);
             
             Game.Write($"Digger {newDigger.Name} has been equipped on ");
-            Game.Write($"{newDigger.MineSite.ChipDensity.ToString()} density", PcmColor.Blue);
+            Game.Write($"{newDigger.MineClaim.ChipDensity.ToString()} density", PcmColor.Blue);
             Game.Write(" with a ");
-            Game.Write($"{newDigger.MineSite.Hardness.ToString()} hardness", PcmColor.Cyan);
+            Game.Write($"{newDigger.MineClaim.Hardness.ToString()} hardness", PcmColor.Cyan);
             Game.WriteLine(string.Empty);
             return newDigger;
 

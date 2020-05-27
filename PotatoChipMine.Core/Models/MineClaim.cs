@@ -7,9 +7,9 @@ namespace PotatoChipMine.Core.Models
         public ChipDensity ChipDensity { get; set; }
         public SiteHardness Hardness { get; set; }
 
-        public MineSiteState GetState()
+        public MineClaimState GetState()
         {
-            return new MineSiteState
+            return new MineClaimState
             {
                 ChipDensity = ChipDensity,
                 Hardness = Hardness
