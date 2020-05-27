@@ -137,14 +137,15 @@ namespace PotatoChipMine.Core.Services
                     Execute = (userCommand, gameState) =>
                     {
                         var table = new TableOutput(80);
-                        table.AddHeaders("Id", "Price", "Density", "Hardness");
+                        table.AddHeaders("Id", "Price", "Density", "Hardness", "InUse");
                         foreach (var claimLease in gameState.Miner.ClaimLeases.GetAll())
                         {
                             table.AddRow(
                                 claimLease.Id.ToString(),
                                 claimLease.Price.ToString(),
                                 claimLease.Claim.ChipDensity.ToString(),
-                                claimLease.Claim.Hardness.ToString());
+                                claimLease.Claim.Hardness.ToString(),
+                                claimLease.InUse ? "X" : "");
                         }
 
                         Game.Write(table);

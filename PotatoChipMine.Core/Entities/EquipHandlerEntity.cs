@@ -152,9 +152,11 @@ namespace PotatoChipMine.Core.Entities
                         return;
                     }
 
-
                     diggerName = FormatDiggerName(diggerName);
-                    claimLease.AssignDigger(EquipDigger(new MineSiteFactory().BuildSite()));
+                    claimLease.AssignDigger(EquipDigger(claimLease.Claim));
+                    GameState.PromptText = null;
+                    Game.PopScene();
+                    return;
                 }
 
                 diggerName = FormatDiggerName(diggerName);
