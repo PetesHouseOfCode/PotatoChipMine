@@ -20,7 +20,7 @@ namespace PotatoChipMine.Core.Entities
         private int claimLeaseId;
         private string diggerName;
                
-        readonly bool claimsAvailable = true;
+        readonly bool claimsAvailable = false;
         private EquipHandlerState state = EquipHandlerState.Starting;
 
         public EquipHandlerEntity(GameState gameState)
@@ -92,7 +92,7 @@ namespace PotatoChipMine.Core.Entities
                 return;
             }
 
-            EquipDigger(new MineClaimFactory().BuildSite());
+            EquipDigger(GameState.MineClaims.Add(new MineClaimFactory().BuildSite()));
 
             GameState.PromptText = null;
             Game.PopScene();
@@ -109,7 +109,7 @@ namespace PotatoChipMine.Core.Entities
             {
                 if(MinerCanNotEquip())
                 {
-                    Game.WriteLine("You can't do this at this time.");
+                    Game.WriteLine("You can't do equip a digger.");
                     GameState.PromptText = null;
                     Game.PopScene();
                     return;
@@ -160,7 +160,7 @@ namespace PotatoChipMine.Core.Entities
                 }
 
                 diggerName = FormatDiggerName(diggerName);
-                EquipDigger(new MineClaimFactory().BuildSite());
+                EquipDigger(GameState.MineClaims.Add(new MineClaimFactory().BuildSite()));
                 GameState.PromptText = null;
                 Game.PopScene();
             }

@@ -101,7 +101,7 @@ namespace PotatoChipMineTests
         [Fact]
         public void ChipDigger_HavingSiteHardnessIsSoft_DurabilityDecreasesBetween0and1()
         {
-            var mineClaim = new MineClaim {ChipDensity = ChipDensity.Scarce, Hardness = SiteHardness.Soft};
+            var mineClaim = new MineClaim(ChipDensity.Scarce, SiteHardness.Soft);
             var chipDigger = ChipDigger.StandardDigger(mineClaim);
             var scoop = chipDigger.Dig(TimeSpan.FromSeconds(20));
             chipDigger.Durability.Current.ShouldBeGreaterThanOrEqualTo(0);

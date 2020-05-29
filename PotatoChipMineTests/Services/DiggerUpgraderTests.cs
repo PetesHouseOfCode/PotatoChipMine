@@ -14,7 +14,7 @@ namespace PotatoChipMineTests.Services
         [Fact]
         public void With_digger_bit_slot_available_allow_bit_upgrade()
         {
-            var digger = ChipDigger.StandardDigger(new MineClaim());
+            var digger = ChipDigger.StandardDigger(MineClaim.Default);
             var item = new BitUpgradeItem()
             {
                 Name = "better bit",
@@ -30,7 +30,7 @@ namespace PotatoChipMineTests.Services
         [Fact]
         public void With_digger_bit_slot_available_but_too_low_level_fails_upgrade()
         {
-            var digger = ChipDigger.StandardDigger(new MineClaim());
+            var digger = ChipDigger.StandardDigger(MineClaim.Default);
             var item = new BitUpgradeItem()
             {
                 Name = "better bit",
@@ -46,7 +46,7 @@ namespace PotatoChipMineTests.Services
         [Fact]
         public void With_digger_bit_slot_available_but_upgrade_to_large_fails_upgrade()
         {
-            var digger = ChipDigger.StandardDigger(new MineClaim());
+            var digger = ChipDigger.StandardDigger(MineClaim.Default);
             var item = new BitUpgradeItem()
             {
                 Name = "better bit",
