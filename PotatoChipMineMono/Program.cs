@@ -1,11 +1,6 @@
-using System;
-using SadConsole;
 using Microsoft.Xna.Framework;
-using Console = SadConsole.Console;
+using System;
 using System.Linq;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Text;
 
 namespace PotatoChipMineMono
 {
@@ -29,7 +24,7 @@ namespace PotatoChipMineMono
             //console.FillWithRandomGarbage();
             //console.Fill(new Rectangle(3, 3, 23, 3), Color.Violet, Color.Black, 0, 0);
             //console.Print(4, 4, "Hello from SadConsole");
-            
+
             SadConsole.Global.CurrentScreen = console;
         }
 
@@ -43,6 +38,5 @@ namespace PotatoChipMineMono
         {
 
         }
-
     }
 }

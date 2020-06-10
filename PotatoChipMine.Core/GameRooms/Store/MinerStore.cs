@@ -16,7 +16,7 @@ namespace PotatoChipMine.Core.GameRooms.Store
             this.Name = "store";
         }
 
-        public StoreState StoreState { get; set; }
+        public StoreInventory StoreState { get; set; }
 
         public override void EnterRoom()
         {

@@ -1,33 +1,43 @@
+using PotatoChipMine.Core.GameEngine;
+using PotatoChipMine.Core.Models.Claims;
+using PotatoChipMine.Core.Services;
+using PotatoChipMine.Core.Services.PersistenceService;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using PotatoChipMine.Core.Services;
-using PotatoChipMine.Core.Services.PersistenceService;
+using System.Security.Claims;
 
 namespace PotatoChipMine.Core.Models
 {
-    public class Miner:PersistentGameElement
+    public class Miner : PersistentGameElement
     {
         public List<ChipDigger> Diggers { get; set; } = new List<ChipDigger>();
         public int TaterTokens { get; set; }
         public List<PlayerAchievement> AttainedAchievements { get; set; } = new List<PlayerAchievement>();
-        public List<PlayerAchievement> PotentialAchievements { get; set; } = new List<PlayerAchievement>();
         public List<InventoryItem> InventoryItems { get; set; } = new List<InventoryItem>();
+        public ClaimLeases ClaimLeases { get; set; } = new ClaimLeases();
 
         private Miner(string name, int taterTokens)
         {
             Name = name;
             TaterTokens = taterTokens;
-            InventoryItems.Add(new InventoryItem { Name = "chips", Count = 0, InventoryId = 0 });
-            PotentialAchievements.AddRange(AchievementsBuilder.GetPotentialAchievements());
+            InventoryItems.Add(new InventoryItem
+            {
+                Count = 0,
+                Item = Game.Gateway.GameItems.GetAll().First(gi => gi.Id == 3)
+            });
         }
 
         private Miner(MinerState state)
         {
             Name = state.Name;
             TaterTokens = state.TaterTokens;
-            InventoryItems = state.InventoryItems;
-            PotentialAchievements = state.PotentialAchievements;
+            InventoryItems = state.InventoryItems.Select(x =>
+                new InventoryItem
+                {
+                    Count = x.Count,
+                    Item = Game.Gateway.GameItems.GetAll().First(gi => gi.Id == x.ItemId)
+                }).ToList();
             AttainedAchievements = state.AttainedAchievements;
             LifetimeStats = state.LifeTimeStats;
             Diggers.AddRange(state.Diggers.Select(x => ChipDigger.FromState(x)));
@@ -35,7 +45,10 @@ namespace PotatoChipMine.Core.Models
 
         public InventoryItem Inventory(string name)
         {
-            return InventoryItems.FirstOrDefault(x => x.Name == name);
+            return InventoryItems
+                .FirstOrDefault(x =>
+                    string.Equals(x.Name, name, StringComparison.CurrentCultureIgnoreCase) ||
+                    string.Equals(x.Item.PluralizedName, name, StringComparison.CurrentCultureIgnoreCase));
         }
 
         public static Miner Default()
@@ -51,8 +64,12 @@ namespace PotatoChipMine.Core.Models
                 Diggers = Diggers.Select(x => x.GetState()).ToList(),
                 TaterTokens = TaterTokens,
                 AttainedAchievements = AttainedAchievements,
-                PotentialAchievements = PotentialAchievements,
-                InventoryItems = InventoryItems,
+                InventoryItems = InventoryItems.Select(x =>
+                    new InventoryItemState
+                    {
+                        Count = x.Count,
+                        ItemId = x.Item.Id
+                    }).ToList(),
                 LifeTimeStats = LifetimeStats
             };
         }
@@ -60,7 +77,6 @@ namespace PotatoChipMine.Core.Models
         public static Miner FromState(MinerState state)
         {
             return new Miner(state);
-
         }
     }
 }

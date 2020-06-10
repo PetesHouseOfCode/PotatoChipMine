@@ -1,11 +1,10 @@
-using System.Linq;
 using PotatoChipMine.Core.GameEngine;
 using PotatoChipMine.Core.Models;
-using PotatoChipMine.Core.Services;
+using System.Linq;
 
 namespace PotatoChipMine.Core.Entities
 {
-    public class MinerAchievementsMonitorEntity :GameEntity, IGameEntity
+    public class MinerAchievementsMonitorEntity : GameEntity, IGameEntity
     {
 
         public MinerAchievementsMonitorEntity(GameState gameState) : base(gameState)
@@ -21,7 +20,7 @@ namespace PotatoChipMine.Core.Entities
         {
             foreach (var achievement in
                 Game.Achievements
-                .Where(x => GameState.Miner.PotentialAchievements.Any(y => y.Name == x.Name)))
+                .Where(x => GameState.Miner.AttainedAchievements.All(y => y.Name != x.Name)))
             {
                 achievement.CheckAchievement();
             }

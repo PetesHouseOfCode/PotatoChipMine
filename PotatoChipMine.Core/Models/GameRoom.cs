@@ -1,5 +1,5 @@
-using System;
 using PotatoChipMine.Core.GameEngine;
+using System;
 
 namespace PotatoChipMine.Core.Models
 {

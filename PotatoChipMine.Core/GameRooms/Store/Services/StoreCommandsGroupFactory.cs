@@ -9,10 +9,10 @@ namespace PotatoChipMine.Core.GameRooms.Store.Services
 {
     public class StoreCommandsGroupFactory
     {
-        private readonly StoreState _storeState;
+        private readonly StoreInventory _storeState;
         private readonly GameState _gameState;
 
-        public StoreCommandsGroupFactory(GameState gameState, StoreState storeState)
+        public StoreCommandsGroupFactory(GameState gameState, StoreInventory storeState)
         {
             _gameState = gameState;
             _storeState = storeState;
@@ -30,7 +30,7 @@ namespace PotatoChipMine.Core.GameRooms.Store.Services
                         EntryDescription = "sell [quantity] [item name] || sell [item name] (sells all) ",
                         Description = "Sell all of the indicated items in your inventory.",
                         Command = (userCommand, gameState) => {
-                            
+
                             if(userCommand.Parameters.Count() == 0 || userCommand.Parameters.Count() > 2)
                             {
                                 return new FailedMessageCommand($"Invalid Quantity");
@@ -41,8 +41,8 @@ namespace PotatoChipMine.Core.GameRooms.Store.Services
                                 if(!int.TryParse(userCommand.Parameters[0], out var quantity))
                                 {
                                     return new FailedMessageCommand($"Invalid Quantity {userCommand.Parameters[0]}");
-                                }                                
-                                
+                                }
+
                                 return new SellCommand{GameState = gameState, StoreState = _storeState, ItemName = userCommand.Parameters[1].Trim(), Quantity = quantity};
                             }
 

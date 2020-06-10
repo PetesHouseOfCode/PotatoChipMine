@@ -1,16 +1,20 @@
+using PotatoChipMine.Core.Data;
+using PotatoChipMine.Core.GameAchievements;
+using PotatoChipMine.Core.GameRooms.Store.Models;
+using PotatoChipMine.Core.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using PotatoChipMine.Core.GameAchievements;
-using PotatoChipMine.Core.Models;
 
 namespace PotatoChipMine.Core.GameEngine
 {
     public static class Game
     {
         private static IPotatoChipGame potatoChipGame;
-
+        
         public static List<GameAchievement> Achievements { get; set; }
+
+        public static DataGateway Gateway { get { return potatoChipGame.Gateway; } }
 
         public static void SetMainProcess(IPotatoChipGame mainProcess)
         {
@@ -49,7 +53,7 @@ namespace PotatoChipMine.Core.GameEngine
             consoleBuffer.Write(character);
         }
 
-        public static void WriteLine(string text, PcmColor color = null, PcmColor backgroundColor = null,GameConsoles targetConsole = GameConsoles.Output)
+        public static void WriteLine(string text, PcmColor color = null, PcmColor backgroundColor = null, GameConsoles targetConsole = GameConsoles.Output)
         {
             ConsoleBuffer consoleBuffer;
             switch (targetConsole)
@@ -71,7 +75,7 @@ namespace PotatoChipMine.Core.GameEngine
             }
         }
 
-        public static void Write(string text, PcmColor color = null, PcmColor backgroundColor = null,GameConsoles targetConsole = GameConsoles.Output)
+        public static void Write(string text, PcmColor color = null, PcmColor backgroundColor = null, GameConsoles targetConsole = GameConsoles.Output)
         {
             ConsoleBuffer consoleBuffer;
             switch (targetConsole)
@@ -93,14 +97,14 @@ namespace PotatoChipMine.Core.GameEngine
         public static void Write(TableOutput table, GameConsoles targetConsole = GameConsoles.Output)
         {
             PrintLine(table.Width, table.ForegroundColor, table.BackgroundColor, targetConsole);
-            PrintRow(table.Width, table.BackgroundColor, table.ForegroundColor,targetConsole, table.Header.ToArray());
+            PrintRow(table.Width, table.BackgroundColor, table.ForegroundColor, targetConsole, table.Header.ToArray());
             PrintLine(table.Width, table.ForegroundColor, table.BackgroundColor, targetConsole);
             if (!table.Rows.Any())
                 PrintLine(table.Width, table.ForegroundColor, table.BackgroundColor, targetConsole);
 
             foreach (var row in table.Rows)
             {
-                PrintRow(table.Width, table.ForegroundColor, table.BackgroundColor,targetConsole, row.ToArray());
+                PrintRow(table.Width, table.ForegroundColor, table.BackgroundColor, targetConsole, row.ToArray());
                 PrintLine(table.Width, table.ForegroundColor, table.BackgroundColor, targetConsole);
             }
         }
@@ -110,9 +114,27 @@ namespace PotatoChipMine.Core.GameEngine
             potatoChipGame.ClearConsole(targetConsole);
         }
 
+        public static void ApplyReward(IAchievementReward reward)
+        {
+            if(reward is NewStoreItemReward)
+            {
+                var newStoreItemReward = reward as NewStoreItemReward;
+                var gameItem = Game.Gateway.GameItems.GetAll().First(x => x.Id == reward.GameItemId);
+                potatoChipGame.GameState.Store.StoreState.ItemsForSale.Add(
+                    new StoreItem
+                    {
+                        Price = newStoreItemReward.Price,
+                        Count = newStoreItemReward.Count,
+                        Item = gameItem,
+                    });
+                Game.WriteLine($"*** A new item is for sale at the store [{gameItem.Name}]", PcmColor.Green, null, GameConsoles.Events);
+                Game.WriteLine(gameItem.Description, PcmColor.Green, null, GameConsoles.Events);
+            }
+        }
+
         private static void PrintLine(int width, PcmColor color, PcmColor backgroundColor, GameConsoles targetConsole = GameConsoles.Output)
         {
-            WriteLine(new string('-', width), color, backgroundColor,targetConsole);
+            WriteLine(new string('-', width), color, backgroundColor, targetConsole);
         }
 
         private static void PrintRow(int width, PcmColor color, PcmColor backgroundColor, GameConsoles targetConsole = GameConsoles.Output, params string[] columns)
@@ -124,7 +146,7 @@ namespace PotatoChipMine.Core.GameEngine
                 row += AlignCenter(column, columnWidth) + "|";
             }
 
-            WriteLine(row, color, backgroundColor,targetConsole);
+            WriteLine(row, color, backgroundColor, targetConsole);
         }
 
         private static string AlignCenter(string text, int width)

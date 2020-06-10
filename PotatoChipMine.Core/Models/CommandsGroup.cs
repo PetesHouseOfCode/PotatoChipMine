@@ -13,11 +13,13 @@ namespace PotatoChipMine.Core.Models
         public void ExecuteCommand(UserCommand userCommand, GameState gameState)
         {
             var command = LocalCommands.FirstOrDefault(x =>
-                x.CommandText.Trim().ToLower().Equals(userCommand.CommandText.Trim().ToLower()));
+                string.Equals(x.CommandText, userCommand.CommandText.Trim(), StringComparison.InvariantCultureIgnoreCase)
+                || x.Abbreviations.Contains(userCommand.CommandText.Trim())
+                );
             if (command == null)
             {
-                Game.WriteLine($"{userCommand.CommandText} is not a valid command.", PcmColor.Red,null,GameConsoles.Input);
-                Game.WriteLine("Type [help] to see a list of commands.", PcmColor.Red,null,GameConsoles.Input);
+                Game.WriteLine($"{userCommand.CommandText} is not a valid command.", PcmColor.Red, null, GameConsoles.Input);
+                Game.WriteLine("Type [help] to see a list of commands.", PcmColor.Red, null, GameConsoles.Input);
                 return;
             }
 
@@ -36,6 +38,11 @@ namespace PotatoChipMine.Core.Models
             commandsGroup.LocalCommands.AddRange(this.LocalCommands);
             commandsGroup.LocalCommands.AddRange(joinedCommandsGroup.LocalCommands);
             return commandsGroup;
+        }
+        
+        public static CommandsGroup Empty()
+        {
+            return new CommandsGroup();
         }
     }
 }

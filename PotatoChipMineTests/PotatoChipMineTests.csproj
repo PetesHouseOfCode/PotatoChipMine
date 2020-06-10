@@ -8,6 +8,21 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="RepositoryTests\Resources\basic-achievements.csv" />
+    <None Remove="RepositoryTests\Resources\basic-gameItems-invalid-itemtype.csv" />
+    <None Remove="RepositoryTests\Resources\basic-gameItems.csv" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="RepositoryTests\Resources\basic-gameItems-invalid-itemtype.csv">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="RepositoryTests\Resources\basic-gameItems.csv">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Shouldly" Version="3.0.2" />
     <PackageReference Include="xunit" Version="2.4.1" />
     <PackageReference Include="xunit.runner.visualstudio" Version="2.4.1">
@@ -18,6 +33,25 @@
 
   <ItemGroup>
     <ProjectReference Include="..\PotatoChipMine.Core\PotatoChipMine.Core.csproj" />
+    <ProjectReference Include="..\PotatoChipMine.Resources\PotatoChipMine.Resources.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="RepositoryTests\Resources\basic-achievements.csv">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="RepositoryTests\Resources\basic-rewards-bad-type.csv">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="RepositoryTests\Resources\basic-rewards.csv">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="RepositoryTests\Resources\basic-storeInventory.csv">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 
 </Project>

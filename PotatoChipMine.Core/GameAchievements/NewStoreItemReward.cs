@@ -1,16 +1,18 @@
-using PotatoChipMine.Core.GameEngine;
-using PotatoChipMine.Core.GameRooms.Store.Models;
-using PotatoChipMine.Core.Models;
-
 namespace PotatoChipMine.Core.GameAchievements
 {
-    public class NewStoreItemReward : StoreItem, IAchievementReward
+    public class NewStoreItemReward : IAchievementReward
     {
-        public void ApplyReward(GameState gameState)
+        public int Count { get; private set; }
+        public int Price { get; private set; }
+        public int Id { get; private set; }
+        public int GameItemId { get; private set; }
+
+        public NewStoreItemReward(int id, int count, int price, int gameItemId)
         {
-            gameState.Store.StoreState.ItemsForSale.Add(this);
-            Game.WriteLine($"*** A new item is for sale at the store [{Name}]",PcmColor.Green,null,GameConsoles.Events);
-            Game.WriteLine(this.Description,PcmColor.Green,null,GameConsoles.Events);
+            Id = id;
+            Price = price;
+            Count = count;
+            GameItemId = gameItemId;
         }
     }
 }

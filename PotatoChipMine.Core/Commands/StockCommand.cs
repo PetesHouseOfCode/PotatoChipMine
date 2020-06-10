@@ -1,16 +1,13 @@
 using PotatoChipMine.Core.GameEngine;
 using PotatoChipMine.Core.GameRooms.Store.Models;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
-using System.Text;
 
 namespace PotatoChipMine.Core.Commands
 {
     public class StockCommand : ICommand
     {
-        public StoreState State { get; set; }
+        public StoreInventory State { get; set; }
     }
 
     public class StockCommandHandler : ICommandHandler<StockCommand>

@@ -1,5 +1,6 @@
-using System.Collections.Generic;
 using PotatoChipMine.Core.Models;
+using PotatoChipMine.Core.Services;
+using System.Collections.Generic;
 
 namespace PotatoChipMine.Core.GameAchievements
 {
@@ -7,30 +8,5 @@ namespace PotatoChipMine.Core.GameAchievements
     {
         public string LifetimeStatName { get; set; }
         public long MinCount { get; set; }
-
-
-        public static LifetimeStatAchievementSetting ChipsTo500()
-        {
-            return new LifetimeStatAchievementSetting
-            {
-                Id = 2,
-                Name = "ChipsTo500",
-                Description = "YOU REACHED 500 CHIPS!!!",
-                LifetimeStatName = Stats.LifetimeChips,
-                MinCount = 500,
-                Rewards = new List<IAchievementReward>
-                {
-                    new NewStoreItemReward
-                    {
-                        ItemId = 0,
-                        InventoryId = 3,
-                        Name = "Large_Hopper",
-                        Description = "Allows digger to hold 100 chips before requiring emptying.",
-                        Count = 10,
-                        Price = 1200
-                    }
-                }
-            };
-        }
     }
 }

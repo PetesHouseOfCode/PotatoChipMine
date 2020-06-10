@@ -1,14 +1,11 @@
 using PotatoChipMine.Core.Commands;
-using PotatoChipMine.Core.GameEngine;
 using PotatoChipMine.Core.Models;
 using System;
 using System.Collections.Generic;
-using System.Globalization;
 using System.Linq;
-using System.Xml.Serialization;
 
 namespace PotatoChipMine.Core.GameRooms.ControlRoom.Services
-{    
+{
     public class ControlRoomCommandsGroupFactory
     {
         public CommandsGroup Build()
@@ -20,9 +17,29 @@ namespace PotatoChipMine.Core.GameRooms.ControlRoom.Services
                     new CommandsDefinition()
                     {
                         CommandText = "equip",
+                        Abbreviations = new List<string> {"eq", "e" },
                         Description = "Begins the process to equip a digger from your inventory to dig.",
-                        Command =  (userCommand, gameState) => new EquipCommand{GameState = gameState}
+                        Command =  (userCommand, gameState) =>{
+                            var command = new EquipCommand
+                            {
+                                GameState = gameState
+                            };
 
+                            if(userCommand.Parameters.Count >= 1)
+                            {
+                                command.DiggerName = userCommand.Parameters[0].Trim();
+                            }
+
+                            if(userCommand.Parameters.Count >= 2)
+                            {
+                                if(int.TryParse(userCommand.Parameters[1].Trim(), out int id))
+                                {
+                                    command.ClaimLeaseId = id;
+                                }
+                            }
+
+                            return command;
+                        }
                     },
                     new CommandsDefinition()
                     {
@@ -115,7 +132,7 @@ namespace PotatoChipMine.Core.GameRooms.ControlRoom.Services
                                     inspectType = InspectCommandTypes.LifeTime;
                                 }
                             }
-                            
+
                             return new InspectCommand
                             {
                                 GameState = gameState,

@@ -1,10 +1,9 @@
+using PotatoChipMine.Core.Entities;
 using PotatoChipMine.Core.GameEngine;
-using PotatoChipMine.Core.GameRooms.ControlRoom.Services;
 using PotatoChipMine.Core.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 
 namespace PotatoChipMine.Core.Commands
 {
@@ -37,8 +36,8 @@ namespace PotatoChipMine.Core.Commands
                 responseList.Add("You don't have enough tokens.");
             }
 
-            var bolts = gameState.Miner.Inventory("bolts");
-            if (bolts == null || boltsCost > gameState.Miner.Inventory("bolts").Count)
+            var bolts = gameState.Miner.Inventory("Bolts");
+            if (bolts == null || boltsCost > gameState.Miner.Inventory("Bolts").Count)
             {
                 responseList.Add("You don't have enough bolts.");
             }

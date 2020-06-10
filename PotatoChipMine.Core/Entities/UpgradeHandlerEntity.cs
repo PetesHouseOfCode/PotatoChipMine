@@ -1,20 +1,21 @@
-using System;
-using System.Linq;
 using PotatoChipMine.Core.GameEngine;
 using PotatoChipMine.Core.Models;
 using PotatoChipMine.Core.Services;
+using System;
+using System.Linq;
 
-namespace PotatoChipMine.Core.GameRooms.ControlRoom.Services
+namespace PotatoChipMine.Core.Entities
 {
     public class UpgradeHandlerEntity : GameEntity
     {
         private ChipDigger digger;
         private InventoryItem item;
         private int dialogStep = 1;
+        private int itemEntryAttempts = 0;
 
         public UpgradeHandlerEntity(GameState gameState) : base(gameState)
         {
-            
+
         }
 
         public override void HandleInput(UserCommand command)
@@ -24,7 +25,7 @@ namespace PotatoChipMine.Core.GameRooms.ControlRoom.Services
                 case 1:
                     if (string.IsNullOrEmpty(command.FullCommand))
                     {
-                        Game.WriteLine("A name is required!", PcmColor.Red,null,GameConsoles.Input);
+                        Game.WriteLine("A name is required!", PcmColor.Red, null, GameConsoles.Input);
                         return;
                     }
 
@@ -42,6 +43,16 @@ namespace PotatoChipMine.Core.GameRooms.ControlRoom.Services
                     dialogStep++;
                     break;
                 case 2:
+                    itemEntryAttempts++;
+
+                    if(itemEntryAttempts > 3)
+                    {
+                        Game.WriteLine($"We aren't able to help you with that.");
+                        GameState.PromptText = null;
+                        Game.PopScene();
+                        return;
+                    }
+
                     if (string.IsNullOrEmpty(command.FullCommand))
                     {
                         Game.WriteLine("An upgrade item is required!", PcmColor.Red, null, GameConsoles.Input);
@@ -49,28 +60,36 @@ namespace PotatoChipMine.Core.GameRooms.ControlRoom.Services
                     }
 
                     item = GameState.Miner.InventoryItems.FirstOrDefault(x =>
-                        string.Equals(x.Name, command.FullCommand, StringComparison.CurrentCultureIgnoreCase));
+                        string.Equals(x.Item.Name, command.FullCommand, StringComparison.CurrentCultureIgnoreCase));
                     if (item == null || item.Count < 1)
                     {
                         Game.WriteLine($"You don't have any {command.FullCommand}!");
                         return;
                     }
 
-                    var result = DiggerUpgrader.ApplyUpgrade(digger, item.Name);
+                    if (!(item.Item is DiggerUpgradeItem))
+                    {
+                        Game.WriteLine($"The item is not a digger upgrade!");
+                        return;
+                    }
+
+                    var result = DiggerUpgrader.ApplyUpgrade(digger, item.Item as DiggerUpgradeItem);
                     if (!result.completed)
                     {
-                        Game.WriteLine(result.message,PcmColor.Red,null,GameConsoles.Input);
+                        Game.WriteLine(result.message, PcmColor.Red, null, GameConsoles.Input);
+                        Game.WriteLine($"{digger.Name} has not been upgraded. {item.Item.Name} isn't available yet.");
+                        GameState.PromptText = null;
+                        Game.PopScene();
+                        return;
                     }
 
                     GameState.Miner.InventoryItems.FirstOrDefault(x =>
-                        string.Equals(x.Name, item.Name, StringComparison.InvariantCultureIgnoreCase)).Count--;
+                        string.Equals(x.Item.Name, item.Item.Name, StringComparison.InvariantCultureIgnoreCase)).Count--;
                     GameState.PromptText = null;
-                    Game.WriteLine($"{digger.Name} has been upgraded. {item.Name}");
-                    Game.WriteLine(item.Description);
+                    Game.WriteLine($"{digger.Name} has been upgraded. {item.Item.Name}");
+                    Game.WriteLine(item.Item.Description);
                     Game.PopScene();
                     break;
-
-                    
             }
         }
     }

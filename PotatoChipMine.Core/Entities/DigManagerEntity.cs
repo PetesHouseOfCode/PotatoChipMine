@@ -1,6 +1,5 @@
 using PotatoChipMine.Core.GameEngine;
 using PotatoChipMine.Core.Models;
-using PotatoChipMine.Core.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,7 +9,7 @@ namespace PotatoChipMine.Core.Entities
     public class DigManagerEntity : GameEntity
     {
         private readonly List<ChipDigger> diggers;
-        
+
         public DigManagerEntity(GameState gameState)
             : base(gameState)
         {
@@ -34,14 +33,14 @@ namespace PotatoChipMine.Core.Entities
                         digger.Name,
                         digResult.ChipsDug.ToString(),
                         digResult.DurabilityLost.ToString(),
-                        $"{digger.Durability}/{digger.MaxDurability}",
+                        $"{digger.Durability.Current}/{digger.Durability.Max}",
                         $"{digger.Hopper.Count}/{digger.Hopper.Max}");
 
                     Game.Write(table, GameConsoles.Events);
                 }
                 else
                 {
-                    foreach(var message in digResult.FaultMessages)
+                    foreach (var message in digResult.FaultMessages)
                         Game.WriteLine(
                             message,
                             PcmColor.Cyan,

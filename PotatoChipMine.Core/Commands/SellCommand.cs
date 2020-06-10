@@ -2,15 +2,13 @@ using PotatoChipMine.Core.GameEngine;
 using PotatoChipMine.Core.GameRooms.Store.Models;
 using PotatoChipMine.Core.Models;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 
 namespace PotatoChipMine.Core.Commands
 {
-    public class SellCommand: CommandWithGameState
+    public class SellCommand : CommandWithGameState
     {
-        public StoreState StoreState { get; set; }
+        public StoreInventory StoreState { get; set; }
         public int? Quantity { get; set; }
         public string ItemName { get; set; }
     }
@@ -18,13 +16,13 @@ namespace PotatoChipMine.Core.Commands
     public class SellCommandHandler : ICommandHandler<SellCommand>
     {
         GameState gameState;
-        StoreState storeState;
+        StoreInventory storeState;
 
         public void Handle(SellCommand command)
         {
             gameState = command.GameState;
             storeState = command.StoreState;
-            
+
             var result = Sell(command.ItemName, command.Quantity);
 
             if (!result.sold)
@@ -41,7 +39,7 @@ namespace PotatoChipMine.Core.Commands
             try
             {
                 InventoryItem item;
-                if(quantity.HasValue)
+                if (quantity.HasValue)
                 {
                     item = gameState.Miner.Inventory(itemName);
                     if (item == null)
@@ -60,8 +58,8 @@ namespace PotatoChipMine.Core.Commands
                     quantity = item.Count;
                 }
 
-                var price = storeState.ItemsBuying.Any(x => x.Name.ToLower() == item.Name)
-                    ? storeState.ItemsBuying.First(x => x.Name.ToLower() == item.Name).Price
+                var price = storeState.ItemsBuying.Any(x => x.Item.Id == item.Item.Id)
+                    ? storeState.ItemsBuying.First(x => x.Item.Id == item.Item.Id).Price
                     : 1;
                 item.Count -= quantity.Value;
                 var tokenChange = quantity.Value * price;

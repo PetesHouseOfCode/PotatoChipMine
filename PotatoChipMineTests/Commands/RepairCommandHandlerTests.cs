@@ -3,9 +3,6 @@ using PotatoChipMine.Core.GameEngine;
 using PotatoChipMine.Core.Models;
 using PotatoChipMineTests.Helpers;
 using PotatoChipMineTests.Mocks;
-using System;
-using System.Collections.Generic;
-using System.Text;
 using Xunit;
 using Shouldly;
 using System.Linq;
@@ -29,18 +26,17 @@ namespace PotatoChipMineTests.Commands
             Game.SetMainProcess(proc);
             gameState.Miner = Miner.Default();
 
-            var digger = ChipDigger.StandardDigger(new MineSite
-                {
-                    ChipDensity = PotatoChipMine.Core.ChipDensity.Normal,
-                    Hardness = SiteHardness.Firm
-                });
+            var digger = ChipDigger.StandardDigger(new MineClaim(
+                PotatoChipMine.Core.ChipDensity.Normal,
+                SiteHardness.Firm
+                ));
             digger.Name = EXISTING_DIGGER_NAME;
 
             gameState.Miner.Diggers.Add(digger);
         }
 
         [Fact]
-        public void WithMissingDiggerThenReportDiggerMissing()
+        public void Digger_with_name_has_to_exist()
         {
             var command = new RepairCommand
             {
@@ -55,9 +51,16 @@ namespace PotatoChipMineTests.Commands
         }
 
         [Fact]
-        public void WithoutTokensThenReportShortOnTokens()
+        public void Need_enough_tokens_to_repair()
         {
-            gameState.Miner.InventoryItems.Add(new InventoryItem { Name = "bolts", Count = 10000 });
+            gameState.Miner.InventoryItems.Add(new InventoryItem
+            {
+                Count = 10000,
+                Item = new GameItem
+                {
+                    Name = "Bolts"
+                }
+            });
             gameState.Miner.TaterTokens = 0;
             var command = new RepairCommand
             {
@@ -75,7 +78,7 @@ namespace PotatoChipMineTests.Commands
         }
 
         [Fact]
-        public void WithoutBoltsThenReportShortOnBolts()
+        public void Need_enough_bolts_to_repair()
         {
             var command = new RepairCommand
             {

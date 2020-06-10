@@ -4,6 +4,6 @@ namespace PotatoChipMine.Core.Models
     {
         Input = 1,
         Output = 2,
-        Events =3
+        Events = 3
     }
 }

@@ -2,9 +2,11 @@ using PotatoChipMine.Core.Commands;
 using PotatoChipMine.Core.Entities;
 using PotatoChipMine.Core.GameEngine;
 using PotatoChipMine.Core.Models;
+using PotatoChipMine.Core.Services.PersistenceService;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 
 namespace PotatoChipMine.Core.Services
 {
@@ -42,7 +44,7 @@ namespace PotatoChipMine.Core.Services
                     {
                         var miner = gameState.Miner;
                         Game.WriteLine($"Name: {miner.Name}", PcmColor.Yellow);
-                        Game.WriteLine($"Chip Vault:{miner.Inventory("chips").Count}", PcmColor.Yellow);
+                        Game.WriteLine($"Chip Vault:{miner.Inventory("rawchip").Count}", PcmColor.Yellow);
                         Game.WriteLine($"Tater Tokens:{miner.TaterTokens}", PcmColor.Yellow);
                         Game.WriteLine($"Diggers Count:{miner.Diggers.Count}", PcmColor.Yellow);
                         Game.WriteLine($"Lifetime Chips Dug:{miner.GetLifeTimeStat(Stats.LifetimeChips)}");
@@ -54,7 +56,7 @@ namespace PotatoChipMine.Core.Services
                     Description = "Shows the number of chips currently in your vault.",
                     Execute = (userCommand, gameState) =>
                     {
-                        Game.WriteLine($"Chip Vault: {gameState.Miner.Inventory("chips").Count}");
+                        Game.WriteLine($"Chip Vault: {gameState.Miner.Inventory("rawchip").Count}");
                     }
                 },
                 new CommandsDefinition
@@ -119,10 +121,31 @@ namespace PotatoChipMine.Core.Services
                         foreach (var digger in gameState.Miner.Diggers)
                         {
                             table.AddRow(digger.Name,
-                                digger.Durability.ToString(),
-                                digger.MineSite.ChipDensity.ToString(),
-                                digger.MineSite.Hardness.ToString(),
+                                digger.Durability.Current.ToString(),
+                                digger.MineClaim.ChipDensity.ToString(),
+                                digger.MineClaim.Hardness.ToString(),
                                 $"{digger.Hopper.Max - digger.Hopper.Count}/{digger.Hopper.Max}");
+                        }
+
+                        Game.Write(table);
+                    }
+                },
+                new CommandsDefinition
+                {
+                    CommandText = "claims",
+                    Description = "Shows the miners claims",
+                    Execute = (userCommand, gameState) =>
+                    {
+                        var table = new TableOutput(80);
+                        table.AddHeaders("Id", "Price", "Density", "Hardness", "InUse");
+                        foreach (var claimLease in gameState.Miner.ClaimLeases.GetAll())
+                        {
+                            table.AddRow(
+                                claimLease.Id.ToString(),
+                                claimLease.Price.ToString(),
+                                claimLease.Claim.ChipDensity.ToString(),
+                                claimLease.Claim.Hardness.ToString(),
+                                claimLease.InUse ? "X" : "");
                         }
 
                         Game.Write(table);
@@ -140,6 +163,12 @@ namespace PotatoChipMine.Core.Services
                     EntryDescription = "load || load [save name]",
                     Description = "Loads shows games available to load, or loads the indicated saved game.",
                     Execute = LoadHandler()
+                },
+                new CommandsDefinition
+                {
+                    CommandText = "claims-office",
+                    Description = "Enter the claims office. Claims will be available for purchase.",
+                    Execute = (userCommand, gameState) => { gameState.ClaimsOffice.EnterRoom(); }
                 }
             };
             return commandsGroup;

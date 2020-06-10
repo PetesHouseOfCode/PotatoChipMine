@@ -1,7 +1,8 @@
+using PotatoChipMine.Core.Data;
 using PotatoChipMine.Core.GameEngine;
+using PotatoChipMine.Core.Models;
 using System;
 using System.Collections.Generic;
-using PotatoChipMine.Core.Models;
 
 namespace PotatoChipMine.Core
 {
@@ -13,6 +14,8 @@ namespace PotatoChipMine.Core
         ConsoleBuffer Output { get; set; }
         ConsoleBuffer Events { get; set; }
         Stack<Scene> SceneStack { get; }
+        GameState GameState { get; }
+        DataGateway Gateway { get; }
         void ClearConsole(GameConsoles targetConsole = GameConsoles.Output);
     }
 }

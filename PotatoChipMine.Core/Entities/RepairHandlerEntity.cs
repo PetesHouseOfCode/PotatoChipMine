@@ -1,10 +1,9 @@
 using PotatoChipMine.Core.GameEngine;
 using PotatoChipMine.Core.Models;
-using PotatoChipMine.Core.Services;
 using System;
 using System.Linq;
 
-namespace PotatoChipMine.Core.GameRooms.ControlRoom.Services
+namespace PotatoChipMine.Core.Entities
 {
     public class RepairHandlerEntity : GameEntity
     {
@@ -29,15 +28,15 @@ namespace PotatoChipMine.Core.GameRooms.ControlRoom.Services
 
             if (command.CommandText.ToLower() != "yes")
             {
-                Game.WriteLine($"\'{command.CommandText}\' isn't a valid response.",PcmColor.Red,null,GameConsoles.Input);
+                Game.WriteLine($"\'{command.CommandText}\' isn't a valid response.", PcmColor.Red, null, GameConsoles.Input);
                 return;
             }
 
             GameState.Miner.TaterTokens -= TokenCost;
-            GameState.Miner.Inventory("bolts").Count -= (int)BoltsCost;
+            GameState.Miner.Inventory("Bolts").Count -= BoltsCost;
             Digger.Repair();
-            Digger.UpdateLifetimeStat(DiggerStats.LifetimeRepairs,1);
-            Digger.UpdateLifetimeStat(DiggerStats.LifeTimeBoltsCost,BoltsCost);
+            Digger.UpdateLifetimeStat(DiggerStats.LifetimeRepairs, 1);
+            Digger.UpdateLifetimeStat(DiggerStats.LifeTimeBoltsCost, BoltsCost);
             Digger.UpdateLifetimeStat(DiggerStats.LifeTimeTokensCost, TokenCost);
             EndScene();
         }
@@ -55,7 +54,7 @@ namespace PotatoChipMine.Core.GameRooms.ControlRoom.Services
 
             prompted = true;
             GameState.PromptText = "Do you want to perform repairs? ";
-            Game.WriteLine($"Repairs will cost {TokenCost} tater tokens and {BoltsCost} bolts.", PcmColor.Green,null,GameConsoles.Input);
+            Game.WriteLine($"Repairs will cost {TokenCost} tater tokens and {BoltsCost} bolts.", PcmColor.Green, null, GameConsoles.Input);
         }
     }
 }

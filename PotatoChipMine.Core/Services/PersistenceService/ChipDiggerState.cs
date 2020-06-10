@@ -8,11 +8,12 @@ namespace PotatoChipMine.Core.Services.PersistenceService
     {
         public string Name { get; set; }
         public DateTime FirstEquipped { get; set; }
-        public int Durability { get; set; }
-        public int MaxDurability { get; set; }
+        public TimeSpan LastDig { get; set; }
         public List<DiggerUpgrade> Upgrades { get; set; }
         public ChipsHopperState Hopper { get; set; }
-        public MineSiteState MineSite { get; set; }
+        public ChipDiggerBitState DiggerBit { get; set; }
+        public DiggerDurabilityState Durability { get; set; }
+        public MineClaimState MineClaim { get; set; }
         public List<Stat> LifeTimeStats { get; set; }
     }
 }

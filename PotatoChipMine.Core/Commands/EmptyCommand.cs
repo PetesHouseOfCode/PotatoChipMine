@@ -1,9 +1,7 @@
 using PotatoChipMine.Core.GameEngine;
 using PotatoChipMine.Core.Models;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 
 namespace PotatoChipMine.Core.Commands
 {
@@ -20,17 +18,17 @@ namespace PotatoChipMine.Core.Commands
 
             var digger = gameState.Miner.Diggers.FirstOrDefault(x =>
                 string.Equals(x.Name, command.DiggerName, StringComparison.CurrentCultureIgnoreCase));
-            var chips = gameState.Miner.InventoryItems.FirstOrDefault(x => x.Name == "chips");
-
-            if (chips == null)
-            {
-                Game.WriteLine($"Could not find Chips in the inventory", PcmColor.Red);
-                return;
-            }
 
             if (digger == null)
             {
                 Game.WriteLine($"Could not find digger named {command.DiggerName}", PcmColor.Red);
+                return;
+            }
+
+            var chips = gameState.Miner.Inventory("rawchip");
+            if (chips == null)
+            {
+                Game.WriteLine($"Could not find Chips in the inventory", PcmColor.Red);
                 return;
             }
 
@@ -39,7 +37,7 @@ namespace PotatoChipMine.Core.Commands
             gameState.Miner.UpdateLifetimeStat(Stats.LifetimeChips, hopperCount);
             Game.WriteLine($"{hopperCount} was removed from {command.DiggerName}'s hopper and moved into the chip vault.",
                 PcmColor.Yellow);
-            Game.WriteLine($"Vault Chips:{gameState.Miner.Inventory("chips").Count}", PcmColor.Yellow);
+            Game.WriteLine($"Vault Chips:{gameState.Miner.Inventory("rawchip").Count}", PcmColor.Yellow);
         }
     }
 }

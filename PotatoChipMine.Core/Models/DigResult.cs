@@ -4,11 +4,11 @@ using System.Linq;
 namespace PotatoChipMine.Core.Models
 {
     public class DigResult
-    {        
+    {
         public bool Failed { get { return FaultMessages.Any(); } }
-        
+
         public int ChipsDug { get; }
-        
+
         public int DurabilityLost { get; }
 
         public List<string> FaultMessages { get; } = new List<string>();
@@ -19,8 +19,8 @@ namespace PotatoChipMine.Core.Models
             DurabilityLost = durabilityLost;
             FaultMessages = faultMessages ?? new List<string>();
         }
-        
-        public static readonly DigResult EmptyDig = new DigResult(0,0); 
+
+        public static readonly DigResult EmptyDig = new DigResult(0, 0);
 
         public static DigResult Success(int chipsDug, int durabilityLost)
         {

@@ -1,12 +1,8 @@
-﻿using PotatoChipMine.Core.GameEngine;
+using PotatoChipMine.Core.Entities;
+using PotatoChipMine.Core.GameEngine;
 using PotatoChipMine.Core.Models;
-using PotatoChipMine.Core.Services;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
 
 namespace PotatoChipMine.Core.Events
 {
@@ -38,7 +34,7 @@ namespace PotatoChipMine.Core.Events
                     .StoreState
                     .ItemsForSale
                     .FirstOrDefault(i =>
-                        i.Name.Equals("digger", StringComparison.CurrentCultureIgnoreCase)
+                        i.Name.Equals("standard_digger", StringComparison.CurrentCultureIgnoreCase)
                         ).Count = +5;
 
                 GameState.NewEvents.Add(new GameEvent

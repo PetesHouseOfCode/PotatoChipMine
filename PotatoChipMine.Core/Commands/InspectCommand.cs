@@ -1,10 +1,8 @@
 using PotatoChipMine.Core.GameEngine;
 using PotatoChipMine.Core.Models;
 using System;
-using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
-using System.Text;
 
 namespace PotatoChipMine.Core.Commands
 {
@@ -69,9 +67,9 @@ namespace PotatoChipMine.Core.Commands
         {
             var vitalsTable = new TableOutput(80, PcmColor.Yellow);
             vitalsTable.AddHeaders("Stat", "Value");
-            vitalsTable.AddRow("Site Hardness", digger.MineSite.Hardness.ToString());
-            vitalsTable.AddRow("Site Chip Density", digger.MineSite.ChipDensity.ToString());
-            vitalsTable.AddRow("Durablity (Left) / (Max)", $"{digger.Durability} / {digger.MaxDurability}");
+            vitalsTable.AddRow("Site Hardness", digger.MineClaim.Hardness.ToString());
+            vitalsTable.AddRow("Site Chip Density", digger.MineClaim.ChipDensity.ToString());
+            vitalsTable.AddRow("Durablity (Left) / (Max)", $"{digger.Durability.Current} / {digger.Durability.Max}");
             vitalsTable.AddRow("Hopper", digger.Hopper.Name);
             vitalsTable.AddRow("Hopper Space (Left) / (Max)",
                 $"{digger.Hopper.Max - digger.Hopper.Count} / {digger.Hopper.Max}");
@@ -97,7 +95,7 @@ namespace PotatoChipMine.Core.Commands
             Game.WriteLine("Available Upgrades", PcmColor.Black, PcmColor.Yellow);
             var upgradesTable = new TableOutput(80, PcmColor.Yellow);
             upgradesTable.AddHeaders("Name", "Max Level", "Current Level", "Slot");
-            foreach (var diggerUpgrade in digger.Upgrades)
+            foreach (var diggerUpgrade in digger.AvailableUpgrades)
             {
                 upgradesTable.AddRow(diggerUpgrade.Name,
                     diggerUpgrade.MaxLevel.ToString(),

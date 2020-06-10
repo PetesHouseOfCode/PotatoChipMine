@@ -1,9 +1,7 @@
 using PotatoChipMine.Core.GameEngine;
 using PotatoChipMine.Core.Models;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 
 namespace PotatoChipMine.Core.Commands
 {
@@ -26,10 +24,14 @@ namespace PotatoChipMine.Core.Commands
                 return;
             }
             gameState.Miner.Diggers.Remove(digger);
-            var bolts = gameState.Miner.Inventory("bolts");
+            var bolts = gameState.Miner.Inventory("Bolt");
             if (bolts == null)
             {
-                bolts = new InventoryItem() { Name = "bolts", Count = 0 };
+                bolts = new InventoryItem()
+                {
+                    Count = 0,
+                    Item = Game.Gateway.GameItems.GetAll().First(x=> x.Name == "Bolt")
+                };
                 gameState.Miner.InventoryItems.Add(bolts);
             }
 
