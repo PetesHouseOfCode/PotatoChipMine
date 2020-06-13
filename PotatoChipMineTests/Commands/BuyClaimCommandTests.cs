@@ -78,8 +78,8 @@ namespace PotatoChipMineTests.Commands
 
             command.Listings.GetAll().Count.ShouldBe(0);
             gameState.Miner.TaterTokens.ShouldBe(MINER_TOKENS - claimPrice);
-            gameState.Miner.ClaimLeases.Count.ShouldBe(1);
-            gameState.Miner.ClaimLeases.First().Claim.ShouldBe(claim);
+            gameState.Miner.ClaimLeases.GetAll().Count.ShouldBe(1);
+            gameState.Miner.ClaimLeases.GetAll().First().Claim.ShouldBe(claim);
 
             var output = ConsoleBufferHelper.GetText(proc.Output);
             output.ShouldStartWith($"{1} Purchase Complete!");
