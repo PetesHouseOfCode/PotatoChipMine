@@ -28,11 +28,10 @@ namespace PotatoChipMineTests.Commands
             Game.SetMainProcess(proc);
             gameState.Miner = Miner.Default();
 
-            var digger = ChipDigger.StandardDigger(new MineClaim
-            {
-                ChipDensity = PotatoChipMine.Core.ChipDensity.Normal,
-                Hardness = SiteHardness.Firm
-            });
+            var digger = ChipDigger.StandardDigger(new MineClaim(
+                PotatoChipMine.Core.ChipDensity.Normal,
+                SiteHardness.Firm
+                ));
             digger.Name = EXISTING_DIGGER_NAME;
 
             gameState.Miner.Diggers.Add(digger);

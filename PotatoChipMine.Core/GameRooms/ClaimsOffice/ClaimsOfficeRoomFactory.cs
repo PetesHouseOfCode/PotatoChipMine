@@ -1,6 +1,7 @@
 using PotatoChipMine.Core.Data;
 using PotatoChipMine.Core.Models;
 using PotatoChipMine.Core.Models.Claims;
+using PotatoChipMine.Core.Services;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -30,14 +31,17 @@ namespace PotatoChipMine.Core.GameRooms.ClaimsOffice
             };
 
             var listings = new ClaimListings();
-            var claim = new MineClaim
-            {
-                ChipDensity = ChipDensity.Normal,
-                Hardness = SiteHardness.Hard
-            };
+            var claim1 = _gameState.MineClaims.Add(
+                new MineClaim(
+                    ChipDensity.Normal,
+                    SiteHardness.Hard
+                    ));
 
-            listings.Add(new ClaimListing(claim, 10, 15, SurveyResults.NoSurvey()));
-            listings.Add(new ClaimListing(claim, 10, 15, SurveyResults.GetFromClaim(claim)));
+            var claim2 = _gameState.MineClaims.Add(
+               new MineClaimFactory().BuildSite());
+
+            listings.Add(new ClaimListing(claim2, 10, 15, SurveyResults.NoSurvey()));
+            listings.Add(new ClaimListing(claim1, 10, 15, SurveyResults.GetFromClaim(claim1)));
 
             var claimsOffice = new ClaimsOfficeRoom(
                 _gameState,

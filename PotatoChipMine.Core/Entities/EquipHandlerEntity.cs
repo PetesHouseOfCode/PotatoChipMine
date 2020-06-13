@@ -20,7 +20,7 @@ namespace PotatoChipMine.Core.Entities
         private int claimLeaseId;
         private string diggerName;
                
-        readonly bool claimsAvailable = true;
+        readonly bool claimsAvailable = false;
         private EquipHandlerState state = EquipHandlerState.Starting;
 
         public EquipHandlerEntity(GameState gameState)
@@ -92,7 +92,7 @@ namespace PotatoChipMine.Core.Entities
                 return;
             }
 
-            EquipDigger(new MineSiteFactory().BuildSite());
+            EquipDigger(GameState.MineClaims.Add(new MineClaimFactory().BuildSite()));
 
             GameState.PromptText = null;
             Game.PopScene();
@@ -109,7 +109,7 @@ namespace PotatoChipMine.Core.Entities
             {
                 if(MinerCanNotEquip())
                 {
-                    Game.WriteLine("You can't do this at this time.");
+                    Game.WriteLine("You can't do equip a digger.");
                     GameState.PromptText = null;
                     Game.PopScene();
                     return;
@@ -152,13 +152,15 @@ namespace PotatoChipMine.Core.Entities
                         return;
                     }
 
-
                     diggerName = FormatDiggerName(diggerName);
-                    claimLease.AssignDigger(EquipDigger(new MineSiteFactory().BuildSite()));
+                    claimLease.AssignDigger(EquipDigger(claimLease.Claim));
+                    GameState.PromptText = null;
+                    Game.PopScene();
+                    return;
                 }
 
                 diggerName = FormatDiggerName(diggerName);
-                EquipDigger(new MineSiteFactory().BuildSite());
+                EquipDigger(GameState.MineClaims.Add(new MineClaimFactory().BuildSite()));
                 GameState.PromptText = null;
                 Game.PopScene();
             }
@@ -199,9 +201,9 @@ namespace PotatoChipMine.Core.Entities
             GameState.Miner.Diggers.Add(newDigger);
             
             Game.Write($"Digger {newDigger.Name} has been equipped on ");
-            Game.Write($"{newDigger.MineSite.ChipDensity.ToString()} density", PcmColor.Blue);
+            Game.Write($"{newDigger.MineClaim.ChipDensity.ToString()} density", PcmColor.Blue);
             Game.Write(" with a ");
-            Game.Write($"{newDigger.MineSite.Hardness.ToString()} hardness", PcmColor.Cyan);
+            Game.Write($"{newDigger.MineClaim.Hardness.ToString()} hardness", PcmColor.Cyan);
             Game.WriteLine(string.Empty);
             return newDigger;
 

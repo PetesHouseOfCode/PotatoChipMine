@@ -20,7 +20,7 @@ namespace PotatoChipMine.Core.Models
         public DiggerDurability Durability { get; private set; }
         public ChipsHopper Hopper { get; private set; }
         //public List<UpgradeSlot> UpgradeSlots { get; set; } = new List<UpgradeSlot>();
-        public MineClaim MineSite { get; private set; }
+        public MineClaim MineClaim { get; private set; }
         public List<DiggerUpgrade> AvailableUpgrades { get; private set; }
 
         private ChipDigger(ChipDiggerState state)
@@ -30,11 +30,11 @@ namespace PotatoChipMine.Core.Models
             FirstEquipped = state.FirstEquipped;
             DiggerBit = ChipDiggerBit.From(state.DiggerBit);
             Durability = DiggerDurability.From(state.Durability);
-            MineSite = new MineClaim
-            {
-                ChipDensity = state.MineSite.ChipDensity,
-                Hardness = state.MineSite.Hardness
-            };
+            MineClaim = new MineClaim(
+                state.MineClaim.Id,
+                state.MineClaim.ChipDensity,
+                state.MineClaim.Hardness
+                );
             AvailableUpgrades = state.Upgrades;
             LifetimeStats = state.LifeTimeStats ?? new List<Stat>();
             Hopper = ChipsHopper.FromState(state.Hopper);
@@ -66,7 +66,7 @@ namespace PotatoChipMine.Core.Models
 
         private int RollChips()
         {
-            switch (MineSite.ChipDensity)
+            switch (MineClaim.ChipDensity)
             {
                 case ChipDensity.Scarce:
                     return DiggerBit.Dig(0.2m);
@@ -81,7 +81,7 @@ namespace PotatoChipMine.Core.Models
 
         private int RollDurabilityHit()
         {
-            switch (MineSite.Hardness)
+            switch (MineClaim.Hardness)
             {
                 case SiteHardness.Soft:
                     return _random.Next(0, 3);
@@ -144,16 +144,17 @@ namespace PotatoChipMine.Core.Models
             return Hopper.Empty();
         }
 
-        public static ChipDigger StandardDigger(MineClaim mineSite)
+        public static ChipDigger StandardDigger(MineClaim mineClaim)
         {
             return new ChipDigger(
                 new ChipDiggerState
                 {
                     FirstEquipped = DateTime.Now,
-                    MineSite = new MineSiteState
+                    MineClaim = new MineClaimState
                     {
-                        Hardness = mineSite.Hardness,
-                        ChipDensity = mineSite.ChipDensity
+                        Id = mineClaim.Id,
+                        Hardness = mineClaim.Hardness,
+                        ChipDensity = mineClaim.ChipDensity
                     },
                     Hopper = new ChipsHopperState
                     {
@@ -203,10 +204,10 @@ namespace PotatoChipMine.Core.Models
                 Durability = Durability.GetState(),
                 Upgrades = AvailableUpgrades,
                 Hopper = Hopper.GetState(),
-                MineSite = new MineSiteState
+                MineClaim = new MineClaimState
                 {
-                    ChipDensity = MineSite.ChipDensity,
-                    Hardness = MineSite.Hardness
+                    ChipDensity = MineClaim.ChipDensity,
+                    Hardness = MineClaim.Hardness
                 },
                 LifeTimeStats = LifetimeStats
             };

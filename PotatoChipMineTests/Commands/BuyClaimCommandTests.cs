@@ -36,7 +36,7 @@ namespace PotatoChipMineTests.Commands
             var command = new BuyClaimCommand();
             command.GameState = gameState;
             command.Listings = new ClaimListings();
-            command.Listings.Add(new ClaimListing(new MineClaim(), 1, 2, SurveyResults.NoSurvey()));
+            command.Listings.Add(new ClaimListing(MineClaim.Default, 1, 2, SurveyResults.NoSurvey()));
             command.ListingId = 2;
 
             var handler = new BuyClaimCommandHandler();
@@ -52,7 +52,7 @@ namespace PotatoChipMineTests.Commands
             var command = new BuyClaimCommand();
             command.GameState = gameState;
             command.Listings = new ClaimListings();
-            command.Listings.Add(new ClaimListing(new MineClaim(), MINER_TOKENS + 1, 2, SurveyResults.NoSurvey()));
+            command.Listings.Add(new ClaimListing(MineClaim.Default, MINER_TOKENS + 1, 2, SurveyResults.NoSurvey()));
             command.ListingId = 1;
 
             var handler = new BuyClaimCommandHandler();
@@ -68,7 +68,7 @@ namespace PotatoChipMineTests.Commands
             var command = new BuyClaimCommand();
             command.GameState = gameState;
             command.Listings = new ClaimListings();
-            var claim = new MineClaim();
+            var claim = MineClaim.Default;
             var claimPrice = 1;
             command.Listings.Add(new ClaimListing(claim, claimPrice, 2, SurveyResults.NoSurvey()));
             command.ListingId = command.Listings.GetAll().First().Id;

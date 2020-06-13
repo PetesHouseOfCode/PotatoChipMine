@@ -17,7 +17,7 @@ namespace PotatoChipMineTests
             diggerState = new ChipDiggerState
             {
                 FirstEquipped = DateTime.Now,
-                MineSite = new MineSiteState
+                MineClaim = new MineClaimState
                 {
                     Hardness = SiteHardness.Firm,
                     ChipDensity = ChipDensity.Normal
@@ -64,8 +64,8 @@ namespace PotatoChipMineTests
         [Fact]
         public void ChipDigger_HavingSiteChipDensityIsRich_ChipsYieldIsBetween7and25()
         {
-            var mineSite = new MineSiteState {ChipDensity = ChipDensity.Rich};
-            diggerState.MineSite = mineSite;
+            var mineClaim = new MineClaimState {ChipDensity = ChipDensity.Rich};
+            diggerState.MineClaim = mineClaim;
             diggerState.Durability.Current = 1;
             var chipDigger = ChipDigger.FromState(diggerState);
             var scoop = chipDigger.Dig(TimeSpan.FromSeconds(20));
@@ -76,8 +76,8 @@ namespace PotatoChipMineTests
         [Fact]
         public void ChipDigger_HavingSiteChipDensityIsNormal_ChipsYieldIsBetween3and9()
         {
-            var mineSite = new MineSiteState { ChipDensity = ChipDensity.Normal };
-            diggerState.MineSite = mineSite;
+            var mineClaim = new MineClaimState { ChipDensity = ChipDensity.Normal };
+            diggerState.MineClaim = mineClaim;
             diggerState.Durability.Current = 1;
             var chipDigger = ChipDigger.FromState(diggerState);
             var scoop = chipDigger.Dig(TimeSpan.FromSeconds(20));
@@ -88,8 +88,8 @@ namespace PotatoChipMineTests
         [Fact]
         public void ChipDigger_HavingSiteChipDensityIsScarce_ChipsYieldIsBetween0and3()
         {
-            var mineSite = new MineSiteState { ChipDensity = ChipDensity.Scarce };
-            diggerState.MineSite = mineSite;
+            var mineClaim = new MineClaimState { ChipDensity = ChipDensity.Scarce };
+            diggerState.MineClaim = mineClaim;
             diggerState.Durability.Current = 1;
             var chipDigger = ChipDigger.FromState(diggerState);
 
@@ -101,8 +101,8 @@ namespace PotatoChipMineTests
         [Fact]
         public void ChipDigger_HavingSiteHardnessIsSoft_DurabilityDecreasesBetween0and1()
         {
-            var mineSite = new MineClaim {ChipDensity = ChipDensity.Scarce, Hardness = SiteHardness.Soft};
-            var chipDigger = ChipDigger.StandardDigger(mineSite);
+            var mineClaim = new MineClaim(ChipDensity.Scarce, SiteHardness.Soft);
+            var chipDigger = ChipDigger.StandardDigger(mineClaim);
             var scoop = chipDigger.Dig(TimeSpan.FromSeconds(20));
             chipDigger.Durability.Current.ShouldBeGreaterThanOrEqualTo(0);
             chipDigger.Durability.Current.ShouldBeLessThanOrEqualTo(25);

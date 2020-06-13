@@ -122,8 +122,8 @@ namespace PotatoChipMine.Core.Services
                         {
                             table.AddRow(digger.Name,
                                 digger.Durability.Current.ToString(),
-                                digger.MineSite.ChipDensity.ToString(),
-                                digger.MineSite.Hardness.ToString(),
+                                digger.MineClaim.ChipDensity.ToString(),
+                                digger.MineClaim.Hardness.ToString(),
                                 $"{digger.Hopper.Max - digger.Hopper.Count}/{digger.Hopper.Max}");
                         }
 
@@ -137,14 +137,15 @@ namespace PotatoChipMine.Core.Services
                     Execute = (userCommand, gameState) =>
                     {
                         var table = new TableOutput(80);
-                        table.AddHeaders("Id", "Price", "Density", "Hardness");
+                        table.AddHeaders("Id", "Price", "Density", "Hardness", "InUse");
                         foreach (var claimLease in gameState.Miner.ClaimLeases.GetAll())
                         {
                             table.AddRow(
                                 claimLease.Id.ToString(),
                                 claimLease.Price.ToString(),
                                 claimLease.Claim.ChipDensity.ToString(),
-                                claimLease.Claim.Hardness.ToString());
+                                claimLease.Claim.Hardness.ToString(),
+                                claimLease.InUse ? "X" : "");
                         }
 
                         Game.Write(table);
