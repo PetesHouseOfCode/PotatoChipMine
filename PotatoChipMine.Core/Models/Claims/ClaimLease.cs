@@ -1,7 +1,9 @@
 using PotatoChipMine.Core.Models;
+using PotatoChipMine.Core.Services.PersistenceService;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 
 namespace PotatoChipMine.Core.Models.Claims
 {
@@ -19,6 +21,14 @@ namespace PotatoChipMine.Core.Models.Claims
         {
             Claim = claim;
             Price = price;
+        }
+
+        public ClaimLease(ClaimLeaseState state)
+        {
+            Id = state.Id;
+            Price = state.Price;
+            DiggerName = state.DiggerName;
+            Claim = MineClaim.FromState(state.MineClaim);
         }
 
         public void SetId(int id)
@@ -63,6 +73,33 @@ namespace PotatoChipMine.Core.Models.Claims
         public bool HasClaimsAvailable()
         {
             return claimLeases.Any(x => !x.InUse);
+        }
+
+        public IEnumerable<ClaimLeaseState> GetState()
+        {
+            foreach(var claimLease in claimLeases)
+            {
+                var state = new ClaimLeaseState()
+                {
+                    Id = claimLease.Id,
+                    Price = claimLease.Price,
+                    DiggerName = claimLease.DiggerName,
+                    MineClaim = claimLease.Claim.GetState()
+                };
+
+                yield return state;
+            }
+        }
+
+        public static ClaimLeases FromState(IEnumerable<ClaimLeaseState> state)
+        {
+            var claimLeases = new ClaimLeases();
+            foreach(var claimLeaseState in state)
+            {
+                claimLeases.Add(new ClaimLease(claimLeaseState));
+            }
+
+            return claimLeases;
         }
     }
 }

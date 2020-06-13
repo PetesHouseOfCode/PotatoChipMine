@@ -1,6 +1,7 @@
 using PotatoChipMine.Core.Models;
 using System;
 using System.Linq;
+using System.Security.Claims;
 
 namespace PotatoChipMine.Core.Models.Claims
 {
@@ -22,6 +23,15 @@ namespace PotatoChipMine.Core.Models.Claims
             Survey = surveyResults;
         }
 
+        public ClaimListing(ClaimListingState state)
+        {
+            Id = state.Id;
+            claim = MineClaim.FromState(state.Claim);
+            Price = state.Price;
+            LeasePrice = state.LeasePrice;
+            Survey = SurveyResults.FromState(state.Survey);
+        }
+
         public void SetId(int id)
         {
             if (Id > 0)
@@ -35,6 +45,21 @@ namespace PotatoChipMine.Core.Models.Claims
         public ClaimLease GetLease()
         {
             return new ClaimLease(claim, LeasePrice);
+        }
+        public ClaimListingState GetState()
+        {
+            return new ClaimListingState
+            {
+                Id = Id,
+                Price = Price,
+                LeasePrice = LeasePrice,
+                Claim = claim.GetState(),
+                Survey = Survey.GetState()
+            };
+        }
+        public static ClaimListing FromState(ClaimListingState state)
+        {
+            return new ClaimListing(state);
         }
     }
 }

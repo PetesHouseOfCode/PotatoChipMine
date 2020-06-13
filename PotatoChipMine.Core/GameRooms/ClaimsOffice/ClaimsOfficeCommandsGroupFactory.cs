@@ -29,7 +29,7 @@ namespace PotatoChipMine.Core.GameRooms.ClaimsOffice
                         Description = "Purchases the quantity indicated of the item requested.",
                         Command = (userCommand, gameState) => {
 
-                            var command = new BuyClaimCommand { GameState = gameState, Listings = listings};
+                            var command = new BuyClaimCommand { GameState = gameState, Listings = gameState.ClaimsOffice.Listings};
                             if(userCommand.Parameters.Count == 0)
                             {
                                 return new FailedMessageCommand("Listing Id is required!");
@@ -51,7 +51,7 @@ namespace PotatoChipMine.Core.GameRooms.ClaimsOffice
                         Description = "",
                         Command = (userCommand, gameState) => {
 
-                            var command = new ViewClaimListingsCommand { Listings = listings};
+                            var command = new ViewClaimListingsCommand { Listings = gameState.ClaimsOffice.Listings};
                             return command;
                         }
                     }

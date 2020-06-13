@@ -25,12 +25,17 @@ namespace PotatoChipMine.Core.GameRooms.ClaimsOffice
             this.Name = "Claims Office";
         }
 
-        public ClaimListings Listings { get; }
+        public ClaimListings Listings { get; private set; }
 
         public override void EnterRoom()
         {
             GameState.Mode = GameMode.Store;
             base.EnterRoom();
+        }
+
+        public void UpdateFromState(List<ClaimListingState> claimListings)
+        {
+            Listings = ClaimListings.FromState(claimListings);
         }
     }
 }

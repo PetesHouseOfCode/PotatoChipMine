@@ -1,4 +1,5 @@
 using PotatoChipMine.Core.Services.PersistenceService;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -17,7 +18,7 @@ namespace PotatoChipMine.Core.Models
         {
         }
 
-        public MineClaim(int id, ChipDensity chipDensity, SiteHardness siteHardness)
+        private MineClaim(int id, ChipDensity chipDensity, SiteHardness siteHardness)
         {
             Id = id;
             ChipDensity = chipDensity;
@@ -37,6 +38,14 @@ namespace PotatoChipMine.Core.Models
                 ChipDensity = ChipDensity,
                 Hardness = Hardness
             };
+        }
+
+        public static MineClaim FromState(MineClaimState state)
+        {
+            return new MineClaim(
+                state.Id,
+                state.ChipDensity,
+                state.Hardness);
         }
     }
 

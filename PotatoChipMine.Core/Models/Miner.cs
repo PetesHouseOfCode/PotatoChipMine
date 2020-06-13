@@ -41,6 +41,7 @@ namespace PotatoChipMine.Core.Models
             AttainedAchievements = state.AttainedAchievements;
             LifetimeStats = state.LifeTimeStats;
             Diggers.AddRange(state.Diggers.Select(x => ChipDigger.FromState(x)));
+            ClaimLeases = ClaimLeases.FromState(state.ClaimLeases);
         }
 
         public InventoryItem Inventory(string name)
@@ -70,7 +71,8 @@ namespace PotatoChipMine.Core.Models
                         Count = x.Count,
                         ItemId = x.Item.Id
                     }).ToList(),
-                LifeTimeStats = LifetimeStats
+                LifeTimeStats = LifetimeStats,
+                ClaimLeases = ClaimLeases.GetState().ToList()
             };
         }
 

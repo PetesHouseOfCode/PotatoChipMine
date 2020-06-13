@@ -1,4 +1,5 @@
 using Newtonsoft.Json;
+using PotatoChipMine.Core.GameRooms.ClaimsOffice;
 using PotatoChipMine.Core.GameRooms.Store.Models;
 using PotatoChipMine.Core.Models;
 using System;
@@ -16,6 +17,7 @@ namespace PotatoChipMine.Core.Services.PersistenceService
             {
                 Miner = gameState.Miner.GetState(),
                 MinerStore = gameState.Store.StoreState.GetState(),
+                ClaimListings = gameState.ClaimsOffice.Listings.GetState().ToList(),
                 Mode = gameState.Mode
             };
         }
@@ -54,6 +56,7 @@ namespace PotatoChipMine.Core.Services.PersistenceService
                 gameState.Mode = loadedGame.Mode;
                 gameState.SaveDirectory = path;
                 gameState.SaveName = gameName;
+                gameState.ClaimsOffice.UpdateFromState(loadedGame.ClaimListings);
                 gameState.GameTime.Restart();
             }
         }

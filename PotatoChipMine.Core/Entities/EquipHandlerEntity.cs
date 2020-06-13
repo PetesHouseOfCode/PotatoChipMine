@@ -20,7 +20,7 @@ namespace PotatoChipMine.Core.Entities
         private int claimLeaseId;
         private string diggerName;
                
-        readonly bool claimsAvailable = false;
+        readonly bool claimsAvailable = true;
         private EquipHandlerState state = EquipHandlerState.Starting;
 
         public EquipHandlerEntity(GameState gameState)
@@ -54,6 +54,7 @@ namespace PotatoChipMine.Core.Entities
                 diggerName = FormatDiggerName(command.CommandText);
             }
 
+            
             if (claimsAvailable)
             {
 

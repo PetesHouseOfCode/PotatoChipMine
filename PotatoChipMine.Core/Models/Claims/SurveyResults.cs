@@ -24,5 +24,19 @@ namespace PotatoChipMine.Core.Models.Claims
         {
             return new SurveyResults(claim.ChipDensity.ToString(), claim.Hardness.ToString());
         }
+
+        public SurveyResultState GetState()
+        {
+            return new SurveyResultState
+            {
+                Density = Density,
+                Hardness = Hardness
+            };
+        }
+
+        public static SurveyResults FromState(SurveyResultState state)
+        {
+            return new SurveyResults(state.Density, state.Hardness);
+        }
     }
 }

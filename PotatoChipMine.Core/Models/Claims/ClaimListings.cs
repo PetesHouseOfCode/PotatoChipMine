@@ -9,6 +9,13 @@ namespace PotatoChipMine.Core.Models.Claims
     {
         private List<ClaimListing> listings = new List<ClaimListing>();
 
+        public ClaimListings() { }
+
+        private ClaimListings(List<ClaimListingState> state)
+        {
+            listings.AddRange(state.Select(x => ClaimListing.FromState(x)));
+        }
+
         public void Add(ClaimListing listing)
         {
             for (var i = 1; true; i++)
@@ -41,6 +48,18 @@ namespace PotatoChipMine.Core.Models.Claims
         public ClaimListing GetById(int listingId)
         {
             return listings.First(x => x.Id == listingId);
+        }
+        public IEnumerable<ClaimListingState> GetState()
+        {
+            foreach(var listing in listings)
+            {
+                yield return listing.GetState();
+            }
+        }
+
+        public static ClaimListings FromState(List<ClaimListingState> claimListings)
+        {
+            return new ClaimListings(claimListings);
         }
     }
 }

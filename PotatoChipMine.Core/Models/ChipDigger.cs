@@ -30,11 +30,7 @@ namespace PotatoChipMine.Core.Models
             FirstEquipped = state.FirstEquipped;
             DiggerBit = ChipDiggerBit.From(state.DiggerBit);
             Durability = DiggerDurability.From(state.Durability);
-            MineClaim = new MineClaim(
-                state.MineClaim.Id,
-                state.MineClaim.ChipDensity,
-                state.MineClaim.Hardness
-                );
+            MineClaim = MineClaim.FromState(state.MineClaim);
             AvailableUpgrades = state.Upgrades;
             LifetimeStats = state.LifeTimeStats ?? new List<Stat>();
             Hopper = ChipsHopper.FromState(state.Hopper);
@@ -204,11 +200,7 @@ namespace PotatoChipMine.Core.Models
                 Durability = Durability.GetState(),
                 Upgrades = AvailableUpgrades,
                 Hopper = Hopper.GetState(),
-                MineClaim = new MineClaimState
-                {
-                    ChipDensity = MineClaim.ChipDensity,
-                    Hardness = MineClaim.Hardness
-                },
+                MineClaim = MineClaim.GetState(),
                 LifeTimeStats = LifetimeStats
             };
         }

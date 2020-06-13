@@ -20,7 +20,6 @@ namespace PotatoChipMine.Core.Models
         public MinerStore Store { get; set; }
         public DiggerControlRoom ControlRoom { get; set; }
         public ClaimsOfficeRoom ClaimsOffice { get; set; }
-        public ClaimListings ClaimListings { get; } = new ClaimListings();
         public MineClaims MineClaims { get; } = new MineClaims();
         public string SaveDirectory { get; set; }
         public string SaveName { get; set; } = string.Empty;
